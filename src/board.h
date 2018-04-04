@@ -5,6 +5,7 @@
 #include <stdexcept>
 
 #include "tile.h"
+#include "coordinates.h"
 
 namespace app {
 
@@ -18,7 +19,7 @@ class board {
 			throw std::runtime_error("Invalid board dimensions");
 		}
 
-		tiles.resize(w*h, tile::space);
+		tiles.resize(w*h, tile::noop);
 	}
 
 	const tile&		get_tile(int _x, int _y) const {
@@ -30,12 +31,13 @@ class board {
 
 	int			get_w() const {return w;}
 	int			get_h() const {return h;}
+	bool			check_coords(const coordinates& _c) const {
+		return !(_c.x > max_w || _c.y > max_h || _c.x < min_h || _c.y < min_h);
+	}
 
 	private:
 
-	bool			check_coords(int _x, int _y) const {
-		return !(w > max_w || h > max_h || w < min_h || h < min_h);
-	}
+
 
 	const int 		min_w=4, min_h=4, max_w=80, max_h=24;
 	int 			w, h;
