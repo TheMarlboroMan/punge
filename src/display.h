@@ -27,7 +27,7 @@ class display {
 	}
 
 	void		draw_board_changes() {
-		//TODO
+		//TODO: Who should store the differences????
 	}
 
 	private:
