@@ -4,8 +4,10 @@
 namespace app {
 
 struct coordinates {
-	int x=0, y=0;
-}
+	int x, y;
+	coordinates(int _x, int _y):x(_x), y(_y) {}
+	coordinates():x(0), y(0) {}
+};
 
 }
 

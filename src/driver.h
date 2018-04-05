@@ -14,15 +14,18 @@ class driver {
 
 	void		run() {
 
-		board b(20, 10);
+		board b(4, 4);
 		display d;
-		d.draw_board(b);
+		d.draw_board_borders({1,1}, b);
+		d.draw_board({2,2}, b);
+		d.refresh();
 
 		while(true) {
 
 			char c;
 			try {
-				std:cin>>c;
+				std::cin>>c;
+				break;
 			}
 			catch(std::exception& e) {
 				//TODO: I think this is it???

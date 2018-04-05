@@ -17,7 +17,7 @@ class tile {
 //	static const char greater_than='`'; // 	Greater than: Pop a and b, then push 1 if b>a, otherwise zero.
 //	static const char move_right='>';
 //	static const char move_left='<';
-//	static const char move_up='^';
+	static const char move_up='^';
 //	static const char move_down='v';
 //	static const char move_random='?';
 //	static const char horizontal_if='_'; //	Pop a value; move right if value=0, left otherwise
