@@ -16,6 +16,7 @@ class display {
 	public:
 
 	void		refresh() {
+		std::cout<<tools::s::reset_text();
 		std::flush(std::cout);
 	}
 
@@ -32,20 +33,21 @@ class display {
 		}
 	}
 
-	void		draw_cursor(const coordinates& _pos, const board& _b) {
+	void		draw_cursor(const coordinates& _pos, const coordinates& _offset, const board& _b) {
 
 		std::cout<<tools::s::text_color(tools::txt_white)
 			<<tools::s::background_color(tools::bg_red)
-			<<tools::s::pos(_pos.x+1, _pos.y+1)
+			<<tools::s::pos(_pos.x+_offset.x, _pos.y+_offset.y)
 			<<_b.get_tile(_pos).get_val();
 	}
 
 	void		draw_stack() {
-		//TODO...
+		//TODO... this should draw the int values and a char value too.
+		//If there are more items in the stack, we should show a "more...".
 	}
 
 	void		draw_board_changes() {
-		//TODO: Who should store the differences????
+		//TODO: Just in case we want to be more efficient...
 	}
 
 	void		draw_board_borders(const coordinates& _pos, const board& _b) {
@@ -70,7 +72,6 @@ class display {
 		draw_hor(_pos.y+_b.get_h()+1, "\u2500");
 		draw_ver(_pos.x, "\u2502");
 		draw_ver(_pos.x+_b.get_h()+1, "\u2502");
-
 	}
 
 	private:

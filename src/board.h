@@ -13,12 +13,14 @@ namespace app {
 class board {
 
 	public:
+		//TODO: I need a constructor that loads a board from a file.
+		//!Base constructor creates an empty board.
 				board(int _w, int _h):w{_w}, h{_h} {
 
 		if(!check_dimensions({w, h})) {
 			throw std::runtime_error("invalid board dimensions");
 		}
-		tiles.resize(w*h, tile::move_up);
+		tiles.resize(w*h, tile::noop);
 	}
 
 	const tile&		get_tile(const coordinates& _c) const {
@@ -41,7 +43,7 @@ class board {
 	}
 
 	//!Gets the position that lies _d from _from... this wraps.
-	coordinates		get_movement_position(const coordinates& _from, directions _d) {
+	coordinates		get_movement_position(const coordinates& _from, directions _d) const {
 		auto res=_from;
 		switch(_d) {
 			case directions::up: 	--res.y; break;
@@ -72,6 +74,7 @@ class board {
 	bool			check_dimensions(const coordinates& _c) const {
 		return !(_c.x > max_w || _c.y > max_h || _c.x < min_h || _c.y < min_h);
 	}
+
 	bool			check_coords(const coordinates& _c) const {
 		return !(_c.x > w || _c.y > h || _c.x < 0 || _c.y < 0);
 	}

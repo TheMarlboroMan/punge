@@ -30,6 +30,8 @@ class stack {
 
 	private:
 
+	//TODO: actually, the stack should be a stack of integers, not of tiles.
+	//TODO: To pop the value as ASCII we would do modulo 256.
 	std::vector<tile>	items;
 };
 
