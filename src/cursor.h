@@ -25,7 +25,6 @@ class cursor {
 	int			get_x() const {return pos.x;}
 	int			get_y() const {return pos.y;}
 	directions		get_heading() const {return heading;}
-	
 
 	private:
 

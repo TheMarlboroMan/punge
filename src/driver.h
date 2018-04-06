@@ -16,15 +16,20 @@ class driver {
 	void		run() {
 
 		//TODO: Check terminal size!!!!!.
+		//TODO: Exit if the terminal is too small.
+		//TODO: Maybe save terminal size into the display???.
+		//TODO: Maybe check all that shit into display???.
 
-		board b(20, 20);
 		display d;
+		board b(20, 20);
 		cursor c;
 
 		coordinates board_pos{2,2};
 		coordinates borders_pos{1,1};
 		coordinates input_pos{1, 23};
 		coordinates clear_pos{1, 24};
+
+		d.clear_terminal();
 
 		while(true) {
 
@@ -61,7 +66,6 @@ class driver {
 		switch(_b.get_tile(np).get_val()) {
 			case tile::noop: //Everything's cool...
 				break;
-			default:
 			case tile::move_up:
 				_c.set_heading(directions::up); break;
 			case tile::move_down:
@@ -71,10 +75,9 @@ class driver {
 			case tile::move_left:
 				_c.set_heading(directions::left); break;
 			default:
-				//TODO: if is alphanumeric, add to 
+				//TODO: if is alphanumeric, add to stack and shit.
 			break;
 		}
-
 	}
 
 };

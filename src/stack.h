@@ -1,6 +1,7 @@
 #ifndef STACK_H
 #define STACK_H
 
+//TODO: Fuck the tile thing.
 #include "tile.h"
 #include "vector.h"
 

@@ -20,6 +20,12 @@ class display {
 		std::flush(std::cout);
 	}
 
+	void		clear_terminal() {
+		//TODO: Perhaps it is better to store the terminal size and move down
+		//as much columns as needed??????? I would prefer that.
+		std::cout<<tools::s::reset();
+	}
+
 	void		draw_board(const coordinates& _pos, const app::board& _b) {
 
 		std::cout<<tools::s::text_color(tools::txt_white)<<tools::s::background_color(tools::bg_black);
