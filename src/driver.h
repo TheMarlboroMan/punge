@@ -5,6 +5,7 @@
 
 #include "board.h"
 #include "display.h"
+#include "cursor.h"
 
 namespace app {
 
@@ -16,8 +17,12 @@ class driver {
 
 		board b(5, 5);
 		display d;
+		cursor c;
+
 		d.draw_board_borders({1,1}, b);
 		d.draw_board({2,2}, b);
+		//TODO: Noope... add extra position to compensate borders.
+		d.draw_cursor(c.get_position(), b);
 		d.refresh();
 
 		while(true) {
