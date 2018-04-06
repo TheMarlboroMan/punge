@@ -14,7 +14,7 @@ class driver {
 
 	void		run() {
 
-		board b(4, 4);
+		board b(5, 5);
 		display d;
 		d.draw_board_borders({1,1}, b);
 		d.draw_board({2,2}, b);

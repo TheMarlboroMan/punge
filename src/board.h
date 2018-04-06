@@ -13,17 +13,11 @@ class board {
 
 	public:
 
-	struct row_iterator {
-		std::vector<tile>::const_iterator 	begin,
-							end;
-	};
-
 				board(int _w, int _h):w{_w}, h{_h} {
 
 		if(!check_coords({w, h})) {
 			throw std::runtime_error("Invalid board dimensions");
 		}
-
 		tiles.resize(w*h, tile::move_up);
 	}
 
@@ -34,8 +28,12 @@ class board {
 		return tiles[ (_y*h) + _x];
 	}
 
-	row_iterator	get_row(int _y) const {
-		return row_iterator{tiles.begin()+(_y*h), tiles.begin()+(_y*h)+w};
+	const std::vector<tile const *>	get_row(int _y) const {
+		std::vector<tile const *> res;
+		for(int i=_y * w; i < (_y * w)+w; i++) {
+			res.push_back(&tiles[i]);
+		}
+		return res;
 	}
 
 	int			get_w() const {return w;}
