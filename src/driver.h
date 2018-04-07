@@ -80,19 +80,15 @@ class driver {
 		switch(val) {
 			case tile::noop: //Everything's cool...
 				break;
-			case tile::move_up:
-				_c.set_heading(directions::up); break;
-			case tile::move_down:
-				_c.set_heading(directions::down); break;
-			case tile::move_right:
-				_c.set_heading(directions::right); break;
-			case tile::move_left:
-				_c.set_heading(directions::left); break;
-			case tile::addition: 
-				_s.push(_s.pop()+_s.pop()); break;
-			case tile::substraction: 
-				_s.push(_s.pop()-_s.pop()); break;
-			break;
+			case tile::move_up:		_c.set_heading(directions::up); break;
+			case tile::move_down:		_c.set_heading(directions::down); break;
+			case tile::move_right:		_c.set_heading(directions::right); break;
+			case tile::move_left:		_c.set_heading(directions::left); break;
+			case tile::addition: 		_s.push(_s.pop()+_s.pop()); break;
+			case tile::substraction: 	_s.push(_s.pop()-_s.pop()); break;
+			case tile::multiplication: 	_s.push(_s.pop()*_s.pop()); break;
+			case tile::division: 		_s.push(_s.pop()/_s.pop()); break;
+			case tile::modulo: 		_s.push(_s.pop()%_s.pop()); break;
 			default:
 				if(std::isdigit(val)) {
 					//TODO: No magic numbers...

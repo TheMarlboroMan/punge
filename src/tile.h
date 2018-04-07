@@ -11,9 +11,9 @@ class tile {
 	static const char noop=' ';
 	static const char addition='+';
 	static const char substraction='-';
-//	static const char multiplication='*';
-//	static const char division='/'; // 	Integer division: Pop a and b, then push b/a, rounded towards 0.
-//	static const char modulo='%';	// 	Modulo: Pop a and b, then push the remainder of the integer division of b/a.
+	static const char multiplication='*';
+	static const char division='/'; // 	Integer division: Pop a and b, then push b/a, rounded towards 0.
+	static const char modulo='%';	// 	Modulo: Pop a and b, then push the remainder of the integer division of b/a.
 //	static const char logical_not='!'; //	Logical NOT: Pop a value. If the value is zero, push 1; otherwise, push zero.
 //	static const char greater_than='`'; // 	Greater than: Pop a and b, then push 1 if b>a, otherwise zero.
 	static const char move_right='>';

@@ -10,16 +10,28 @@ struct register_item {
 	typedef	unsigned 	t_stack;
 	t_stack			value;
 
+				register_item(t_stack _v=0):value(_v) {
+		
+	}
+
 	register_item operator+(const register_item& _o) {
-		register_item res;
-		res.value=value+_o.value;
-		return res;
+		return register_item(value+_o.value);
 	}
 
 	register_item operator-(const register_item& _o) {
-		register_item res;
-		res.value=value-_o.value;
-		return res;
+		return register_item(value-_o.value);
+	}
+
+	register_item operator*(const register_item& _o) {
+		return register_item(value*_o.value);
+	}
+
+	register_item operator/(const register_item& _o) {
+		return register_item(value/_o.value);
+	}
+
+	register_item operator%(const register_item& _o) {
+		return register_item(value%_o.value);
 	}
 	
 	bool			is_printable() const {
