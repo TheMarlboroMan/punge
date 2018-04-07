@@ -5,6 +5,7 @@
 
 #include "board.h"
 #include "coordinates.h"
+#include "stack.h"
 
 
 namespace app {
@@ -47,13 +48,41 @@ class display {
 			<<_b.get_tile(_pos).get_val();
 	}
 
-	void		draw_stack() {
-		//TODO... this should draw the int values and a char value too.
-		//If there are more items in the stack, we should show a "more...".
-	}
+	void		draw_stack(coordinates _pos, const stack& _s) {
 
-	void		draw_board_changes() {
-		//TODO: Just in case we want to be more efficient...
+		for(const auto &it : _s.get_slice()) {
+			std::cout<<tools::s::pos(_pos.x, _pos.y++)
+				<<tools::s::reset_text()
+//TODO: Please, add to terminal tools as "clear rest line".
+				<<"\033[0K"
+				<<"[";
+
+			if(it->is_printable()) {
+				std::cout<<tools::s::text_color(tools::txt_white)
+					<<tools::s::background_color(tools::bg_blue)
+					<<(it->as_char());
+			}
+			else {
+				std::cout<<tools::s::text_color(tools::txt_white)
+					<<tools::s::background_color(tools::bg_red)
+					<<"?";
+			}
+			
+			std::cout<<tools::s::reset_text()
+				<<"]\t["
+				<<tools::s::text_color(tools::txt_white)
+				<<tools::s::background_color(tools::bg_blue)
+				<<(it->value)
+				<<tools::s::reset_text()
+				<<"]";
+		}
+
+		//TODO: CLEAR ALSO until we reach 10.
+
+		if(_s.get_size() > 10) {
+			//TODO: Perhaps show how many more???
+			std::cout<<tools::s::pos(_pos.x, _pos.y++)<<"[MORE]";
+		}
 	}
 
 	void		draw_board_borders(const coordinates& _pos, const board& _b) {

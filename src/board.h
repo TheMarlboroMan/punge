@@ -13,14 +13,23 @@ namespace app {
 class board {
 
 	public:
-		//TODO: I need a constructor that loads a board from a file.
 		//!Base constructor creates an empty board.
 				board(int _w, int _h):w{_w}, h{_h} {
 
 		if(!check_dimensions({w, h})) {
-			throw std::runtime_error("invalid board dimensions");
+			throw std::runtime_error("invalid board dimensions "+std::to_string(_w)+"x"+std::to_string(_h));
 		}
 		tiles.resize(w*h, tile::noop);
+	}
+
+	
+
+	void			set_tile(const coordinates& _c, char _t) {
+		if(!check_coords({_c.x, _c.y})) {
+			throw std::runtime_error("set tile out of bounds ["+std::to_string(_c.x)+","+std::to_string(_c.y)+"]");
+		}
+
+		tiles[(_c.y*h) + _c.x].set_val(_t);
 	}
 
 	const tile&		get_tile(const coordinates& _c) const {
@@ -32,7 +41,7 @@ class board {
 
 	const std::vector<tile const *>	get_row(int _y) const {
 		if(_y < 0 || _y >= h) {
-			throw std::runtime_error("get row out of bounds");
+			throw std::runtime_error("get row out of bounds ["+std::to_string(_y)+"]");
 		}
 
 		std::vector<tile const *> res;
@@ -76,7 +85,7 @@ class board {
 	}
 
 	bool			check_coords(const coordinates& _c) const {
-		return !(_c.x > w || _c.y > h || _c.x < 0 || _c.y < 0);
+		return !(_c.x >= w || _c.y >= h || _c.x < 0 || _c.y < 0);
 	}
 
 	private:

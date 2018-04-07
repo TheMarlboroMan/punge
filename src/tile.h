@@ -9,8 +9,8 @@ class tile {
 
 //TODO: Uncomment as we implement them...
 	static const char noop=' ';
-//	static const char addition='+';
-//	static const char substraction='-';
+	static const char addition='+';
+	static const char substraction='-';
 //	static const char multiplication='*';
 //	static const char division='/'; // 	Integer division: Pop a and b, then push b/a, rounded towards 0.
 //	static const char modulo='%';	// 	Modulo: Pop a and b, then push the remainder of the integer division of b/a.

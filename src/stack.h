@@ -1,9 +1,9 @@
 #ifndef STACK_H
 #define STACK_H
 
-//TODO: Fuck the tile thing.
-#include "tile.h"
-#include "vector.h"
+#include <vector>
+
+#include "register_item.h"
 
 namespace app {
 
@@ -11,29 +11,47 @@ class stack {
 
 	public:
 
-	size_t		get_size() {
+	size_t		get_size() const {
 		return items.size();
 	}
 
-	tile&		pop() {
-		//TODO
-		return items[0];
+	register_item	pop() {
+
+		auto res=register_item{0};
+		if(items.size()) {
+			res.value=items.back().value;
+			items.pop_back();
+		}
+		update_slice();
+		return res;
 	};
 
-	void		push(const tile& _v) {
-//TODO		items.insert()
+	void		push(register_item _v) {
+		items.push_back(_v);
+		update_slice();
 	};
 
-//TODO: Pass a std::function to be processed by the whole vector.
-	void		walk() {
-
+	//TODO: What if the slice is a property??
+	const std::vector<register_item const *> get_slice() const {
+		return slice;
 	}
 
 	private:
 
-	//TODO: actually, the stack should be a stack of integers, not of tiles.
-	//TODO: To pop the value as ASCII we would do modulo 256.
-	std::vector<tile>	items;
+	//TODO... Hmmmm... this is actually game specific... I don't want it here!.
+	void 		update_slice() {
+		//TODO: No magic numbers....
+		slice.clear();
+		slice.reserve(10);
+
+		for(auto it=items.crbegin(); it!=items.crend(); ++it) {
+			slice.push_back( &(*it) );
+			if(slice.size()==10) break;
+		}
+	}
+
+	std::vector<register_item>		items;
+	std::vector<register_item const *>	slice; //!Already reversed in show order.
 };
 
 }
