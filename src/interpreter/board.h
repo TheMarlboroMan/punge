@@ -1,5 +1,5 @@
-#ifndef BOARD_H
-#define BOARD_H
+#ifndef INTERPRETER_BOARD_H
+#define INTERPRETER_BOARD_H
 
 #include <vector>
 #include <stdexcept>
@@ -8,11 +8,12 @@
 #include "coordinates.h"
 #include "directions.h"
 
-namespace app {
+namespace interpreter {
 
 class board {
 
 	public:
+
 		//!Base constructor creates an empty board.
 				board(int _w, int _h):w{_w}, h{_h} {
 
@@ -22,7 +23,12 @@ class board {
 		tiles.resize(w*h, tile::noop);
 	}
 
-	
+	board&			operator=(const board& _b) {
+		w=_b.w;
+		h=_b.h;
+		tiles=_b.tiles;
+		return *this;
+	}
 
 	void			set_tile(const coordinates& _c, char _t) {
 		if(!check_coords({_c.x, _c.y})) {

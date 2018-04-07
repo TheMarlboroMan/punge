@@ -1,7 +1,7 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "src/driver.h"
+#include "src/app/driver.h"
 
 int main(int argc, char ** argv) {
 

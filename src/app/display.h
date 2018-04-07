@@ -1,11 +1,11 @@
-#ifndef DISPLAY_H
-#define DISPLAY_H
+#ifndef APP_DISPLAY_H
+#define APP_DISPLAY_H
 
 #include <terminaltools.h>
 
-#include "board.h"
-#include "coordinates.h"
-#include "stack.h"
+#include "../interpreter/board.h"
+#include "../interpreter/coordinates.h"
+#include "../interpreter/stack.h"
 
 
 namespace app {
@@ -27,7 +27,7 @@ class display {
 		std::cout<<tools::s::reset();
 	}
 
-	void		draw_board(const coordinates& _pos, const app::board& _b) {
+	void		draw_board(const interpreter::coordinates& _pos, const interpreter::board& _b) {
 
 		std::cout<<tools::s::text_color(tools::txt_white)<<tools::s::background_color(tools::bg_black);
 
@@ -40,7 +40,7 @@ class display {
 		}
 	}
 
-	void		draw_cursor(const coordinates& _pos, const coordinates& _offset, const board& _b) {
+	void		draw_cursor(const interpreter::coordinates& _pos, const interpreter::coordinates& _offset, const interpreter::board& _b) {
 
 		std::cout<<tools::s::text_color(tools::txt_white)
 			<<tools::s::background_color(tools::bg_red)
@@ -48,7 +48,7 @@ class display {
 			<<_b.get_tile(_pos).get_val();
 	}
 
-	void		draw_stack(coordinates _pos, const stack& _s) {
+	void		draw_stack(interpreter::coordinates _pos, const interpreter::stack& _s) {
 
 		for(const auto &it : _s.get_slice()) {
 			std::cout<<tools::s::pos(_pos.x, _pos.y++)
@@ -85,7 +85,7 @@ class display {
 		}
 	}
 
-	void		draw_board_borders(const coordinates& _pos, const board& _b) {
+	void		draw_board_borders(const interpreter::coordinates& _pos, const interpreter::board& _b) {
 
 		std::cout<<tools::s::text_color(tools::txt_blue)<<tools::s::background_color(tools::bg_black);
 

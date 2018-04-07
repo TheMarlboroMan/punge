@@ -1,9 +1,12 @@
-#ifndef REGISTER_ITEM_H
-#define REGISTER_ITEM_H
+#ifndef INTERPRETER_REGISTER_ITEM_H
+#define INTERPRETER_REGISTER_ITEM_H
 
 #include <cctype>
+#include <iostream> //TODO: DELETE
 
-namespace app {
+#include "exception.h"
+
+namespace interpreter {
 
 struct register_item {
 
@@ -27,10 +30,16 @@ struct register_item {
 	}
 
 	register_item operator/(const register_item& _o) {
+		if(_o.value==0) {
+			throw divide_by_zero_exception("tried to divide register by zero");
+		}
 		return register_item(value/_o.value);
 	}
 
 	register_item operator%(const register_item& _o) {
+		if(_o.value==0) {
+			throw divide_by_zero_exception("tried to modulo register by zero");
+		}
 		return register_item(value%_o.value);
 	}
 	

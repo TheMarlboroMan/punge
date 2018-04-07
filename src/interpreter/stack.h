@@ -1,11 +1,11 @@
-#ifndef STACK_H
-#define STACK_H
+#ifndef INTERPRETER_STACK_H
+#define INTERPRETER_STACK_H
 
 #include <vector>
 
 #include "register_item.h"
 
-namespace app {
+namespace interpreter {
 
 class stack {
 

@@ -1,5 +1,5 @@
-#ifndef BOARD_LOADER_H
-#define BOARD_LOADER_H
+#ifndef INTERPRETER_BOARD_LOADER_H
+#define INTERPRETER_BOARD_LOADER_H
 
 #include <fstream>
 #include <sstream>
@@ -9,7 +9,7 @@
 
 #include "board.h"
 
-namespace app {
+namespace interpreter {
 
 class board_loader {
 
@@ -17,14 +17,9 @@ class board_loader {
 
 	board		from_string(const std::string& _s) {
 
-		//Get boardinfo.
 		boardinfo bi=get_boardinfo(_s);
-
-		//Create board.
 		board res(bi.w, bi.h);
 		read_into_board(res, _s);
-
-		//Read into board.
 		return res;
 	}
 

@@ -1,10 +1,10 @@
-#ifndef CURSOR_H
-#define CURSOR_H
+#ifndef INTERPRETER_CURSOR_H
+#define INTERPRETER_CURSOR_H
 
 #include "coordinates.h"
 #include "directions.h"
 
-namespace app {
+namespace interpreter {
 
 class cursor {
 	public:

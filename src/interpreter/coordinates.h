@@ -1,7 +1,7 @@
-#ifndef COORDINATES_H
-#define COORDINATES_H
+#ifndef INTERPRETER_COORDINATES_H
+#define INTERPRETER_COORDINATES_H
 
-namespace app {
+namespace interpreter {
 
 struct coordinates {
 	int x, y;

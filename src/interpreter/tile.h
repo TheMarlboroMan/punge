@@ -1,7 +1,7 @@
-#ifndef TILE_H
-#define TILE_H
+#ifndef INTERPRETER_TILE_H
+#define INTERPRETER_TILE_H
 
-namespace app {
+namespace interpreter {
 
 class tile {
 
