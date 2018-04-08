@@ -23,18 +23,18 @@ class tile {
 //	static const char move_random='?';
 //	static const char horizontal_if='_'; //	Pop a value; move right if value=0, left otherwise
 //	static const char vertical_if='|'; //	Pop a value; move down if value=0, up otherwise
-//	static const char string_delimiter='"';
-//	static const char duplicate=':';
-//	static const char swap='\';
-//	static const char pop='$';	//	Pop value from the stack and discard it
-//	static const char pop_out_int='.';// 	Pop value and output as an integer followed by a space
-//	static const char pop_out_char=','; // 	Pop value and output as ASCII character
-//	static const char skip='#'; // 	Bridge: Skip next cell
+	static const char string_delimiter='"';
+	static const char duplicate=':';
+	static const char swap='\\';
+	static const char pop='$';	//	Pop value from the stack and discard it
+	static const char pop_out_int='.';// 	Pop value and output as an integer followed by a space
+	static const char pop_out_char=','; // 	Pop value and output as ASCII character
+	static const char skip='#'; // 	Bridge: Skip next cell
 //	static const char put='p'; // 	A "put" call (a way to store a value for later use). Pop y, x, and v, then change the character at (x,y) in the program to the character with ASCII value v
 //	static const char get='g'; // 	A "get" call (a way to retrieve data in storage). Pop y and x, then push ASCII value of the character at that position in the program
 //	static const char push_in_int='&'; // 	Ask user for a number and push it
 //	static const char push_in_char='~'; //	Ask user for a character and push its ASCII value
-//	static const char end='@'; // 	End program
+	static const char end='@'; // 	End program
 	//Of course, a tile can also be a-z, A-Z and 0-9 :).
 
 			tile(char _v):val{_v}{

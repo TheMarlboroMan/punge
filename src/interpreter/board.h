@@ -35,14 +35,14 @@ class board {
 			throw std::runtime_error("set tile out of bounds ["+std::to_string(_c.x)+","+std::to_string(_c.y)+"]");
 		}
 
-		tiles[(_c.y*h) + _c.x].set_val(_t);
+		tiles[get_index(_c)].set_val(_t);
 	}
 
 	const tile&		get_tile(const coordinates& _c) const {
 		if(!check_coords({_c.x, _c.y})) {
 			throw std::runtime_error("get tile out of bounds ["+std::to_string(_c.x)+","+std::to_string(_c.y)+"]");
 		}
-		return tiles[ (_c.y*h) + _c.x];
+		return tiles[get_index(_c)];
 	}
 
 	const std::vector<tile const *>	get_row(int _y) const {
@@ -91,10 +91,14 @@ class board {
 	}
 
 	bool			check_coords(const coordinates& _c) const {
-		return !(_c.x >= w || _c.y >= h || _c.x < 0 || _c.y < 0);
+		return !(_c.x > w || _c.y > h || _c.x < 0 || _c.y < 0);
 	}
 
 	private:
+
+	size_t			get_index(const coordinates& _c) const {
+		return (_c.y*w) + _c.x;
+	}
 
 	const int 		min_w=4, min_h=4, max_w=80, max_h=24;
 	int 			w, h;

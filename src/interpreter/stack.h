@@ -5,6 +5,8 @@
 
 #include "register_item.h"
 
+//TODO: Should have a max size and throw if surpassed.
+
 namespace interpreter {
 
 class stack {
@@ -13,6 +15,25 @@ class stack {
 
 	size_t		get_size() const {
 		return items.size();
+	}
+
+	void		duplicate() {
+		auto item=pop();
+		push(item);
+		push(item);
+	}
+
+	void		swap() {
+		if(items.size() > 2) {
+			auto a=pop();
+			auto b=pop();
+			push(a);
+			push(b);
+		}
+	}
+
+	void		clear() {
+		items.clear();
 	}
 
 	register_item	pop() {
@@ -31,14 +52,14 @@ class stack {
 		update_slice();
 	};
 
-	//TODO: What if the slice is a property??
+	//TODO... Hmmmm... this is actually game specific... I don't want it here in the interpreter!!
 	const std::vector<register_item const *> get_slice() const {
 		return slice;
 	}
 
 	private:
 
-	//TODO... Hmmmm... this is actually game specific... I don't want it here!.
+	//TODO... Hmmmm... this is actually game specific... I don't want it here in the interpreter!!
 	void 		update_slice() {
 		//TODO: No magic numbers....
 		slice.clear();

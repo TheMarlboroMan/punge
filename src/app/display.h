@@ -4,6 +4,7 @@
 #include <terminaltools.h>
 
 #include "../interpreter/board.h"
+#include "../interpreter/output.h"
 #include "../interpreter/coordinates.h"
 #include "../interpreter/stack.h"
 
@@ -38,6 +39,18 @@ class display {
 				std::cout<<(t->get_val());
 			}
 		}
+
+		std::cout<<tools::s::reset_text();
+	}
+
+	void		draw_output(const interpreter::coordinates& _pos, const interpreter::output& _o) {
+
+		std::cout<<tools::s::text_color(tools::txt_white)
+			<<tools::s::background_color(tools::bg_green)
+			<<tools::s::pos(_pos.x, _pos.y)
+			<<_o.get()
+			<<tools::s::reset_text();
+
 	}
 
 	void		draw_cursor(const interpreter::coordinates& _pos, const interpreter::coordinates& _offset, const interpreter::board& _b) {
@@ -45,16 +58,19 @@ class display {
 		std::cout<<tools::s::text_color(tools::txt_white)
 			<<tools::s::background_color(tools::bg_red)
 			<<tools::s::pos(_pos.x+_offset.x, _pos.y+_offset.y)
-			<<_b.get_tile(_pos).get_val();
+			<<_b.get_tile(_pos).get_val()
+			<<tools::s::reset_text();
 	}
 
 	void		draw_stack(interpreter::coordinates _pos, const interpreter::stack& _s) {
 
+		int lines_cleared=0;
+
+		std::cout<<tools::s::reset_text();
+
 		for(const auto &it : _s.get_slice()) {
 			std::cout<<tools::s::pos(_pos.x, _pos.y++)
-				<<tools::s::reset_text()
-//TODO: Please, add to terminal tools as "clear rest line".
-				<<"\033[0K"
+				<<tools::s::clear_right()
 				<<"[";
 
 			if(it->is_printable()) {
@@ -75,14 +91,21 @@ class display {
 				<<(it->value)
 				<<tools::s::reset_text()
 				<<"]";
+
+			++lines_cleared;
 		}
 
-		//TODO: CLEAR ALSO until we reach 10.
-
-		if(_s.get_size() > 10) {
-			//TODO: Perhaps show how many more???
-			std::cout<<tools::s::pos(_pos.x, _pos.y++)<<"[MORE]";
+		//TODO: No magic number: stack size
+		while(lines_cleared < 10) {
+			std::cout<<tools::s::pos(_pos.x, _pos.y++)
+				<<tools::s::clear_right();
+			++lines_cleared;
 		}
+
+		std::cout<<tools::s::pos(_pos.x, --_pos.y)
+			<<tools::s::clear_right()
+			<<(_s.get_size() > 10 ? "[MORE]" : "[----]")
+			<<tools::s::reset_text();
 	}
 
 	void		draw_board_borders(const interpreter::coordinates& _pos, const interpreter::board& _b) {
@@ -106,11 +129,12 @@ class display {
 		draw_hor(_pos.y, "\u2500");
 		draw_hor(_pos.y+_b.get_h()+1, "\u2500");
 		draw_ver(_pos.x, "\u2502");
-		draw_ver(_pos.x+_b.get_h()+1, "\u2502");
+		draw_ver(_pos.x+_b.get_w()+1, "\u2502");
+
+		std::cout<<tools::s::reset_text();
 	}
 
 	private:
-
 };
 
 }

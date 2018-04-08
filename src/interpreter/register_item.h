@@ -2,15 +2,14 @@
 #define INTERPRETER_REGISTER_ITEM_H
 
 #include <cctype>
-#include <iostream> //TODO: DELETE
 
 #include "exception.h"
+#include "typedefs.h"
 
 namespace interpreter {
 
 struct register_item {
 
-	typedef	unsigned 	t_stack;
 	t_stack			value;
 
 				register_item(t_stack _v=0):value(_v) {
