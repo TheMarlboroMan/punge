@@ -16,26 +16,30 @@ struct register_item {
 		
 	}
 
-	register_item operator+(const register_item& _o) {
+	bool		operator>(const register_item& _o) const {
+		return value > _o.value;
+	}
+
+	register_item 	operator+(const register_item& _o) {
 		return register_item(value+_o.value);
 	}
 
-	register_item operator-(const register_item& _o) {
+	register_item 	operator-(const register_item& _o) {
 		return register_item(value-_o.value);
 	}
 
-	register_item operator*(const register_item& _o) {
+	register_item 	operator*(const register_item& _o) {
 		return register_item(value*_o.value);
 	}
 
-	register_item operator/(const register_item& _o) {
+	register_item 	operator/(const register_item& _o) {
 		if(_o.value==0) {
 			throw divide_by_zero_exception("tried to divide register by zero");
 		}
 		return register_item(value/_o.value);
 	}
 
-	register_item operator%(const register_item& _o) {
+	register_item 	operator%(const register_item& _o) {
 		if(_o.value==0) {
 			throw divide_by_zero_exception("tried to modulo register by zero");
 		}

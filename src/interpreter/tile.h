@@ -7,22 +7,21 @@ class tile {
 
 	public:
 
-//TODO: Uncomment as we implement them...
 	static const char noop=' ';
 	static const char addition='+';
 	static const char substraction='-';
 	static const char multiplication='*';
 	static const char division='/'; // 	Integer division: Pop a and b, then push b/a, rounded towards 0.
 	static const char modulo='%';	// 	Modulo: Pop a and b, then push the remainder of the integer division of b/a.
-//	static const char logical_not='!'; //	Logical NOT: Pop a value. If the value is zero, push 1; otherwise, push zero.
-//	static const char greater_than='`'; // 	Greater than: Pop a and b, then push 1 if b>a, otherwise zero.
+	static const char logical_not='!'; //	Logical NOT: Pop a value. If the value is zero, push 1; otherwise, push zero.
+	static const char greater_than='`'; // 	Greater than: Pop a and b, then push 1 if b>a, otherwise zero.
 	static const char move_right='>';
 	static const char move_left='<';
 	static const char move_up='^';
 	static const char move_down='v';
 //	static const char move_random='?';
-//	static const char horizontal_if='_'; //	Pop a value; move right if value=0, left otherwise
-//	static const char vertical_if='|'; //	Pop a value; move down if value=0, up otherwise
+	static const char horizontal_if='_'; //	Pop a value; move right if value=0, left otherwise
+	static const char vertical_if='|'; //	Pop a value; move down if value=0, up otherwise
 	static const char string_delimiter='"';
 	static const char duplicate=':';
 	static const char swap='\\';

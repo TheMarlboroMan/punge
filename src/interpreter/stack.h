@@ -17,21 +17,6 @@ class stack {
 		return items.size();
 	}
 
-	void		duplicate() {
-		auto item=pop();
-		push(item);
-		push(item);
-	}
-
-	void		swap() {
-		if(items.size() > 2) {
-			auto a=pop();
-			auto b=pop();
-			push(a);
-			push(b);
-		}
-	}
-
 	void		clear() {
 		items.clear();
 	}

@@ -25,7 +25,7 @@ class driver {
 		display 	d;
 		interpreter::coordinates 	board_pos{2,2};
 		interpreter::coordinates 	borders_pos{1,1};
-		interpreter::coordinates 	stack_pos{30, 1};
+		interpreter::coordinates 	stack_pos{82, 1};
 		interpreter::coordinates 	output_pos{1, 23};
 		interpreter::coordinates 	input_pos{1, 24};
 		interpreter::coordinates 	exit_pos{1, 25};
@@ -49,14 +49,15 @@ class driver {
 			std::cout<<tools::s::pos(input_pos.x, input_pos.y)<<"["<<curpos.x<<","<<curpos.y<<"]>>";
 			d.refresh();
 
-			std::this_thread::sleep_for(std::chrono::milliseconds(500));
+			std::this_thread::sleep_for(std::chrono::milliseconds(250));
 			p.step();
 		}
 
 		//Exit cleanly...
 		std::cout<<tools::s::pos(exit_pos.x, exit_pos.y);
 		std::flush(std::cout);
-		std::flush(std::cin);
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	}
 
 
