@@ -30,7 +30,7 @@ class tile {
 	static const char pop_out_char=',';
 	static const char skip='#';
 	static const char put='p';
-//	static const char get='g'; // 	A "get" call (a way to retrieve data in storage). Pop y and x, then push ASCII value of the character at that position in the program
+	static const char get='g';
 //	static const char push_in_int='&'; // 	Ask user for a number and push it
 //	static const char push_in_char='~'; //	Ask user for a character and push its ASCII value
 	static const char end='@';

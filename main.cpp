@@ -1,7 +1,11 @@
 #include <iostream>
 #include <stdexcept>
 
+#include <log.h>
+
 #include "src/app/driver.h"
+
+tools::log	applog("logs/app.log");
 
 int main(int argc, char ** argv) {
 

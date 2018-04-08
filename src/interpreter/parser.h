@@ -5,6 +5,7 @@
 #include <cctype>
 
 #include <number_generator.h>
+#include <log.h>
 
 #include "board.h"
 #include "board_loader.h"
@@ -12,6 +13,8 @@
 #include "output.h"
 #include "stack.h"
 #include "stack_manipulator.h"
+
+extern tools::log applog;
 
 namespace interpreter {
 
@@ -60,6 +63,9 @@ class parser {
 	}
 
 	void 		step() {
+
+		//TODO... oh well... should we execute first and move later???
+		//seems like the way to go...
 
 		auto np=brd.get_movement_position(cur.get_position(), cur.get_heading());
 		cur.set_position(np);
@@ -134,7 +140,7 @@ class parser {
 			case tile::pop_out_char:	out.add(stk.pop().as_char()); break;
 
 			case tile::put:			do_put_board(); break;
-
+			case tile::get:			do_get_board(); break;
 
 			case tile::string_delimiter:	string_mode=!string_mode; break;
 			case tile::skip:		skip_next=true; break;
@@ -149,10 +155,24 @@ class parser {
 	void			do_put_board() {
 		try {
 			auto y=stk.pop(), x=stk.pop(), v=stk.pop();
+applog<<"do_put_board:"<<x.value<<","<<y.value<<" => "<<v.value<<std::endl;
 			brd.set_tile( {static_cast<int>(x.value), static_cast<int>(y.value)}, v.as_char());
 		}
 		catch(out_of_bounds_exception& e) {
 			//It's ok...
+		}
+	}
+
+	//A "get" call (a way to retrieve data in storage). Pop y and x, then push ASCII value of the character at that position in the program
+	void			do_get_board() {
+		try {
+			auto y=stk.pop(), x=stk.pop();
+			const auto& t=brd.get_tile({static_cast<int>(x.value), static_cast<int>(y.value)});
+			stk.push({static_cast<t_stack>(t.get_val())});
+applog<<"do_get_board:"<<x.value<<","<<y.value<<" => "<<t.get_val()<<std::endl;
+		}
+		catch(out_of_bounds_exception& e) {
+			stk.push({0});
 		}
 	}
 
