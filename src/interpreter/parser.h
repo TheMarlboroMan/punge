@@ -64,21 +64,22 @@ class parser {
 
 	void 		step() {
 
-		//TODO... oh well... should we execute first and move later???
-		//seems like the way to go...
-
-		auto np=brd.get_movement_position(cur.get_position(), cur.get_heading());
-		cur.set_position(np);
-
+		//Execute...
 		if(skip_next) {
 			skip_next=false;
 		}
-		else if(string_mode) {
-			parse_string_mode(brd.get_tile(np));
-		}
 		else {
-			parse_regular_mode(brd.get_tile(np));
+			const auto& pos=cur.get_position();
+			if(string_mode) {
+				parse_string_mode(brd.get_tile(pos));
+			}
+			else {
+				parse_regular_mode(brd.get_tile(pos));
+			}
 		}
+
+		//...and move.
+		cur.set_position(brd.get_movement_position(cur.get_position(), cur.get_heading()));
 	}
 
 	private:

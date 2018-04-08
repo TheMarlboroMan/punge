@@ -20,7 +20,6 @@ Once these paths are sorted out in the makefile, just run "make all".
 ## TODO and FIX.
 
 - Fix borders.
-- The first instruction IS NOT EXECUTED.
 - Finish the interpreter with the missing commands.
 - Hide the cursor and clear the standard input.
 - Separate the stack slice... perhaps we can use the stack manipulator for that?
