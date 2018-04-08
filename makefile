@@ -1,2 +1,8 @@
+INCLUDES=-I../terminal-tools/src/ -I ../tools/class/ -I ../log/src/
+COMPILER=g++
+DEBUG=-g
+EXTERNAL_DEPS=../terminal-tools/obj/terminaltools.o ../log/obj/log.o
+CFLAGS=-Wno-deprecated -Wall -ansi -pedantic -std=c++11 -Wfatal-errors
+
 all: main.cpp
-	g++ -g main.cpp ../terminal-tools/obj/terminaltools.o -I../terminal-tools/src/ --std=c++11
+	$(COMPILER) $(DEBUG) main.cpp $(EXTERNAL_DEPS) $(INCLUDES) $(CFLAGS)

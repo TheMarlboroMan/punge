@@ -36,7 +36,7 @@ class board_loader {
 	private:
 
 	struct boardinfo {
-		int 		w=0, h=0;
+		unsigned	w=0, h=0;
 	};
 
 	boardinfo	get_boardinfo(const std::string& _s) {

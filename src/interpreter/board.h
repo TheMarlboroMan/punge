@@ -2,11 +2,11 @@
 #define INTERPRETER_BOARD_H
 
 #include <vector>
-#include <stdexcept>
 
 #include "tile.h"
 #include "coordinates.h"
 #include "directions.h"
+#include "exception.h"
 
 namespace interpreter {
 
@@ -18,7 +18,7 @@ class board {
 				board(int _w, int _h):w{_w}, h{_h} {
 
 		if(!check_dimensions({w, h})) {
-			throw std::runtime_error("invalid board dimensions "+std::to_string(_w)+"x"+std::to_string(_h));
+			throw invalid_dimensions_exception("invalid board dimensions "+std::to_string(_w)+"x"+std::to_string(_h));
 		}
 		tiles.resize(w*h, tile::noop);
 	}
@@ -32,7 +32,7 @@ class board {
 
 	void			set_tile(const coordinates& _c, char _t) {
 		if(!check_coords({_c.x, _c.y})) {
-			throw std::runtime_error("set tile out of bounds ["+std::to_string(_c.x)+","+std::to_string(_c.y)+"]");
+			throw out_of_bounds_exception("set tile out of bounds ["+std::to_string(_c.x)+","+std::to_string(_c.y)+"]");
 		}
 
 		tiles[get_index(_c)].set_val(_t);
@@ -40,14 +40,14 @@ class board {
 
 	const tile&		get_tile(const coordinates& _c) const {
 		if(!check_coords({_c.x, _c.y})) {
-			throw std::runtime_error("get tile out of bounds ["+std::to_string(_c.x)+","+std::to_string(_c.y)+"]");
+			throw out_of_bounds_exception("get tile out of bounds ["+std::to_string(_c.x)+","+std::to_string(_c.y)+"]");
 		}
 		return tiles[get_index(_c)];
 	}
 
 	const std::vector<tile const *>	get_row(int _y) const {
 		if(_y < 0 || _y >= h) {
-			throw std::runtime_error("get row out of bounds ["+std::to_string(_y)+"]");
+			throw out_of_bounds_exception("get row out of bounds ["+std::to_string(_y)+"]");
 		}
 
 		std::vector<tile const *> res;

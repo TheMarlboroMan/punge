@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cctype>
 
+#include <number_generator.h>
 
 #include "board.h"
 #include "board_loader.h"
@@ -19,7 +20,7 @@ class parser {
 	public:
 
 			parser():
-		b(4,4) {
+		brd(4,4) {
 
 	}
 
@@ -32,7 +33,7 @@ class parser {
 	}
 
 	const board&	get_board() const {
-		return b;
+		return brd;
 	}
 
 	const cursor&	get_cursor() const {
@@ -45,7 +46,7 @@ class parser {
 
 	void 		load_board_from_filename(const std::string& _f) {
 		board_loader 	bl;
-		b=bl.from_filename(_f);
+		brd=bl.from_filename(_f);
 	}
 
 	void		reset() {
@@ -60,17 +61,17 @@ class parser {
 
 	void 		step() {
 
-		auto np=b.get_movement_position(cur.get_position(), cur.get_heading());
+		auto np=brd.get_movement_position(cur.get_position(), cur.get_heading());
 		cur.set_position(np);
 
 		if(skip_next) {
 			skip_next=false;
 		}
 		else if(string_mode) {
-			parse_string_mode(b.get_tile(np));
+			parse_string_mode(brd.get_tile(np));
 		}
 		else {
-			parse_regular_mode(b.get_tile(np));
+			parse_regular_mode(brd.get_tile(np));
 		}
 	}
 
@@ -115,6 +116,7 @@ class parser {
 			case tile::move_left:		cur.set_heading(directions::left); break;
 			case tile::horizontal_if:	cur.set_heading(stk.pop().value ? directions::left : directions::right); break;
 			case tile::vertical_if:		cur.set_heading(stk.pop().value ? directions::up : directions::down); break;
+			case tile::move_random:		cur.set_heading(get_random_heading()); break;
 
 			case tile::pop:			stk.pop(); break;
 
@@ -131,6 +133,9 @@ class parser {
 			case tile::pop_out_int:		out.add(stk.pop().value); break;
 			case tile::pop_out_char:	out.add(stk.pop().as_char()); break;
 
+			case tile::put:			do_put_board(); break;
+
+
 			case tile::string_delimiter:	string_mode=!string_mode; break;
 			case tile::skip:		skip_next=true; break;
 			case tile::end:			end_signal=true; break;
@@ -138,12 +143,37 @@ class parser {
 			default:			push_value_to_stack(val); break;
 		}
 	}
+	
+	//!A "put" call (a way to store a value for later use). Pop y, x, and v, then change the character at (x,y) in the program to the character with ASCII value v
+	//We use 0 indexed coordinates.
+	void			do_put_board() {
+		try {
+			auto y=stk.pop(), x=stk.pop(), v=stk.pop();
+			brd.set_tile( {static_cast<int>(x.value), static_cast<int>(y.value)}, v.as_char());
+		}
+		catch(out_of_bounds_exception& e) {
+			//It's ok...
+		}
+	}
+
+	directions		get_random_heading() {
+
+		tools::int_generator g(0, 3);
+		switch(g()) {
+			case 0: return directions::up; break;
+			case 1: return directions::right; break;
+			case 2: return directions::down; break;
+			case 3: return directions::left; break;
+		}
+
+		return directions::up; //Shut up compiler...
+	}
 
 	cursor 			cur;
 	//TODO: Terrible variable names...
 	stack			stk;
 	stack_manipulator	stkman;
-	board 			b;
+	board 			brd;
 	output			out;
 
 	bool		end_signal=false,

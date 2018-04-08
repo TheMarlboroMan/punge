@@ -19,7 +19,7 @@ class tile {
 	static const char move_left='<';
 	static const char move_up='^';
 	static const char move_down='v';
-//	static const char move_random='?';
+	static const char move_random='?';
 	static const char horizontal_if='_';
 	static const char vertical_if='|';
 	static const char string_delimiter='"';
@@ -29,7 +29,7 @@ class tile {
 	static const char pop_out_int='.';
 	static const char pop_out_char=',';
 	static const char skip='#';
-//	static const char put='p'; // 	A "put" call (a way to store a value for later use). Pop y, x, and v, then change the character at (x,y) in the program to the character with ASCII value v
+	static const char put='p';
 //	static const char get='g'; // 	A "get" call (a way to retrieve data in storage). Pop y and x, then push ASCII value of the character at that position in the program
 //	static const char push_in_int='&'; // 	Ask user for a number and push it
 //	static const char push_in_char='~'; //	Ask user for a character and push its ASCII value

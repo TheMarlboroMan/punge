@@ -56,8 +56,6 @@ class driver {
 		//Exit cleanly...
 		std::cout<<tools::s::pos(exit_pos.x, exit_pos.y);
 		std::flush(std::cout);
-//		std::cin.clear();
-//		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	}
 
 

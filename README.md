@@ -2,7 +2,22 @@
 
 An idea of a puzzle game based in the Befunge language.
 
-# TODO:
+## Building
+
+You will need to have with the following object files in your system
+
+	- terminaltools.o (located in terminal-tools/obj/ after building my terminal-tools github project).
+	- log.o (located in log/obj after building my log github project).
+
+You will need to add the include paths to:
+
+	- number_generator.h (located in class/ in my tools github repo).
+	- terminaltools.h (located in class/ in my terminal-tools github repo).
+	- log.h (located in class in my log github repo).
+
+Once these paths are sorted out in the makefile, just run "make all".
+
+## TODO:
 
 - Finish the interpreter with the missing commands.
 - Hide the cursor and clear the standard input.

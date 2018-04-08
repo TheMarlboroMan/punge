@@ -21,6 +21,20 @@ class modulo_by_zero_exception:public std::runtime_error {
 	}
 };
 
+class invalid_dimensions_exception:public std::runtime_error {
+	public:
+		invalid_dimensions_exception(const std::string& _m):std::runtime_error(_m) {
+
+	}
+};
+
+class out_of_bounds_exception:public std::runtime_error {
+	public:
+		out_of_bounds_exception(const std::string& _m):std::runtime_error(_m) {
+
+	}
+};
+
 }
 
 #endif
