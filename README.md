@@ -1,7 +1,18 @@
 # punge
+
 An idea of a puzzle game based in the Befunge language.
 
-## Befunge-93 instruction list
+# TODO:
+
+- Finish the interpreter with the missing commands.
+- Hide the cursor and clear the standard input.
+- Separate the stack slice... perhaps we can use the stack manipulator for that?
+
+- Normalize board format (perhaps board first, info later????).
+- Normalize puzzle set structure.
+- Experiment with getch alternatives...
+
+## For my own reference: befunge-93 instruction list
 
 0-9 	Push this number on the stack
 + 	Addition: Pop a and b, then push a+b
