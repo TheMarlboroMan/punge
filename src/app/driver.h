@@ -16,46 +16,48 @@ class driver {
 
 	void		run() {
 
-		//TODO: Check terminal size!!!!!.
-		//TODO: Exit if the terminal is too small.
-		//TODO: Maybe save terminal size into the display???.
-		//TODO: Maybe check all that shit into display???.
+		//TODO: Display constructor hides cursor, on destructor shows it again!
+		
+		try {
+			display 	d;
+			interpreter::parser 		p;
+			p.load_board_from_filename("data/sets/original/test01.brd");
 
-		//TODO: Display hides cursor, on destructor shows it again!
-		display 	d;
-		interpreter::coordinates 	board_pos{2,2};
-		interpreter::coordinates 	borders_pos{1,1};
-		interpreter::coordinates 	stack_pos{82, 1};
-		interpreter::coordinates 	output_pos{1, 23};
-		interpreter::coordinates 	input_pos{1, 24};
-		interpreter::coordinates 	exit_pos{1, 25};
+			d.clear_terminal();
 
-		interpreter::parser 		p;
-		p.load_board_from_filename("data/sets/original/test01.brd");
+			while(!p.is_end()) {
 
-		d.clear_terminal();
+				const auto curpos=p.get_cursor().get_position();
 
-		while(!p.is_end()) {
+				d.draw_board_borders(p.get_board());
+				d.draw_board(p.get_board());
 
-			const auto curpos=p.get_cursor().get_position();
+				//TODO: Change color when in string mode!!!
+				d.draw_cursor(curpos, p.get_board());
+				d.draw_stack(p.get_stack());
+				d.draw_output(p.get_output());
 
-			d.draw_board_borders(borders_pos, p.get_board());
-			d.draw_board(board_pos, p.get_board());
-			//TODO: Change color when in string mode!!!
-			d.draw_cursor(curpos, board_pos, p.get_board());
-			d.draw_stack(stack_pos, p.get_stack());
-			d.draw_output(output_pos, p.get_output());
+//TODO: This should be done by the display.	std::cout<<tools::s::pos(input_pos.x, input_pos.y)<<"["<<curpos.x<<","<<curpos.y<<"]>>";
+				d.refresh();
 
-			std::cout<<tools::s::pos(input_pos.x, input_pos.y)<<"["<<curpos.x<<","<<curpos.y<<"]>>";
-			d.refresh();
+				std::this_thread::sleep_for(std::chrono::milliseconds(250));
+				p.step();
+			}
 
-			std::this_thread::sleep_for(std::chrono::milliseconds(250));
-			p.step();
+			//Exit cleanly...
+//TODO: This should be done by the display too			std::cout<<tools::s::pos(exit_pos.x, exit_pos.y);
+			std::flush(std::cout);
 		}
-
-		//Exit cleanly...
-		std::cout<<tools::s::pos(exit_pos.x, exit_pos.y);
-		std::flush(std::cout);
+		catch(display_size_exception& e) {
+			std::cout<<tools::s::text_color(tools::txt_red)
+				<<tools::s::background_color(tools::bg_white)
+				<<"You cannot play Punge in your terminal:"
+				<<tools::s::reset_text()
+				<<" "<<e.what()<<std::endl;
+		}
+		catch(...) {
+			throw;
+		}
 	}
 
 

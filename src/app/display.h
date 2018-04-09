@@ -3,6 +3,11 @@
 
 #include <terminaltools.h>
 
+#include <sys/ioctl.h>
+#include <unistd.h>
+
+#include "exception.h"
+
 #include "../interpreter/board.h"
 #include "../interpreter/output.h"
 #include "../interpreter/coordinates.h"
@@ -17,6 +22,19 @@ namespace app {
 class display {
 	public:
 
+			display():
+	board_pos{2,2}, 
+	borders_pos{1,1}, 
+	stack_pos{82, 1},
+	output_pos{1, 23},
+	input_pos{1, 24},
+	exit_pos{1, 25} {
+		get_terminal_size();
+		if(!check_size()) {
+			throw display_size_exception("terminal must be of at least "+std::to_string(min_w)+"x"+std::to_string(min_h));
+		}
+	}
+
 	void		refresh() {
 		std::cout<<tools::s::reset_text();
 		std::flush(std::cout);
@@ -28,7 +46,9 @@ class display {
 		std::cout<<tools::s::reset();
 	}
 
-	void		draw_board(const interpreter::coordinates& _pos, const interpreter::board& _b) {
+	void		draw_board(const interpreter::board& _b) {
+
+		const interpreter::coordinates& _pos=board_pos; //alias...
 
 		std::cout<<tools::s::text_color(tools::txt_white)<<tools::s::background_color(tools::bg_black);
 
@@ -43,8 +63,9 @@ class display {
 		std::cout<<tools::s::reset_text();
 	}
 
-	void		draw_output(const interpreter::coordinates& _pos, const interpreter::output& _o) {
+	void		draw_output(const interpreter::output& _o) {
 
+		const interpreter::coordinates& _pos=output_pos; //alias.
 		std::cout<<tools::s::text_color(tools::txt_white)
 			<<tools::s::background_color(tools::bg_green)
 			<<tools::s::pos(_pos.x, _pos.y)
@@ -53,7 +74,9 @@ class display {
 
 	}
 
-	void		draw_cursor(const interpreter::coordinates& _pos, const interpreter::coordinates& _offset, const interpreter::board& _b) {
+	void		draw_cursor(const interpreter::coordinates& _pos, const interpreter::board& _b) {
+
+		const interpreter::coordinates& _offset=board_pos;
 
 		std::cout<<tools::s::text_color(tools::txt_white)
 			<<tools::s::background_color(tools::bg_red)
@@ -62,7 +85,9 @@ class display {
 			<<tools::s::reset_text();
 	}
 
-	void		draw_stack(interpreter::coordinates _pos, const interpreter::stack& _s) {
+	void		draw_stack(const interpreter::stack& _s) {
+
+		auto _pos=stack_pos; //Copy...
 
 		int lines_cleared=0;
 
@@ -108,7 +133,9 @@ class display {
 			<<tools::s::reset_text();
 	}
 
-	void		draw_board_borders(const interpreter::coordinates& _pos, const interpreter::board& _b) {
+	void		draw_board_borders(const interpreter::board& _b) {
+
+		const interpreter::coordinates& _pos=borders_pos;
 
 		std::cout<<tools::s::text_color(tools::txt_blue)<<tools::s::background_color(tools::bg_black);
 
@@ -135,6 +162,27 @@ class display {
 	}
 
 	private:
+
+	void		get_terminal_size(){
+		winsize ws;
+		ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws);
+		w=ws.ws_col;
+		h=ws.ws_row;
+	}
+
+	bool		check_size() {
+		return !(w < min_w || h < min_h);
+	}
+
+	const unsigned			min_w=80, min_h=26;
+
+	unsigned 			w, h;
+	interpreter::coordinates 	board_pos,
+					borders_pos,
+					stack_pos,
+					output_pos,
+					input_pos,
+					exit_pos;
 };
 
 }
