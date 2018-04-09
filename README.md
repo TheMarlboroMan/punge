@@ -19,14 +19,17 @@ Once these paths are sorted out in the makefile, just run "make all".
 
 ## TODO and FIX.
 
-- Fix borders.
-- Finish the interpreter with the missing commands.
-- Hide the cursor and clear the standard input.
+- Separate cpp files, do real makefile... it sucks since it's slower in the end.
+
+- Experiment with getch alternatives...
+- Fix borders. This is rather easy of course.
+- Finish the interpreter with the missing commands. I am only missing the input stuff.
+- Hide the cursor, show it when needed.
+- Clear the stdin when done.
 - Separate the stack slice... perhaps we can use the stack manipulator for that?
 
 - Normalize board format (perhaps board first, info later????).
 - Normalize puzzle set structure.
-- Experiment with getch alternatives...
 
 ## For my own reference: befunge-93 instruction list
 
