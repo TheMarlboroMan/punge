@@ -12,14 +12,21 @@
 tools::log	applog("logs/app.log");
 termios	initialTermios;
 
+void flush_input() {
+	//TODO: Experiment with discarding shit.
+	if(0 > tcflush(STDIN_FILENO, TCIFLUSH)) {
+		throw std::runtime_error("Unable to flush input");
+	}
+}
+
 void enter() {
 
-	int fd;
-	if ((fd = fcntl (STDIN_FILENO, F_GETFL)) < 0) {
+	int fl;
+	if ((fl = fcntl (STDIN_FILENO, F_GETFL)) < 0) {
 		throw std::runtime_error("Unable to capture stdin flags");
 	}
 
-	if (fcntl(STDIN_FILENO, F_SETFL, fd | O_NONBLOCK)) {
+	if (fcntl(STDIN_FILENO, F_SETFL, fl | O_NONBLOCK)) {
 		throw std::runtime_error("Unable to set stdin flags");
 	}
 
@@ -28,17 +35,14 @@ void enter() {
 	}
 
 	termios tios(initialTermios);
-	tios.c_lflag &= ~(ICANON); // | ECHO);	// No by-line buffering, no echo.
-	tios.c_iflag &= ~(IXON | IXOFF);	// No ^s scroll lock
-//	tios.c_cc[VMIN] = 1;		// Read at least 1 character on each read().
-//	tios.c_cc[VTIME] = 0;		// Disable time-based preprocessing (Esc sequences)
+	tios.c_lflag &= ~(ICANON | ECHO);	// No by-line buffering, no echo.
+//	tios.c_iflag &= ~(IXON | IXOFF);	// No ^s scroll lock
+	tios.c_cc[VMIN] = 1;		// Read at least 1 character on each read().
+	tios.c_cc[VTIME] = 0;		// Disable time-based preprocessing (Esc sequences)
 //	tios.c_cc[VQUIT] = 0xff;		// Disable ^\. Root window will handle.
 //	tios.c_cc[VSUSP] = 0xff;		// Disable ^z. Suspends in UI mode result in garbage.
 
-	//TODO: Experiment with discarding shit.
-	if(0 > tcflush(STDIN_FILENO, TCIFLUSH)) {	// Flush the input queue; who knows what was pressed.
-		throw std::runtime_error("Unable to flush input");
-	}
+	flush_input();
 
 	if(0 > tcsetattr (STDIN_FILENO, TCSAFLUSH, &tios)) {
 		throw std::runtime_error("Unable to set new attributes");
@@ -48,30 +52,100 @@ void enter() {
 
 void exit() {
 
-	if(0 > tcflush(STDIN_FILENO, TCIFLUSH)) {	// Flush the input queue; who knows what was pressed.
-		throw std::runtime_error("Unable to flush input");
-	}
+	flush_input();
 
 	if(tcsetattr (STDIN_FILENO, TCSANOW, &initialTermios)) {
 		throw std::runtime_error("Unable to restore terminal state");
 	}
 }
 
+struct input_data {
+	char c;
+	enum class arrowkeys {none, up, down, left, right} arrow;
+
+	bool is_input() const {return c || arrow!=arrowkeys::none;}
+	bool is_arrow() const {return arrow!=arrowkeys::none;}
+	bool is_char() const {return c;}
+	bool is_backspace() const {return c==127;}
+	//TODO: And TAB????
+
+	input_data():c{0}, arrow{arrowkeys::none} {
+	
+	}
+};
+
+input_data get_input() {
+	input_data res;
+
+	//TODO like... terrible XD!.
+	fd_set set;
+	FD_ZERO(&set);
+	FD_SET(STDIN_FILENO, &set);
+
+	//This prevents blocking.
+	timeval tv {0, 10000};
+	if(select(STDIN_FILENO+1, &set, nullptr, nullptr, &tv)) {
+
+		//TODO: Please do this right... 
+		//We can either read 3 at a time and hope for the best
+		//or read two if we get a scape.
+		char c;
+		read(STDIN_FILENO, &c, 1);
+
+		//This is the begin of a scape sequence...
+		if(c==27) {
+			read(STDIN_FILENO, &c, 1);
+			//This is "["
+			if(c==91) {
+				read(STDIN_FILENO, &c, 1);
+				//These are actually the cursors!.
+				switch(c) {
+					case 'A': res.arrow=input_data::arrowkeys::up; break;
+					case 'B': res.arrow=input_data::arrowkeys::down; break;
+					case 'C': res.arrow=input_data::arrowkeys::right; break;
+					case 'D': res.arrow=input_data::arrowkeys::left; break;
+				}
+			}
+			//Control + keys and stuff... Control+C will still work :D.
+			else {
+				flush_input(); //Lol
+			}
+		}
+		//Backspace, chars...
+		else if(c==127 || isprint(c)) {
+			res.c=c;
+		}
+		else {
+			flush_input(); //Lol
+		}
+	}
+
+	return res;
+}
+
 int main(int argc, char ** argv) {
 
 	enter();
 	std::cout<<"Hello >>"<<std::endl;
-	//Interestingly, line buffering is fucking us up.
 
-	char c='\0';
+	input_data id;
 
-	while(c!='x') {
-		std::cin>>c;
-		std::cout<<"You said "<<c<<std::endl;
+	while(true) {
+		std::flush(std::cout);
+		id=get_input();
+		if(id.is_input()) {
+
+			if(id.is_char()) {
+				std::cout<<"You said "<<id.c<<" ["<<(int)id.c<<"]"<<std::endl;
+				if(id.c=='x') break;
+			}
+			else if(id.is_arrow()) {
+				std::cout<<"Good arrow press..."<<std::endl;
+			}
+		}
 	}
 
 	exit();
-	
 
 	return 0;
 
