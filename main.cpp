@@ -10,6 +10,10 @@
 #include "src/app/driver.h"
 
 tools::log	applog("logs/app.log");
+
+//TODO: All this shit should go into terminal tools.
+//We could separate "input" and "output".
+
 termios	initialTermios;
 
 void flush_input() {
@@ -35,7 +39,9 @@ void enter() {
 	}
 
 	termios tios(initialTermios);
-	tios.c_lflag &= ~(ICANON | ECHO);	// No by-line buffering, no echo.
+	//TODO: It would be good to choose to enable OR disable the echo.
+	tios.c_lflag &= ~(ICANON);// | ECHO);	// No by-line buffering, no echo.
+	tios.c_lflag &= ~(ECHO);// | ECHO);	// No by-line buffering, no echo.
 //	tios.c_iflag &= ~(IXON | IXOFF);	// No ^s scroll lock
 	tios.c_cc[VMIN] = 1;		// Read at least 1 character on each read().
 	tios.c_cc[VTIME] = 0;		// Disable time-based preprocessing (Esc sequences)
@@ -68,6 +74,7 @@ struct input_data {
 	bool is_char() const {return c;}
 	bool is_backspace() const {return c==127;}
 	//TODO: And TAB????
+	//TODO: And ENTER???
 
 	input_data():c{0}, arrow{arrowkeys::none} {
 	
