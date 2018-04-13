@@ -161,6 +161,16 @@ class display {
 		std::cout<<tools::s::reset_text();
 	}
 
+	void		draw_cursor_pos(const interpreter::coordinates& _c) {
+		
+		std::cout<<tools::s::pos(input_pos.x, input_pos.y)<<"["<<_c.x<<","<<_c.y<<"]>>";
+	}
+
+	void		cleanup() {
+
+		std::cout<<tools::s::pos(exit_pos.x, exit_pos.y)<<tools::s::flush();
+	}
+
 	private:
 
 	void		get_terminal_size(){

@@ -4,6 +4,8 @@
 #include <thread>
 #include <chrono>
 
+#include <terminal_in.h>
+
 #include "display.h"
 
 #include "../interpreter/parser.h"
@@ -16,13 +18,12 @@ class driver {
 
 	void		run() {
 
-		//TODO: Display constructor hides cursor, on destructor shows it again!
-		
 		try {
-			display 	d;
+			tools::terminal_in 		ti;
+			display 			d;
 			interpreter::parser 		p;
-			p.load_board_from_filename("data/sets/original/test01.brd");
 
+			p.load_board_from_filename("data/sets/original/test01.brd");
 			d.clear_terminal();
 
 			while(!p.is_end()) {
@@ -36,8 +37,7 @@ class driver {
 				d.draw_cursor(curpos, p.get_board());
 				d.draw_stack(p.get_stack());
 				d.draw_output(p.get_output());
-
-//TODO: This should be done by the display.	std::cout<<tools::s::pos(input_pos.x, input_pos.y)<<"["<<curpos.x<<","<<curpos.y<<"]>>";
+				d.draw_cursor_pos(curpos);
 				d.refresh();
 
 				std::this_thread::sleep_for(std::chrono::milliseconds(250));
@@ -45,8 +45,7 @@ class driver {
 			}
 
 			//Exit cleanly...
-//TODO: This should be done by the display too			std::cout<<tools::s::pos(exit_pos.x, exit_pos.y);
-			std::flush(std::cout);
+			d.cleanup();
 		}
 		catch(display_size_exception& e) {
 			std::cout<<tools::s::text_color(tools::txt_red)
