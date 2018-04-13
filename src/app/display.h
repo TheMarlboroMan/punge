@@ -1,10 +1,10 @@
 #ifndef APP_DISPLAY_H
 #define APP_DISPLAY_H
 
-#include <terminaltools.h>
-
 #include <sys/ioctl.h>
 #include <unistd.h>
+
+#include <terminal_out.h>
 
 #include "exception.h"
 

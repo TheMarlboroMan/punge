@@ -6,13 +6,14 @@ An idea of a puzzle game based in the Befunge language.
 
 You will need to have with the following object files in your system
 
-	- terminaltools.o (located in terminal-tools/obj/ after building my terminal-tools github project).
+	- terminal_in.o and terminal_out.o (located in terminal-tools/obj/ after building my terminal-tools github project).
 	- log.o (located in log/obj after building my log github project).
 
 You will need to add the include paths to:
 
 	- number_generator.h (located in class/ in my tools github repo).
-	- terminaltools.h (located in class/ in my terminal-tools github repo).
+	- terminal_in.h (located in class/ in my terminal-tools github repo).
+	- terminal_out.h (located in class/ in my terminal-tools github repo).
 	- log.h (located in class in my log github repo).
 
 Once these paths are sorted out in the makefile, just run "make all".
