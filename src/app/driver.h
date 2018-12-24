@@ -3,6 +3,9 @@
 
 #include "../interpreter/coordinates.h"
 #include "../interpreter/board.h"
+#include "../interpreter/parser.h"
+
+#include "display.h"
 
 #include <terminal_in.h>
 
@@ -20,6 +23,7 @@ class driver {
 	interpreter::coordinates	edit_cursor;
 
 	void						do_input(const interpreter::board&);
+	void 						do_draw(display&, const interpreter::parser&);
 
 };
 

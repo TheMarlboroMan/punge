@@ -110,6 +110,7 @@ $(DIR_CLASS_APP)display.h
 	$(COMPILER) -c $(DIR_CLASS_APP)display.cpp $(CFLAGS) $(INCLUDES) -o $(DIR_O)display.o
 
 $(DIR_O)driver.o:\
+$(DIR_O)display.o\
 $(DEPS_INTERPRETER)\
 $(DIR_CLASS_APP)driver.cpp \
 $(DIR_CLASS_APP)driver.h

@@ -19,6 +19,7 @@ class display {
 
 							display();
 	void					refresh();
+	//!Sends the reset signal to the terminal.
 	void					clear_terminal();
 	void					draw_board(const interpreter::board& _b);
 	void					draw_output(const interpreter::output& _o);
