@@ -7,7 +7,8 @@ An idea of a puzzle game based in the Befunge language.
 You will need to have with the following object files in your system
 
 	- terminal_in.o and terminal_out.o (located in terminal-tools/obj/ after building my terminal-tools github project).
-	- log.o (located in log/obj after building my log github project).
+	- log.o (located in log/objects after building my log github project).
+	- utf8-tools.o (same as above, but for the utf8-tools project)
 
 You will need to add the include paths to:
 
@@ -19,8 +20,6 @@ You will need to add the include paths to:
 Once these paths are sorted out in the makefile, just run "make all".
 
 ## TODO and FIX.
-
-- Separate cpp files, do real makefile... it sucks since it's slower in the end.
 
 - Experiment with getch alternatives...
 - Fix borders. This is rather easy of course.

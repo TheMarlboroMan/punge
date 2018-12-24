@@ -36,10 +36,7 @@ class tile {
 	static const char end='@';
 	//Of course, a tile can also be any other character :).
 
-			tile(char _v):val{_v}{
-
-	};
-
+				tile(char _v);
 	char		get_val() const {return val;}
 	void		set_val(char _v) {val=_v;}
 
