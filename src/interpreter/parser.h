@@ -17,9 +17,13 @@ class parser {
 	bool			is_end() const;
 	const output&	get_output() const {return out;}
 	const board&	get_board() const {return brd;}
+	//!Returns a reference to the board. Allows changes on it.
+	board&			get_board() {return brd;}
 	const cursor&	get_cursor() const {return cur;}
 	const stack&	get_stack() const {return stk;}
 
+	//!Overwrites the current board with a new one. The original board is discarded.
+	void			new_board(int _w, int _h);
 	void 			load_board_from_filename(const std::string& _f);
 	void			reset();
 	void 			step();

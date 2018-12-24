@@ -28,10 +28,16 @@ void parser::load_board_from_filename(const std::string& _f) {
 	brd=bl.from_filename(_f);
 }
 
+void parser::new_board(int _w, int _h) {
+
+	brd=board(_w, _h);
+}
+
 void parser::reset() {
 
 	out.clear();
 	stk.clear();
+
 	//TODO: Reset cursor, board...
 	end_signal=false;
 	string_mode=false;

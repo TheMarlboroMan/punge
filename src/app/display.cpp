@@ -158,6 +158,18 @@ void display::draw_cursor_pos(const interpreter::coordinates& _c) {
 	std::cout<<tools::s::pos(input_pos.x, input_pos.y)<<"["<<_c.x<<","<<_c.y<<"]>>";
 }
 
+//TODO: DRY: This is mostly the same than draw_cursor.
+void display::draw_edit_cursor(const interpreter::coordinates& _pos, const interpreter::board& _b) {
+
+	const interpreter::coordinates& _offset=board_pos;
+
+	std::cout<<tools::s::text_color(tools::txt_white)
+		<<tools::s::background_color(tools::bg_green)
+		<<tools::s::pos(_pos.x+_offset.x, _pos.y+_offset.y)
+		<<_b.get_tile(_pos).get_val()
+		<<tools::s::reset_text();
+}
+
 void display::cleanup() {
 
 	std::cout<<tools::s::pos(exit_pos.x, exit_pos.y)<<tools::s::flush();
