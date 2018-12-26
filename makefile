@@ -30,8 +30,8 @@ all: a.out $(DIR_O)
 	echo "Done";
 
 clean:
-	if [ -f a.out]; then rm a.out; fi;
-	rm $(DIR_O)/*
+	if [ -f a.out ]; then rm a.out; fi;
+	if [ -d $(DIR_O) ]; then rm $(DIR_O)/*; fi;
 
 a.out:\
 $(DIR_O)\

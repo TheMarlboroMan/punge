@@ -86,7 +86,7 @@ bool board::check_dimensions(const coordinates& _c) const {
 
 bool board::check_coords(const coordinates& _c) const {
 
-	return !(_c.x > w || _c.y > h || _c.x < 0 || _c.y < 0);
+	return !(_c.x >= w || _c.y >= h || _c.x < 0 || _c.y < 0);
 }
 
 size_t board::get_index(const coordinates& _c) const {

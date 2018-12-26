@@ -15,15 +15,24 @@ class driver {
 
 	public:
 
-	void						run();
+	void					run();
 
 	private:
 
-	tools::terminal_in 			ti;
-	interpreter::coordinates	edit_cursor;
+	enum class states			{edit, play};
 
-	void						do_input(const interpreter::board&);
-	void 						do_draw(display&, const interpreter::parser&);
+	void					do_input(const interpreter::board&);
+	void					do_input_play(const interpreter::board&, const tools::terminal_in_data&);
+	void					do_input_edit(const interpreter::board&, const tools::terminal_in_data&);
+
+	void 					do_draw(display&, const interpreter::parser&);
+	void 					do_draw_play(display&, const interpreter::parser&);
+	void 					do_draw_edit(display&, const interpreter::parser&);
+
+	states					state=states::edit;
+	tools::terminal_in 			ti;
+	interpreter::coordinates		edit_cursor;
+
 
 };
 

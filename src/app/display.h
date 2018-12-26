@@ -23,10 +23,7 @@ class display {
 	void					clear_terminal();
 	void					draw_board(const interpreter::board& _b);
 	void					draw_output(const interpreter::output& _o);
-	//!Draws the position of the parser cursor.
-	void					draw_cursor(const interpreter::coordinates& _pos, const interpreter::board& _b);
-	//!Draws the position of the editing cursor.
-	void					draw_edit_cursor(const interpreter::coordinates& _c, const interpreter::board& _b);
+	void					draw_cursor(const interpreter::coordinates& _pos, const interpreter::board& _b, int _bg_color, int _fg_color);
 	void					draw_stack(const interpreter::stack& _s);
 	void					draw_board_borders(const interpreter::board& _b);
 	void					draw_cursor_pos(const interpreter::coordinates& _c);
