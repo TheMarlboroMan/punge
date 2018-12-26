@@ -21,6 +21,8 @@ Once these paths are sorted out in the makefile, just run "make all".
 
 ## TODO and FIX.
 
+- Add help with the instructions list.
+- Add "Exit" with escape.
 - Experiment with getch alternatives...
 - Fix borders. This is rather easy of course.
 - Finish the interpreter with the missing commands. I am only missing the input stuff.
