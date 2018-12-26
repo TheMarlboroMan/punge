@@ -125,6 +125,11 @@ void driver::do_input_edit(const interpreter::board& _board, const tools::termin
 			edit_cursor=future_position;
 		}
 	}
+	else if(tools::terminal_in_data::types::chr==_indata.type) {
+
+		//TODO: Search for a better solution??
+		const_cast<interpreter::board&>(_board).set_tile(edit_cursor, _indata.get_string_data()[0]);
+	}
 }
 
 void driver::do_draw(display& _d, const interpreter::parser& _parser) {
