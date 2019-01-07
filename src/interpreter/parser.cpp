@@ -128,7 +128,7 @@ void parser::parse_regular_mode(const tile& _t) {
 		case tile::skip:		skip_next=true; break;
 		case tile::end:			end_signal=true; break;
 
-		default:			push_value_to_stack(val); break;
+		default:			/* Noop, cool... */ break;
 	}
 }
 

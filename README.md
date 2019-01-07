@@ -22,7 +22,7 @@ Once these paths are sorted out in the makefile, just run "make all".
 ## TODO and FIX.
 
 - Add help with the instructions list.
-- Add "Exit" with escape.
+- What should be printed out if there's nothing on the stack???
 - Experiment with getch alternatives...
 - Fix borders. This is rather easy of course.
 - Finish the interpreter with the missing commands. I am only missing the input stuff.
@@ -30,7 +30,7 @@ Once these paths are sorted out in the makefile, just run "make all".
 - Clear the stdin when done.
 - Separate the stack slice... perhaps we can use the stack manipulator for that?
 
-- Normalize board format (perhaps board first, info later????).
+- Normalize board format as far as files are concerned (perhaps board first, info later????).
 - Normalize puzzle set structure.
 
 ## For my own reference: befunge-93 instruction list

@@ -37,12 +37,12 @@ class display {
 	const unsigned			min_w=80, min_h=26;
 
 	unsigned 				w, h;
-	interpreter::coordinates 	board_pos,
-							borders_pos,
-							stack_pos,
-							output_pos,
-							input_pos,
-							exit_pos;
+	interpreter::coordinates 		board_pos,
+						borders_pos,
+						stack_pos,
+						output_pos,
+						input_pos,
+						exit_pos;
 };
 
 }

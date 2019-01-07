@@ -14,6 +14,7 @@ using namespace app;
 display::display()
 	:board_pos{2,2},
 	borders_pos{1,1},
+	//TODO: This goes against the given limits!!
 	stack_pos{82, 1},
 	output_pos{1, 23},
 	input_pos{1, 24},

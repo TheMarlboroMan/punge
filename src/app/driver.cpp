@@ -1,7 +1,6 @@
 #include "driver.h"
 
 #include <thread>
-#include <chrono>
 #include <iostream>
 
 #include <terminal_out.h>
@@ -24,37 +23,16 @@ void driver::run() {
 		//TODO: Use an interface for this, so we can later swap shit.
 		d.clear_terminal();
 
-		const int tick_speed=1000;
-		const int refresh_rate=250; //Four times per second.
 
 		auto last_tick=std::chrono::system_clock::now();
 		auto last_refresh=last_tick;
-		bool running=true;
 
 		do_draw(d, p);
 
-		while(running) {
+		while(states::exit!=state) {
 
-			//TODO: interface for this, so we can swap to SDL or whatever.
 			do_input(p.get_board());
-
-			switch(state) {
-				case states::edit:
-
-				break;
-
-				case states::play: {
-				
-					auto diff_tick=std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-last_tick);
-					if(diff_tick.count() >= tick_speed) {
-						last_tick=std::chrono::system_clock::now();
-						p.step();
-					}
-
-					running=!p.is_end();
-				}
-				break;
-			}
+			do_logic(p, last_tick);
 
 			//TODO: Should not refresh until something has changed...
 			auto diff_display=std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-last_refresh);
@@ -67,7 +45,6 @@ void driver::run() {
 
 		//Exit cleanly...
 		d.cleanup();
-
 	}
 	catch(display_size_exception& e) {
 		std::cout<<tools::s::text_color(tools::txt_red)
@@ -81,23 +58,66 @@ void driver::run() {
 	}
 }
 
+void driver::do_logic(interpreter::parser& _p, t_time& _last_tick) {
+
+	switch(state) {
+		case states::edit:
+
+		break;
+
+		case states::play: {
+	
+			auto diff_tick=std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-_last_tick);
+			if(diff_tick.count() >= tick_speed) {
+				_last_tick=std::chrono::system_clock::now();
+				_p.step();
+			}
+
+			if(_p.is_end()) {
+				state=states::exit;
+			}
+		}
+		break;
+		case states::exit: 
+
+		break;
+	}
+}
+
+
 void driver::do_input(const interpreter::board& _board) {
 
 	const auto indata=ti.get();
 
 	if(indata) {
 
-		if(tools::terminal_in_data::types::control==indata.type
-		&& tools::terminal_in_data::controls::tab==indata.control) {
-			
-			state=state==states::play 
-				? states::edit
-				: states::play;
+		if(tools::terminal_in_data::types::control==indata.type) {
+
+			switch(indata.control) {
+				case tools::terminal_in_data::controls::tab:
+					state=state==states::play 
+						? states::edit
+						: states::play;
+				break;
+				case tools::terminal_in_data::controls::escape:
+					state=states::exit;
+				break;
+				case tools::terminal_in_data::controls::enter:
+
+				break;
+				case tools::terminal_in_data::controls::backspace:
+
+				break;
+				case tools::terminal_in_data::controls::none:
+
+				break;
+			}
 		}
 
 		switch(state) {
 			case states::play: do_input_play(_board, indata); break;
 			case states::edit: do_input_edit(_board, indata); break;
+			case states::exit: break;
 		}
 	}
 }
@@ -127,7 +147,8 @@ void driver::do_input_edit(const interpreter::board& _board, const tools::termin
 	}
 	else if(tools::terminal_in_data::types::chr==_indata.type) {
 
-		//TODO: Search for a better solution??
+		//TODO: Search for a better solution?? Const casting is always a bad idea... 
+		//The problem is how this method is called from another that gets a const board.
 		const_cast<interpreter::board&>(_board).set_tile(edit_cursor, _indata.get_string_data()[0]);
 	}
 }
@@ -137,6 +158,7 @@ void driver::do_draw(display& _d, const interpreter::parser& _parser) {
 	switch(state) {
 		case states::edit: do_draw_edit(_d, _parser); break;
 		case states::play: do_draw_play(_d, _parser); break;
+		case states::exit: break;
 	}
 
 	_d.refresh();
