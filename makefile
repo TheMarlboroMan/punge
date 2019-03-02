@@ -27,6 +27,8 @@ $(DIR_O)parser.o\
 DEPS_APP=$(DIR_O)terminal_display.o \
 $(DIR_O)terminal_input.o \
 $(DIR_O)driver.o \
+$(DIR_O)state_play.o \
+$(DIR_O)state_edit.o \
 $(DIR_O)drawing_routines.o \
 
 #ifndef VERBOSE
@@ -129,9 +131,25 @@ $(DIR_CLASS_APP)drawing_routines.cpp \
 $(DIR_CLASS_APP)drawing_routines.h
 	$(COMPILER) -c $(DIR_CLASS_APP)drawing_routines.cpp $(CFLAGS) $(INCLUDES) -o $(DIR_O)drawing_routines.o
 
+$(DIR_O)state_play.o:\
+$(DEPS_INTERPRETER)\
+$(DIR_CLASS_APP)state_play.cpp \
+$(DIR_CLASS_APP)state_play.h\
+$(DIR_CLASS_APP)state_interface.h
+	$(COMPILER) -c $(DIR_CLASS_APP)state_play.cpp $(CFLAGS) $(INCLUDES) -o $(DIR_O)state_play.o
+
+$(DIR_O)state_edit.o:\
+$(DEPS_INTERPRETER)\
+$(DIR_CLASS_APP)state_edit.cpp \
+$(DIR_CLASS_APP)state_edit.h\
+$(DIR_CLASS_APP)state_interface.h
+	$(COMPILER) -c $(DIR_CLASS_APP)state_edit.cpp $(CFLAGS) $(INCLUDES) -o $(DIR_O)state_edit.o
+
 $(DIR_O)driver.o:\
 $(DIR_O)terminal_display.o\
 $(DIR_O)terminal_input.o\
+$(DIR_O)state_edit.o\
+$(DIR_O)state_play.o\
 $(DEPS_INTERPRETER)\
 $(DIR_CLASS_APP)driver.cpp \
 $(DIR_CLASS_APP)driver.h
