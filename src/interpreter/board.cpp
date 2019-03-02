@@ -38,19 +38,6 @@ const tile&	board::get_tile(const coordinates& _c) const {
 	return tiles[get_index(_c)];
 }
 
-const std::vector<tile const *>	board::get_row(int _y) const {
-
-	if(_y < 0 || _y >= h) {
-		throw out_of_bounds_exception("get row out of bounds ["+std::to_string(_y)+"]");
-	}
-
-	std::vector<tile const *> res;
-	for(int i=_y * w; i < (_y * w)+w; i++) {
-		res.push_back(&tiles[i]);
-	}
-	return res;
-}
-
 //!Gets the position that lies _d from _from... this wraps.
 coordinates	board::get_movement_position(const coordinates& _from, directions _d) const {
 

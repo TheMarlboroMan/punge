@@ -7,7 +7,7 @@
 #include "../interpreter/board.h"
 #include "../interpreter/parser.h"
 
-#include "display.h"
+#include "display_interface.h"
 
 #include <terminal_in.h>
 
@@ -34,12 +34,9 @@ class driver {
 	//TODO: Should use an interface.
 	void					do_input_edit(const interpreter::board&, const tools::terminal_in_data&);
 
-	//TODO: Should use an interface.
-	void 					do_draw(display&, const interpreter::parser&);
-	//TODO: Should use an interface.
-	void 					do_draw_play(display&, const interpreter::parser&);
-	//TODO: Should use an interface.
-	void 					do_draw_edit(display&, const interpreter::parser&);
+	void 					do_draw(display_interface&, const interpreter::parser&);
+	void 					do_draw_play(display_interface&, const interpreter::parser&);
+	void 					do_draw_edit(display_interface&, const interpreter::parser&);
 
 	void 					do_logic(interpreter::parser&, t_time&);
 

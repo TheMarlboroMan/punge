@@ -12,10 +12,10 @@ class terminal_display:
 	public:
 
 						terminal_display();
-	void					clear();
-	void					cleanup();
-	void					refresh();
-	void					draw(interpreter::coordinates, const std::string&, color_fg, color_bg);
+	virtual void				clear();
+	virtual void				cleanup();
+	virtual void				refresh();
+	virtual void				draw(interpreter::coordinates, const std::string&, color_fg, color_bg);
 
 	private:
 

@@ -2,7 +2,7 @@
 
 using namespace app;
 
-void	draw_cursor_pos(display_interface& _di, const interpreter::coordinates& _pos) {
+void	app::draw_cursor_pos(display_interface& _di, const interpreter::coordinates& _pos) {
 
 	const std::string output="["
 		+std::to_string(_pos.x)
@@ -10,125 +10,118 @@ void	draw_cursor_pos(display_interface& _di, const interpreter::coordinates& _po
 		+std::to_string(_pos.y)
 		+"]";
 
-	_di.draw(interpreter::coordinates{1, 24}, output, _di::color::fg_white, _di::bg_black);
+	_di.draw(interpreter::coordinates{1, 24}, output, display_interface::color_fg::white, display_interface::color_bg::black);
 }
 
-void	draw_output(display_interface& _di, const interpreter::output& _o) {
+void	app::draw_output(display_interface& _di, const interpreter::output& _o) {
 
-	_di.draw(interpreter::coordinates{1, 23}, _o.get(), _di::color::fg_white, _di::color::bg_green);
+	_di.draw(interpreter::coordinates{1, 23}, _o.get(), display_interface::color_fg::white, display_interface::color_bg::green);
 }
 
-void	draw_board_borders(display_interface& _di, const interpreter::board& _b) {
+void	app::draw_board_borders(display_interface& _di, const interpreter::board& _b) {
 
-/*
-const interpreter::coordinates& _pos=borders_pos;
-
-	borders_pos{1,1},
-
-	std::cout<<tools::s::text_color(tools::txt_blue)<<tools::s::background_color(tools::bg_black);
+	const interpreter::coordinates& _pos{1,1};
 
 	//Terminal positions are not arranged as X, Y from 0,0 but from 1,1
-	auto draw_hor=[&_pos, &_b](int _y, const std::string& _r) {
-		std::cout<<tools::s::pos(_pos.x, _y);
-		for(int x=_pos.x; x<=_b.get_w()+_pos.x+1; x++) {
-			std::cout<<_r;
+	auto draw_hor=[&_pos, &_b, &_di](int _y, const char _r) {
+
+		std::string str;
+		str.append(_b.get_w(), _r);
+		_di.draw(interpreter::coordinates{_pos.x+1, _y},
+			str, 
+			display_interface::color_fg::blue, 
+			display_interface::color_bg::black);
+	};
+
+	auto draw_ver=[&_pos, &_b, &_di](int _x, const char _r) {
+
+		std::string str;
+		str=_r;
+		for(int y=_pos.y+1; y<=_b.get_h()+_pos.y; y++) {
+			_di.draw(interpreter::coordinates{_x, y}, str, display_interface::color_fg::blue, display_interface::color_bg::black);
 		}
 	};
 
-	auto draw_ver=[&_pos, &_b](int _x, const std::string& _r) {
-		for(int y=_pos.y; y<=_b.get_h()+_pos.y+1; y++) {
-			std::cout<<tools::s::pos(_x, y)<<_r;
-		}
-	};
+	draw_hor(_pos.y, '-');
+	draw_hor(_pos.y+_b.get_h()+1, '-');
 
-	draw_hor(_pos.y, "\u2500");
-	draw_hor(_pos.y+_b.get_h()+1, "\u2500");
-	draw_ver(_pos.x, "\u2502");
-	draw_ver(_pos.x+_b.get_w()+1, "\u2502");
-
-	std::cout<<tools::s::reset_text();
-*/
+	draw_ver(_pos.x, '|');
+	draw_ver(_pos.x+_b.get_w()+1, '|');
 }
 
-void	draw_cursor(display_interface& _di, const interpreter::coordinates& _pos, const interpreter::board& _b, display_interface::color _fg, display_interface::color _bg) {
+void	app::draw_cursor(display_interface& _di, const interpreter::coordinates& _pos, const interpreter::board& _b, display_interface::color_fg _fg, display_interface::color_bg _bg) {
 
-	 offset{2,2};
+	interpreter::coordinates offset{2,2};
+
+	std::string contents;
+	contents+=_b.get_tile(_pos).get_val();
 
 	_di.draw(
 		interpreter::coordinates{2+_pos.x, 2+_pos.y},
-		_b.get_tile(_pos).get_val(),
+		contents, //Char to string...
 		_fg, _bg);
 }
 
-void	draw_stack(display_interface& _di, const interpreter::stack& _s)
+void	app::draw_stack(display_interface& _di, const interpreter::stack& _s) {
 
-/*
 	//TODO: This goes against the given limits!!
-	stack_pos{82, 1},
-
-	auto _pos=stack_pos; //Copy...
+	interpreter::coordinates pos{82, 1};
 
 	int lines_cleared=0;
 
-	std::cout<<tools::s::reset_text();
-
 	for(const auto &it : _s.get_slice()) {
-		std::cout<<tools::s::pos(_pos.x, _pos.y++)
-			<<tools::s::clear_right()
-			<<"[";
 
-		if(it->is_printable()) {
-			std::cout<<tools::s::text_color(tools::txt_white)
-				<<tools::s::background_color(tools::bg_blue)
-				<<(it->as_char());
-		}
-		else {
-			std::cout<<tools::s::text_color(tools::txt_white)
-				<<tools::s::background_color(tools::bg_red)
-				<<"?";
-		}
+		auto bg=it->is_printable() 
+			? display_interface::color_bg::blue
+			: display_interface::color_bg::red;
 
-		std::cout<<tools::s::reset_text()
-			<<"]\t["
-			<<tools::s::text_color(tools::txt_white)
-			<<tools::s::background_color(tools::bg_blue)
-			<<(it->value)
-			<<tools::s::reset_text()
-			<<"]";
+		char display=it->is_printable() 
+			? it->as_char()
+			: '?';
+
+		std::string str="["
+			+display
+			+std::string("]\t[")
+			+std::to_string(it->value)
+			+"]";
+
+		_di.draw(
+			interpreter::coordinates{pos.x, pos.y++},
+			str,
+			display_interface::color_fg::white, 
+			bg);
 
 		++lines_cleared;
 	}
 
-	//TODO: No magic number: stack size
 	while(lines_cleared < 10) {
-		std::cout<<tools::s::pos(_pos.x, _pos.y++)
-			<<tools::s::clear_right();
 		++lines_cleared;
+		++pos.y;
 	}
 
-	std::cout<<tools::s::pos(_pos.x, --_pos.y)
-		<<tools::s::clear_right()
-		<<(_s.get_size() > 10 ? "[MORE]" : "[----]")
-		<<tools::s::reset_text();
-*/
+	_di.draw(
+		interpreter::coordinates{pos.x, pos.y},
+		(_s.get_size() > 10 ? "[MORE]" : "[----]"),
+		display_interface::color_fg::white, 
+		display_interface::color_bg::blue);
 }
 
 
-void	draw_board(display_interface& _di, const interpreter::board& _b) {
+void	app::draw_board(display_interface& _di, const interpreter::board& _b) {
 
-/*
-	const interpreter::coordinates& _pos=board_pos; //alias...
+	interpreter::coordinates pos{2,2};
 
-	std::cout<<tools::s::text_color(tools::txt_white)<<tools::s::background_color(tools::bg_black);
+	for(int y=0; y<_b.get_h(); y++) {
 
-	int row=0;
-	for(int y=_pos.y; y<_b.get_h()+_pos.y; y++) {
-		std::cout<<tools::s::pos(_pos.x, y);
-		for(const auto t : _b.get_row(row++)) {
-			std::cout<<(t->get_val());
+		std::string str;
+		for(int x=0; x<_b.get_w(); ++x) {
+			str+=_b.get_tile({x, y}).get_val();
 		}
-	}
 
-	std::cout<<tools::s::reset_text();
-*/
+		_di.draw(
+			interpreter::coordinates{pos.x, pos.y+y},
+			str,
+			display_interface::color_fg::white, 
+			display_interface::color_bg::black);
+	}
 }

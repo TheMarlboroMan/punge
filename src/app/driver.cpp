@@ -21,9 +21,8 @@ void driver::run() {
 //		p.load_board_from_filename("data/sets/original/test01.brd");
 		p.new_board(20, 20);
 
-		std::unique_ptr<display_interface> d(new display_interface);
+		std::unique_ptr<display_interface> d(new terminal_display);
 		d->clear();
-
 
 		auto last_tick=std::chrono::system_clock::now();
 		auto last_refresh=last_tick;
@@ -141,7 +140,7 @@ void driver::do_input_edit(const interpreter::board& _board, const tools::termin
 			case tools::terminal_in_data::arrowkeys::left:		--future_position.x; break;
 			case tools::terminal_in_data::arrowkeys::right:		++future_position.x; break;
 			case tools::terminal_in_data::arrowkeys::none:		return;
-		}º
+		}
 
 		//Validate the position...
 		if(_board.check_coords(future_position)) {
@@ -161,19 +160,19 @@ void driver::do_draw(display_interface& _di, const interpreter::parser& _parser)
 
 	switch(state) {
 		case states::edit: do_draw_edit(_di, _parser); break;
-		case states::play: do_draw_play(_d, _parser); break;
+		case states::play: do_draw_play(_di, _parser); break;
 		case states::exit: break;
 	}
 
-	_d.refresh();
+	_di.refresh();
 }
 
-void driver::do_draw_edit(display_interface& _d, const interpreter::parser& _parser) {
+void driver::do_draw_edit(display_interface& _di, const interpreter::parser& _parser) {
 
 	draw_board_borders(_di, _parser.get_board());
 	draw_board(_di, _parser.get_board());
 
-	draw_cursor(_di, edit_cursor, _parser.get_board(), display_interface::fg_white, tools::bg_green);
+	draw_cursor(_di, edit_cursor, _parser.get_board(), display_interface::color_fg::white, display_interface::color_bg::green);
 	draw_cursor_pos(_di, edit_cursor); 
 }
 
@@ -186,7 +185,7 @@ void driver::do_draw_play(display_interface& _di, const interpreter::parser& _pa
 
 	//TODO: Change color when in string mode!!!
 	//TODO: Set a reasonable refresh rate.
-	draw_cursor(_di, curpos, _parser.get_board(), display_interface::fg_white, display_interface::bg_red);
+	draw_cursor(_di, curpos, _parser.get_board(), display_interface::color_fg::white, display_interface::color_bg::red);
 	draw_stack(_di, _parser.get_stack());
 	draw_output(_di, _parser.get_output());
 	draw_cursor_pos(_di, curpos);

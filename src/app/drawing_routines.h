@@ -16,7 +16,7 @@ void	draw_board(display_interface&, const interpreter::board&);
 void	draw_output(display_interface&, const interpreter::output&);
 
 //!Must prepare the drawing of the editing/interpreting cursor.
-void	draw_cursor(display_interface&, const interpreter::coordinates&, const interpreter::board&);
+void	draw_cursor(display_interface&, const interpreter::coordinates&, const interpreter::board&, display_interface::color_fg, display_interface::color_bg);
 
 //!Must prepare the drawing of the stack.
 void	draw_stack(display_interface&, const interpreter::stack&);

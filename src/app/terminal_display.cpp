@@ -1,4 +1,4 @@
-#include "display.h"
+#include "terminal_display.h"
 
 #include <sys/ioctl.h>
 #include <unistd.h>
@@ -8,6 +8,8 @@
 
 #include "exception.h"
 
+#include <log_tools.h>
+extern	tools::log applog;
 
 using namespace app;
 
@@ -56,13 +58,15 @@ void terminal_display::draw(interpreter::coordinates _pos, const std::string& _s
 	auto fg=tools::txt_white;
 	switch(_fg) {
 		case color_fg::white:	fg=tools::txt_white;	break;
+		case color_fg::blue:	fg=tools::txt_blue;	break;
 	}
 
-	auto fg=tools::tools::bg_black;
+	auto bg=tools::bg_black;
 	switch(_bg) {
-		case color_bg::black:	fg=tools::tools::bg_black; 	break;
-		case color_bg::green:	fg=tools::tools::bg_green;	break;
-		case color_bg::red:	fg=tools::tools::bg_red;	break;
+		case color_bg::black:	bg=tools::bg_black; 	break;
+		case color_bg::green:	bg=tools::bg_green;	break;
+		case color_bg::red:	bg=tools::bg_red;	break;
+		case color_bg::blue:	bg=tools::bg_blue;	break;
 	}
 
 	//TODO: Optimize, keep a private buffer...

@@ -1,13 +1,18 @@
 INCLUDES=-I../terminal-tools/src/ -I ../tools/class/ -I ../log/src/ -I ../utf8-tools/src/
 COMPILER=g++
 DEBUG=-g
-EXTERNAL_DEPS=../terminal-tools/obj/terminal_in.o ../terminal-tools/obj/terminal_out.o ../log/objects/log.o ../utf8-tools/obj/utf8-tools.o
 CFLAGS=-Wno-deprecated -Wall -ansi -pedantic -std=c++11 -Wfatal-errors
 LINKER=
 
 DIR_O=objects/
 DIR_CLASS_APP=src/app/
 DIR_CLASS_INTERPRETER=src/interpreter/
+
+DEPS_EXTERNAL=../terminal-tools/obj/terminal_in.o\
+../terminal-tools/obj/terminal_out.o\
+../log/objects/log.o\
+../log/objects/log_tools.o\
+../utf8-tools/obj/utf8-tools.o\
 
 DEPS_INTERPRETER=$(DIR_O)board_loader.o \
 $(DIR_O)board.o \
@@ -17,7 +22,7 @@ $(DIR_O)output.o \
 $(DIR_O)register_item.o \
 $(DIR_O)stack.o \
 $(DIR_O)stack_manipulator.o \
-$(DIR_O)parser.o
+$(DIR_O)parser.o\
 
 DEPS_APP=$(DIR_O)terminal_display.o \
 $(DIR_O)driver.o \
@@ -38,9 +43,9 @@ a.out:\
 $(DIR_O)\
 $(DEPS_INTERPRETER)\
 $(DEPS_APP)\
-$(EXTERNAL_DEPS)\
+$(DEPS_EXTERNAL)\
 main.cpp
-	$(COMPILER) main.cpp -o a.out $(CFLAGS) $(INCLUDES) $(DEPS_INTERPRETER) $(DEPS_APP) $(EXTERNAL_DEPS) $(LINKER)
+	$(COMPILER) main.cpp -o a.out $(CFLAGS) $(INCLUDES) $(DEPS_INTERPRETER) $(DEPS_APP) $(DEPS_EXTERNAL) $(LINKER)
 
 $(DIR_O):
 	mkdir -p $(DIR_O)

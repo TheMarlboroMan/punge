@@ -19,7 +19,6 @@ class board {
 	board&				operator=(const board& _b);
 	void				set_tile(const coordinates& _c, char _t);
 	const tile&			get_tile(const coordinates& _c) const;
-	const std::vector<tile const *>	get_row(int _y) const;
 
 	//!Gets the position that lies _d from _from... this wraps.
 	coordinates			get_movement_position(const coordinates& _from, directions _d) const;

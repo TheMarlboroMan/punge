@@ -1,6 +1,8 @@
 #ifndef DISPLAY_INTERFACE_H
 #define DISPLAY_INTERFACE_H
 
+#include <string>
+
 #include "../interpreter/coordinates.h"
 
 namespace app {
@@ -11,13 +13,15 @@ class display_interface {
 	public:
 
 	enum class		color_fg {
-		white
+		white,
+		blue
 	};
 
 	enum class		color_bg {
 		black,
 		green,
-		red
+		red,
+		blue
 	};
 
 	//!Must clear the whole screen.
@@ -34,7 +38,7 @@ class display_interface {
 	//!Should not directly draw it until instructed
 	//!with a call to "refresh".
 	//TODO: How about the "arrangement" as in vertical or horizontal???
-	virtual void		draw(interpreter::coordinates, const std::string&, color_fg, color_bg);
+	virtual void		draw(interpreter::coordinates, const std::string&, color_fg, color_bg)=0;
 
 	
 
