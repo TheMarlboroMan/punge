@@ -8,8 +8,7 @@
 #include "../interpreter/parser.h"
 
 #include "display_interface.h"
-
-#include <terminal_in.h>
+#include "input_interface.h"
 
 namespace app {
 
@@ -28,11 +27,9 @@ class driver {
 	static const int 			refresh_rate=250; //Four times per second.
 
 
-	void					do_input(const interpreter::board&);
-	//TODO: Should use an interface.
-	void					do_input_play(const interpreter::board&, const tools::terminal_in_data&);
-	//TODO: Should use an interface.
-	void					do_input_edit(const interpreter::board&, const tools::terminal_in_data&);
+	void					do_input(input_interface&, const interpreter::board&);
+	void					do_input_play(input_interface&, const interpreter::board&);
+	void					do_input_edit(input_interface&, const interpreter::board&);
 
 	void 					do_draw(display_interface&, const interpreter::parser&);
 	void 					do_draw_play(display_interface&, const interpreter::parser&);
@@ -41,8 +38,6 @@ class driver {
 	void 					do_logic(interpreter::parser&, t_time&);
 
 	states					state=states::edit;
-	//TODO: Should use an interface too, so we can swap things later!!!!.
-	tools::terminal_in 			ti;
 	interpreter::coordinates		edit_cursor;
 
 

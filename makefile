@@ -25,6 +25,7 @@ $(DIR_O)stack_manipulator.o \
 $(DIR_O)parser.o\
 
 DEPS_APP=$(DIR_O)terminal_display.o \
+$(DIR_O)terminal_input.o \
 $(DIR_O)driver.o \
 $(DIR_O)drawing_routines.o \
 
@@ -51,7 +52,6 @@ $(DIR_O):
 	mkdir -p $(DIR_O)
 
 #Interpreter...
-
 $(DIR_O)board_loader.o:\
 $(DIR_O)board.o\
 $(DIR_CLASS_INTERPRETER)board_loader.cpp \
@@ -116,6 +116,13 @@ $(DIR_CLASS_APP)terminal_display.h \
 $(DIR_CLASS_APP)display_interface.h
 	$(COMPILER) -c $(DIR_CLASS_APP)terminal_display.cpp $(CFLAGS) $(INCLUDES) -o $(DIR_O)terminal_display.o
 
+$(DIR_O)terminal_input.o:\
+$(DEPS_INTERPRETER)\
+$(DIR_CLASS_APP)terminal_input.cpp \
+$(DIR_CLASS_APP)terminal_input.h \
+$(DIR_CLASS_APP)input_interface.h
+	$(COMPILER) -c $(DIR_CLASS_APP)terminal_input.cpp $(CFLAGS) $(INCLUDES) -o $(DIR_O)terminal_input.o
+
 $(DIR_O)drawing_routines.o:\
 $(DEPS_INTERPRETER)\
 $(DIR_CLASS_APP)drawing_routines.cpp \
@@ -124,6 +131,7 @@ $(DIR_CLASS_APP)drawing_routines.h
 
 $(DIR_O)driver.o:\
 $(DIR_O)terminal_display.o\
+$(DIR_O)terminal_input.o\
 $(DEPS_INTERPRETER)\
 $(DIR_CLASS_APP)driver.cpp \
 $(DIR_CLASS_APP)driver.h

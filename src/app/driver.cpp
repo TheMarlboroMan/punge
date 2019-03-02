@@ -7,6 +7,7 @@
 #include <terminal_out.h>
 
 #include "terminal_display.h"
+#include "terminal_input.h"
 #include "drawing_routines.h"
 #include "../interpreter/parser.h"
 
@@ -22,6 +23,7 @@ void driver::run() {
 		p.new_board(20, 20);
 
 		std::unique_ptr<display_interface> d(new terminal_display);
+		std::unique_ptr<input_interface> i(new terminal_input);
 		d->clear();
 
 		auto last_tick=std::chrono::system_clock::now();
@@ -31,7 +33,7 @@ void driver::run() {
 
 		while(states::exit!=state) {
 
-			do_input(p.get_board());
+			do_input(*i, p.get_board());
 			do_logic(p, last_tick);
 
 			//TODO: Should not refresh until something has changed...
@@ -87,72 +89,49 @@ void driver::do_logic(interpreter::parser& _p, t_time& _last_tick) {
 	}
 }
 
+void driver::do_input(input_interface& _i, const interpreter::board& _board) {
 
-void driver::do_input(const interpreter::board& _board) {
+	_i.collect();
+	if(_i.is_input()) {
 
-	const auto indata=ti.get();
-
-	if(indata) {
-
-		if(tools::terminal_in_data::types::control==indata.type) {
-
-			switch(indata.control) {
-				case tools::terminal_in_data::controls::tab:
-					state=state==states::play 
-						? states::edit
-						: states::play;
-				break;
-				case tools::terminal_in_data::controls::escape:
-					state=states::exit;
-				break;
-				case tools::terminal_in_data::controls::enter:
-
-				break;
-				case tools::terminal_in_data::controls::backspace:
-
-				break;
-				case tools::terminal_in_data::controls::none:
-
-				break;
-			}
+		if(_i.is_tab()) {
+			state=state==states::play 
+				? states::edit
+				: states::play;
 		}
 
 		switch(state) {
-			case states::play: do_input_play(_board, indata); break;
-			case states::edit: do_input_edit(_board, indata); break;
+			case states::play: do_input_play(_i, _board); break;
+			case states::edit: do_input_edit(_i, _board); break;
 			case states::exit: break;
 		}
 	}
 }
 
-void driver::do_input_play(const interpreter::board& /*_board*/, const tools::terminal_in_data&) {
+void driver::do_input_play(input_interface& /*_i*/, const interpreter::board& /*_board*/) {
 
 }
 
-void driver::do_input_edit(const interpreter::board& _board, const tools::terminal_in_data& _indata) {
+void driver::do_input_edit(input_interface& _i, const interpreter::board& _board) {
 
 	auto future_position=edit_cursor;
 
-	if(tools::terminal_in_data::types::arrow==_indata.type) {
-		switch(_indata.arrow) {
-			case tools::terminal_in_data::arrowkeys::up: 		--future_position.y; break;
-			case tools::terminal_in_data::arrowkeys::down:		++future_position.y; break;
-			case tools::terminal_in_data::arrowkeys::left:		--future_position.x; break;
-			case tools::terminal_in_data::arrowkeys::right:		++future_position.x; break;
-			case tools::terminal_in_data::arrowkeys::none:		return;
-		}
+	if(_i.is_arrow()) {
+
+		if(_i.is_arrow_up()) {--future_position.y;}
+		else if(_i.is_arrow_down()) {++future_position.y;}
+		else if(_i.is_arrow_left()) {--future_position.x;}
+		else if(_i.is_arrow_right()) {++future_position.x;}
 
 		//Validate the position...
 		if(_board.check_coords(future_position)) {
-
 			edit_cursor=future_position;
 		}
 	}
-	else if(tools::terminal_in_data::types::chr==_indata.type) {
-
+	else if(_i.is_char()) {
 		//TODO: Search for a better solution?? Const casting is always a bad idea... 
 		//The problem is how this method is called from another that gets a const board.
-		const_cast<interpreter::board&>(_board).set_tile(edit_cursor, _indata.get_string_data()[0]);
+		const_cast<interpreter::board&>(_board).set_tile(edit_cursor, _i.get_char());
 	}
 }
 
