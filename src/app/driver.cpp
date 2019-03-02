@@ -1,13 +1,15 @@
 #include "driver.h"
 
 #include <thread>
+#include <memory>
 #include <iostream>
 
 #include <terminal_out.h>
 
-#include "display.h"
-
+#include "terminal_display.h"
+#include "drawing_routines.h"
 #include "../interpreter/parser.h"
+
 
 using namespace app;
 
@@ -19,15 +21,14 @@ void driver::run() {
 //		p.load_board_from_filename("data/sets/original/test01.brd");
 		p.new_board(20, 20);
 
-		display d;
-		//TODO: Use an interface for this, so we can later swap shit.
-		d.clear_terminal();
+		std::unique_ptr<display_interface> d(new display_interface);
+		d->clear();
 
 
 		auto last_tick=std::chrono::system_clock::now();
 		auto last_refresh=last_tick;
 
-		do_draw(d, p);
+		do_draw(*d, p);
 
 		while(states::exit!=state) {
 
@@ -39,14 +40,17 @@ void driver::run() {
 			if(diff_display.count() >= refresh_rate) {
 
 				last_refresh=std::chrono::system_clock::now();
-				do_draw(d, p);
+				do_draw(*d, p);
 			}
 		}
 
 		//Exit cleanly...
-		d.cleanup();
+		d->cleanup();
 	}
+	//TODO: This is actually a particular case of the
+	//display initialization... should be another type of exception.
 	catch(display_size_exception& e) {
+		//TODO: Yeah, no...
 		std::cout<<tools::s::text_color(tools::txt_red)
 			<<tools::s::background_color(tools::bg_white)
 			<<"You cannot play Punge in your terminal:"
@@ -137,7 +141,7 @@ void driver::do_input_edit(const interpreter::board& _board, const tools::termin
 			case tools::terminal_in_data::arrowkeys::left:		--future_position.x; break;
 			case tools::terminal_in_data::arrowkeys::right:		++future_position.x; break;
 			case tools::terminal_in_data::arrowkeys::none:		return;
-		}
+		}º
 
 		//Validate the position...
 		if(_board.check_coords(future_position)) {
@@ -153,10 +157,10 @@ void driver::do_input_edit(const interpreter::board& _board, const tools::termin
 	}
 }
 
-void driver::do_draw(display& _d, const interpreter::parser& _parser) {
+void driver::do_draw(display_interface& _di, const interpreter::parser& _parser) {
 
 	switch(state) {
-		case states::edit: do_draw_edit(_d, _parser); break;
+		case states::edit: do_draw_edit(_di, _parser); break;
 		case states::play: do_draw_play(_d, _parser); break;
 		case states::exit: break;
 	}
@@ -164,30 +168,26 @@ void driver::do_draw(display& _d, const interpreter::parser& _parser) {
 	_d.refresh();
 }
 
-void driver::do_draw_edit(display& _d, const interpreter::parser& _parser) {
+void driver::do_draw_edit(display_interface& _d, const interpreter::parser& _parser) {
 
-	_d.draw_board_borders(_parser.get_board());
-	_d.draw_board(_parser.get_board());
+	draw_board_borders(_di, _parser.get_board());
+	draw_board(_di, _parser.get_board());
 
-	_d.draw_cursor(edit_cursor, _parser.get_board(), tools::bg_green, tools::txt_white);
-	_d.draw_cursor_pos(edit_cursor);
+	draw_cursor(_di, edit_cursor, _parser.get_board(), display_interface::fg_white, tools::bg_green);
+	draw_cursor_pos(_di, edit_cursor); 
 }
 
-void driver::do_draw_play(display& _d, const interpreter::parser& _parser) {
+void driver::do_draw_play(display_interface& _di, const interpreter::parser& _parser) {
 
 	const auto curpos=_parser.get_cursor().get_position();
 
-	//TODO: This is shit... we should actually try and make something better:
-	//iterate for the board and game size and draw as needed, without printing
-	//jumps here or there.
-
-	_d.draw_board_borders(_parser.get_board());
-	_d.draw_board(_parser.get_board());
+	draw_board_borders(_di, _parser.get_board());
+	draw_board(_di, _parser.get_board());
 
 	//TODO: Change color when in string mode!!!
 	//TODO: Set a reasonable refresh rate.
-	_d.draw_cursor(curpos, _parser.get_board(), tools::bg_red, tools::txt_white);
-	_d.draw_stack(_parser.get_stack());
-	_d.draw_output(_parser.get_output());
-	_d.draw_cursor_pos(curpos);
+	draw_cursor(_di, curpos, _parser.get_board(), display_interface::fg_white, display_interface::bg_red);
+	draw_stack(_di, _parser.get_stack());
+	draw_output(_di, _parser.get_output());
+	draw_cursor_pos(_di, curpos);
 }

@@ -1,0 +1,32 @@
+#ifndef DRAWING_ROUTINES_H
+#define DRAWING_ROUTINES_H
+
+#include "display_interface.h"
+#include "../interpreter/board.h"
+#include "../interpreter/output.h"
+#include "../interpreter/coordinates.h"
+#include "../interpreter/stack.h"
+
+namespace app {
+
+//!Must prepare the drawing of the board.
+void	draw_board(display_interface&, const interpreter::board&);
+
+//!Must prepare the output of the program's output..
+void	draw_output(display_interface&, const interpreter::output&);
+
+//!Must prepare the drawing of the editing/interpreting cursor.
+void	draw_cursor(display_interface&, const interpreter::coordinates&, const interpreter::board&);
+
+//!Must prepare the drawing of the stack.
+void	draw_stack(display_interface&, const interpreter::stack&);
+
+//!Must prepare the drawing of the board borders.
+void	draw_board_borders(display_interface&, const interpreter::board&);
+
+//!Must prepare the drawing of the current cursor coordinates.
+void	draw_cursor_pos(display_interface&, const interpreter::coordinates&);
+
+}
+
+#endif

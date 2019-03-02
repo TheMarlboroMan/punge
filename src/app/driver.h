@@ -29,16 +29,22 @@ class driver {
 
 
 	void					do_input(const interpreter::board&);
+	//TODO: Should use an interface.
 	void					do_input_play(const interpreter::board&, const tools::terminal_in_data&);
+	//TODO: Should use an interface.
 	void					do_input_edit(const interpreter::board&, const tools::terminal_in_data&);
 
+	//TODO: Should use an interface.
 	void 					do_draw(display&, const interpreter::parser&);
+	//TODO: Should use an interface.
 	void 					do_draw_play(display&, const interpreter::parser&);
+	//TODO: Should use an interface.
 	void 					do_draw_edit(display&, const interpreter::parser&);
 
 	void 					do_logic(interpreter::parser&, t_time&);
 
 	states					state=states::edit;
+	//TODO: Should use an interface too, so we can swap things later!!!!.
 	tools::terminal_in 			ti;
 	interpreter::coordinates		edit_cursor;
 
