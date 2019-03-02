@@ -65,6 +65,7 @@ void driver::run() {
 
 void driver::do_logic(interpreter::parser& _p, t_time& _last_tick) {
 
+	//TODO: Separate in different state classes.
 	switch(state) {
 		case states::edit:
 
@@ -89,7 +90,7 @@ void driver::do_logic(interpreter::parser& _p, t_time& _last_tick) {
 	}
 }
 
-void driver::do_input(input_interface& _i, const interpreter::board& _board) {
+void driver::do_input(input_interface& _i, interpreter::board& _board) {
 
 	_i.collect();
 	if(_i.is_input()) {
@@ -100,6 +101,11 @@ void driver::do_input(input_interface& _i, const interpreter::board& _board) {
 				: states::play;
 		}
 
+		if(_i.is_escape()) {
+			state=states::exit;
+		}
+
+		//TODO: Separate in different state classes.
 		switch(state) {
 			case states::play: do_input_play(_i, _board); break;
 			case states::edit: do_input_edit(_i, _board); break;
@@ -112,11 +118,11 @@ void driver::do_input_play(input_interface& /*_i*/, const interpreter::board& /*
 
 }
 
-void driver::do_input_edit(input_interface& _i, const interpreter::board& _board) {
-
-	auto future_position=edit_cursor;
+void driver::do_input_edit(input_interface& _i, interpreter::board& _board) {
 
 	if(_i.is_arrow()) {
+
+		auto future_position=edit_cursor;
 
 		if(_i.is_arrow_up()) {--future_position.y;}
 		else if(_i.is_arrow_down()) {++future_position.y;}
@@ -129,14 +135,14 @@ void driver::do_input_edit(input_interface& _i, const interpreter::board& _board
 		}
 	}
 	else if(_i.is_char()) {
-		//TODO: Search for a better solution?? Const casting is always a bad idea... 
-		//The problem is how this method is called from another that gets a const board.
-		const_cast<interpreter::board&>(_board).set_tile(edit_cursor, _i.get_char());
+
+		_board.set_tile(edit_cursor, _i.get_char());
 	}
 }
 
 void driver::do_draw(display_interface& _di, const interpreter::parser& _parser) {
 
+	//TODO: Separate in different state classes.
 	switch(state) {
 		case states::edit: do_draw_edit(_di, _parser); break;
 		case states::play: do_draw_play(_di, _parser); break;

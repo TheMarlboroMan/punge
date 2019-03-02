@@ -27,9 +27,9 @@ class driver {
 	static const int 			refresh_rate=250; //Four times per second.
 
 
-	void					do_input(input_interface&, const interpreter::board&);
+	void					do_input(input_interface&, interpreter::board&);
 	void					do_input_play(input_interface&, const interpreter::board&);
-	void					do_input_edit(input_interface&, const interpreter::board&);
+	void					do_input_edit(input_interface&, interpreter::board&);
 
 	void 					do_draw(display_interface&, const interpreter::parser&);
 	void 					do_draw_play(display_interface&, const interpreter::parser&);
