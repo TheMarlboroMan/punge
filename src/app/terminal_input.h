@@ -12,19 +12,21 @@ class terminal_input:
 
 	public:
 
-	virtual void collect();
-	virtual bool is_input() const;
-	virtual bool is_tab() const;
-	virtual bool is_escape() const;
-	virtual bool is_enter() const;
-	virtual bool is_backspace() const;
-	virtual bool is_arrow() const;
-	virtual bool is_arrow_left() const;
-	virtual bool is_arrow_right() const;
-	virtual bool is_arrow_up() const;
-	virtual bool is_arrow_down() const;
-	virtual bool is_char() const;
-	virtual char get_char() const;
+	virtual		~terminal_input() {}
+
+	virtual void 	collect();
+	virtual bool 	is_input() const;
+	virtual bool 	is_tab() const;
+	virtual bool 	is_escape() const;
+	virtual bool 	is_enter() const;
+	virtual bool 	is_backspace() const;
+	virtual bool 	is_arrow() const;
+	virtual bool 	is_arrow_left() const;
+	virtual bool 	is_arrow_right() const;
+	virtual bool 	is_arrow_up() const;
+	virtual bool 	is_arrow_down() const;
+	virtual bool 	is_char() const;
+	virtual char 	get_char() const;
 
 	private:
 

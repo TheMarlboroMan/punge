@@ -37,7 +37,9 @@ void terminal_display::clear() {
 void terminal_display::cleanup() {
 
 	interpreter::coordinates exit_pos{1, 25};
-	std::cout<<tools::s::pos(exit_pos.x, exit_pos.y)<<tools::s::flush();
+	std::cout<<tools::s::pos(exit_pos.x, exit_pos.y)
+		<<tools::s::reset()
+		<<tools::s::flush();
 }
 
 void terminal_display::get_terminal_size(){

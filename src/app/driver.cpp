@@ -8,6 +8,12 @@
 
 #include "terminal_display.h"
 #include "terminal_input.h"
+
+#include "state_play.h"
+#include "state_edit.h"
+#include "state_title.h"
+
+
 #include "../interpreter/parser.h"
 
 
@@ -15,13 +21,13 @@ using namespace app;
 
 driver::driver() {
 
+	controllers[states::title]=std::unique_ptr<state_interface>(new state_title);
 	controllers[states::play]=std::unique_ptr<state_interface>(new state_play);
 	controllers[states::edit]=std::unique_ptr<state_interface>(new state_edit);
 }
 
 void driver::run() {
 
-	//TODO: Add state_title
 	//TODO: Add state_game_help
 
 	try {
@@ -80,10 +86,12 @@ void driver::run() {
 
 void driver::do_input(input_interface& _i, interpreter::board& _board) {
 
+
 	_i.collect();
 	if(_i.is_input()) {
 
-		if(_i.is_tab() && (state=state==states::play || state=state==states::edit) {
+		if(_i.is_tab() ) {
+		//TODO... && (state==states::play || state==states::edit)) {
 			state=state==states::play 
 				? states::edit
 				: states::play;

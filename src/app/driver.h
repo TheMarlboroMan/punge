@@ -10,8 +10,9 @@
 
 #include "display_interface.h"
 #include "input_interface.h"
-#include "state_play.h"
-#include "state_edit.h"
+#include "states.h"
+#include "state_interface.h"
+#include "typedefs.h"
 
 namespace app {
 
@@ -23,20 +24,12 @@ class driver {
 	void					run();
 
 	private:
-
-	typedef					std::chrono::time_point<std::chrono::system_clock> t_time;
-
-	enum class states{
-		edit,
-		play,
-		exit
-	};
 	
 	static const int 			refresh_rate=250; //Four times per second.
 
 	void					do_input(input_interface&, interpreter::board&);
 
-	states					state=states::edit;
+	states					state=states::title;
 	std::map<states, std::unique_ptr<state_interface>> controllers;
 };
 

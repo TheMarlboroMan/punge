@@ -27,6 +27,8 @@ void	draw_board_borders(display_interface&, const interpreter::board&);
 //!Must prepare the drawing of the current cursor coordinates.
 void	draw_cursor_pos(display_interface&, const interpreter::coordinates&);
 
+//!Must prepare the title screen.
+void	draw_title_screen(display_interface&);
 }
 
 #endif

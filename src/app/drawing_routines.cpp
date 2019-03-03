@@ -125,3 +125,11 @@ void	app::draw_board(display_interface& _di, const interpreter::board& _b) {
 			display_interface::color_bg::black);
 	}
 }
+
+
+void	app::draw_title_screen(display_interface& _di) {
+
+	_di.draw(interpreter::coordinates{1, 1}, 
+		"Welcome to PUNGE\n\nPress any key to start (this is a lie)", 
+		display_interface::color_fg::white, display_interface::color_bg::black);
+}
