@@ -33,7 +33,7 @@ void state_title::do_draw(display_interface& _di, const interpreter::parser& _pa
 
 void state_title::do_logic(interpreter::parser& _p, t_time& _last_tick) {
 
-	if(input_received()) {
+	if(input_received) {
 
 		state_mngr.request(states::edit);
 	}

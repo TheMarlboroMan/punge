@@ -43,7 +43,7 @@ void driver::run() {
 		auto last_tick=std::chrono::system_clock::now();
 		auto last_refresh=last_tick;
 
-//		controllers[state]->do_draw(*d, p);
+		controllers[state_mngr.get_current()]->awake();
 
 		while(!exit_signal) {
 
@@ -61,9 +61,9 @@ void driver::run() {
 			}
 
 			if(state_mngr.is_change()) {
-				controllers[state].sleep();
+				controllers[state]->sleep();
 				state_mngr.accept();
-				controllers[state_mngr.get_curret()].awake();
+				controllers[state_mngr.get_current()]->awake();
 			}
 		}
 

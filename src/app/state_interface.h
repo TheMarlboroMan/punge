@@ -20,10 +20,15 @@ class state_interface {
 
 	}
 
-	virtual void	awake();
-	virtual void	sleep();
+	//!Called when the state is activated (from another state or at startup).
+	virtual void	awake()=0;
+	//!Called when another controller is called to the front.
+	virtual void	sleep()=0;
+	//!Processes input. Should not change any unrelated internal state.
 	virtual void 	do_input(input_interface&, interpreter::board&)=0;
+	//!Draws.
 	virtual void 	do_draw(display_interface&, const interpreter::parser&)=0;
+	//!Does logic  Should be the one to change internal state.
 	virtual void 	do_logic(interpreter::parser&, t_time&)=0;
 
 	protected:
