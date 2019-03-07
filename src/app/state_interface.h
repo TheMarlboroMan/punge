@@ -20,6 +20,8 @@ class state_interface {
 
 	}
 
+	virtual void	awake();
+	virtual void	sleep();
 	virtual void 	do_input(input_interface&, interpreter::board&)=0;
 	virtual void 	do_draw(display_interface&, const interpreter::parser&)=0;
 	virtual void 	do_logic(interpreter::parser&, t_time&)=0;

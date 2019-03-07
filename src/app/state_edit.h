@@ -14,6 +14,8 @@ class state_edit:
 
 					state_edit(t_state_manager&);
 
+	void				awake();
+	void				sleep();
 	void 				do_input(input_interface&, interpreter::board&);
 	void 				do_draw(display_interface&, const interpreter::parser&);
 	void 				do_logic(interpreter::parser&, t_time&);

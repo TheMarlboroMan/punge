@@ -8,6 +8,14 @@ state_play::state_play(t_state_manager& _sm)
 
 }
 
+void state_play::awake() {
+
+}
+
+void state_play::sleep() {
+
+}
+
 void state_play::do_input(input_interface&, interpreter::board&) {
 
 }

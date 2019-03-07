@@ -61,7 +61,9 @@ void driver::run() {
 			}
 
 			if(state_mngr.is_change()) {
+				controllers[state].sleep();
 				state_mngr.accept();
+				controllers[state_mngr.get_curret()].awake();
 			}
 		}
 
