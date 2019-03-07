@@ -16,7 +16,13 @@ void state_play::sleep() {
 
 }
 
-void state_play::do_input(input_interface&, interpreter::board&) {
+//TODO: Board should be injected.
+void state_play::do_input(input_interface& _i, interpreter::board&) {
+
+	if(_i.is_tab()) {
+		state_mngr.request(states::edit);
+		return;
+	}
 
 }
 

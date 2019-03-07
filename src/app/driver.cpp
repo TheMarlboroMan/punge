@@ -47,9 +47,15 @@ void driver::run() {
 
 		while(!exit_signal) {
 
-			auto state=state_mngr.get_current();
 			do_input(*i, p.get_board());
 
+			if(state_mngr.is_change()) {
+				controllers[state_mngr.get_current()]->sleep();
+				state_mngr.accept();
+				controllers[state_mngr.get_current()]->awake();
+			}
+
+			auto state=state_mngr.get_current();
 			controllers[state]->do_logic(p, last_tick);
 
 			//TODO: Should not refresh until something has changed...
@@ -60,11 +66,7 @@ void driver::run() {
 				controllers[state]->do_draw(*d, p);
 			}
 
-			if(state_mngr.is_change()) {
-				controllers[state]->sleep();
-				state_mngr.accept();
-				controllers[state_mngr.get_current()]->awake();
-			}
+
 		}
 
 		//Exit cleanly...
@@ -90,18 +92,12 @@ void driver::do_input(input_interface& _i, interpreter::board& _board) {
 	const auto state=state_mngr.get_current();
 
 	_i.collect();
+	controllers[state]->do_input(_i, _board);
+
 	if(_i.is_input()) {
 
-		controllers[state]->do_input(_i, _board);
-
-//		if(_i.is_tab() ) {
-//			state_mngr.request(state==states::play 
-//				? states::edit
-//				: states::play);
+		if(_i.is_escape()) {
+			exit_signal=true;
 		}
-
-//		if(_i.is_escape()) {
-//			exit_signal=true;
-//		}
 	}
 }

@@ -16,8 +16,14 @@ void state_edit::sleep() {
 
 }
 
+//TODO: Board should be injected.
 void state_edit::do_input(input_interface& _i, interpreter::board& _board) {
 
+	if(_i.is_tab()) {
+		state_mngr.request(states::play);
+		return;
+	}
+	
 	if(_i.is_arrow()) {
 
 		auto future_position=edit_cursor;
