@@ -3,6 +3,11 @@
 
 using namespace app;
 
+state_edit::state_edit(t_state_manager& _sm)
+	:state_interface(_sm) {
+
+}
+
 void state_edit::do_input(input_interface& _i, interpreter::board& _board) {
 
 	if(_i.is_arrow()) {

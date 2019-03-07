@@ -29,7 +29,8 @@ class driver {
 
 	void					do_input(input_interface&, interpreter::board&);
 
-	states					state=states::title;
+	t_state_manager				state_mngr;
+	bool					exit_signal=false;
 	std::map<states, std::unique_ptr<state_interface>> controllers;
 };
 

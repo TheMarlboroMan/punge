@@ -3,6 +3,11 @@
 
 using namespace app;
 
+state_title::state_title(t_state_manager& _sm)
+	:state_interface(_sm) {
+
+}
+
 void state_title::do_input(input_interface&, interpreter::board&) {
 
 }

@@ -13,17 +13,17 @@
 #include "state_edit.h"
 #include "state_title.h"
 
-
 #include "../interpreter/parser.h"
 
 
 using namespace app;
 
-driver::driver() {
+driver::driver()
+	:state_mngr(states::title) {
 
-	controllers[states::title]=std::unique_ptr<state_interface>(new state_title);
-	controllers[states::play]=std::unique_ptr<state_interface>(new state_play);
-	controllers[states::edit]=std::unique_ptr<state_interface>(new state_edit);
+	controllers[states::title]=std::unique_ptr<state_interface>(new state_title(state_mngr));
+	controllers[states::play]=std::unique_ptr<state_interface>(new state_play(state_mngr));
+	controllers[states::edit]=std::unique_ptr<state_interface>(new state_edit(state_mngr));
 }
 
 void driver::run() {
@@ -43,26 +43,25 @@ void driver::run() {
 		auto last_tick=std::chrono::system_clock::now();
 		auto last_refresh=last_tick;
 
-		if(controllers.count(state)) {
-			controllers[state]->do_draw(*d, p);
-		}
+//		controllers[state]->do_draw(*d, p);
 
-		while(states::exit!=state) {
+		while(!exit_signal) {
 
+			auto state=state_mngr.get_current();
 			do_input(*i, p.get_board());
 
-			if(controllers.count(state)) {
-				controllers[state]->do_logic(p, last_tick);
-			}
+			controllers[state]->do_logic(p, last_tick);
 
 			//TODO: Should not refresh until something has changed...
 			auto diff_display=std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-last_refresh);
 			if(diff_display.count() >= refresh_rate) {
 
 				last_refresh=std::chrono::system_clock::now();
-				if(controllers.count(state)) {
-					controllers[state]->do_draw(*d, p);
-				}
+				controllers[state]->do_draw(*d, p);
+			}
+
+			if(state_mngr.is_change()) {
+				state_mngr.accept();
 			}
 		}
 
@@ -86,23 +85,21 @@ void driver::run() {
 
 void driver::do_input(input_interface& _i, interpreter::board& _board) {
 
+	const auto state=state_mngr.get_current();
 
 	_i.collect();
 	if(_i.is_input()) {
 
 		if(_i.is_tab() ) {
-		//TODO... && (state==states::play || state==states::edit)) {
-			state=state==states::play 
+			state_mngr.request(state==states::play 
 				? states::edit
-				: states::play;
+				: states::play);
 		}
 
 		if(_i.is_escape()) {
-			state=states::exit;
+			exit_signal=true;
 		}
 
-		if(controllers.count(state)) {
-			controllers[state]->do_input(_i, _board);
-		}
+		controllers[state]->do_input(_i, _board);
 	}
 }

@@ -7,7 +7,6 @@ namespace app {
 
 typedef		std::chrono::time_point<std::chrono::system_clock> t_time;
 
-
 }
 
 #endif

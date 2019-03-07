@@ -5,6 +5,7 @@
 #include "display_interface.h"
 #include "../interpreter/board.h"
 #include "../interpreter/parser.h"
+#include "states.h" 	//t_state_manager.
 #include "typedefs.h"
 
 namespace app {
@@ -14,9 +15,18 @@ class state_interface {
 
 	public:
 
-	virtual void do_input(input_interface&, interpreter::board&)=0;
-	virtual void do_draw(display_interface&, const interpreter::parser&)=0;
-	virtual void do_logic(interpreter::parser&, t_time&)=0;
+			state_interface(app::t_state_manager _sm)
+		:state_mngr(_sm) {
+
+	}
+
+	virtual void 	do_input(input_interface&, interpreter::board&)=0;
+	virtual void 	do_draw(display_interface&, const interpreter::parser&)=0;
+	virtual void 	do_logic(interpreter::parser&, t_time&)=0;
+
+	protected:
+
+	t_state_manager&	state_mngr;
 };
 
 }
