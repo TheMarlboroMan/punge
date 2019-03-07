@@ -92,16 +92,16 @@ void driver::do_input(input_interface& _i, interpreter::board& _board) {
 	_i.collect();
 	if(_i.is_input()) {
 
-		if(_i.is_tab() ) {
-			state_mngr.request(state==states::play 
-				? states::edit
-				: states::play);
-		}
-
-		if(_i.is_escape()) {
-			exit_signal=true;
-		}
-
 		controllers[state]->do_input(_i, _board);
+
+//		if(_i.is_tab() ) {
+//			state_mngr.request(state==states::play 
+//				? states::edit
+//				: states::play);
+		}
+
+//		if(_i.is_escape()) {
+//			exit_signal=true;
+//		}
 	}
 }
