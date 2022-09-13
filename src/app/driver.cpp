@@ -21,20 +21,30 @@ using namespace app;
 driver::driver()
 	:state_mngr(states::title) {
 
+	//TODO: allow setting the speed at runtime.
 	controllers[states::title]=std::unique_ptr<state_interface>(new state_title(state_mngr));
 	controllers[states::play]=std::unique_ptr<state_interface>(new state_play(state_mngr));
 	controllers[states::edit]=std::unique_ptr<state_interface>(new state_edit(state_mngr));
 }
 
+//TODO: There is stuff to do here... First, the driver acts like a program
+//itself but it does not take any parameters at all and that makes a bit
+//difficult to work with different boards. I guess the driver could have a 
+//board, but considering the board is part of the interpreter, maybe it should
+//have an interpreter we can clean up if need be. From there, we could have
+//external methods like new_board_from_scratch() of from filename in the 
+//driver. This method seems to be ok, there is no external or referenced 
+//storage in the driver, so it will do.
 void driver::run() {
 
 	//TODO: Add state_game_help
+	refresh_rate=100;
 
 	try {
 		interpreter::parser 	p;
 
-//		p.load_board_from_filename("data/sets/original/test01.brd");
-		p.new_board(20, 20);
+		p.load_board_from_filename("data/sets/original/test01.brd");
+//		p.new_board(20, 20);
 
 		std::unique_ptr<display_interface> d(new terminal_display);
 		std::unique_ptr<input_interface> i(new terminal_input);
@@ -50,6 +60,7 @@ void driver::run() {
 			do_input(*i, p.get_board());
 
 			if(state_mngr.is_change()) {
+				d->clear();
 				controllers[state_mngr.get_current()]->sleep();
 				state_mngr.accept();
 				controllers[state_mngr.get_current()]->awake();
@@ -65,8 +76,6 @@ void driver::run() {
 				last_refresh=std::chrono::system_clock::now();
 				controllers[state]->do_draw(*d, p);
 			}
-
-
 		}
 
 		//Exit cleanly...

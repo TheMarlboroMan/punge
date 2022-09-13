@@ -1,5 +1,4 @@
-#ifndef INTERPRETER_EXCEPTION_H
-#define INTERPRETER_EXCEPTION_H
+#pragma once
 
 #include <stdexcept>
 #include <string>
@@ -37,4 +36,14 @@ class out_of_bounds_exception:public std::runtime_error {
 
 }
 
-#endif
+class bad_stack_peek:public std::runtime_error {
+	public:
+		bad_stack_peek(std::size_t _requested, std::size_t _size):std::runtime_error(
+			std::string("bad peek requested ")
+			+std::to_string(_requested)
+			+std::string(" for stack of size ")
+			+std::to_string(_size)
+		) {
+
+	}
+};

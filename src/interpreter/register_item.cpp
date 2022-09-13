@@ -47,10 +47,11 @@ register_item register_item::operator%(const register_item& _o) {
 
 bool register_item::is_printable() const {
 
-	return isprint(as_char());
+	return isprint(value % 255);
 }
 
 char register_item::as_char() const {
 
+//TODO: what if this is a tab?????
 	return value % 255;
 }

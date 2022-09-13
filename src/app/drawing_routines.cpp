@@ -1,8 +1,12 @@
 #include "app/drawing_routines.h"
+#include <sstream>
 
 using namespace app;
 
-void	app::draw_cursor_pos(display_interface& _di, const interpreter::coordinates& _pos) {
+void	app::draw_cursor_pos(
+	display_interface& _di, 
+	const interpreter::coordinates& _pos
+) {
 
 	const std::string output="["
 		+std::to_string(_pos.x)
@@ -13,12 +17,18 @@ void	app::draw_cursor_pos(display_interface& _di, const interpreter::coordinates
 	_di.draw(interpreter::coordinates{1, 24}, output, display_interface::color_fg::white, display_interface::color_bg::black);
 }
 
-void	app::draw_output(display_interface& _di, const interpreter::output& _o) {
+void	app::draw_output(
+	display_interface& _di, 
+	const interpreter::output& _o
+) {
 
 	_di.draw(interpreter::coordinates{1, 23}, _o.get(), display_interface::color_fg::white, display_interface::color_bg::green);
 }
 
-void	app::draw_board_borders(display_interface& _di, const interpreter::board& _b) {
+void	app::draw_board_borders(
+	display_interface& _di, 
+	const interpreter::board& _b
+) {
 
 	const interpreter::coordinates& _pos{1,1};
 
@@ -47,9 +57,21 @@ void	app::draw_board_borders(display_interface& _di, const interpreter::board& _
 
 	draw_ver(_pos.x, '|');
 	draw_ver(_pos.x+_b.get_w()+1, '|');
+
+	//draw corners...
+	_di.draw(interpreter::coordinates{1,1}, "+", display_interface::color_fg::blue, display_interface::color_bg::black);
+	_di.draw(interpreter::coordinates{_b.get_w()+2,1}, "+", display_interface::color_fg::blue, display_interface::color_bg::black);
+	_di.draw(interpreter::coordinates{1, _b.get_h()+2}, "+", display_interface::color_fg::blue, display_interface::color_bg::black);
+	_di.draw(interpreter::coordinates{_b.get_w()+2,_b.get_h()+2}, "+", display_interface::color_fg::blue, display_interface::color_bg::black);
 }
 
-void	app::draw_cursor(display_interface& _di, const interpreter::coordinates& _pos, const interpreter::board& _b, display_interface::color_fg _fg, display_interface::color_bg _bg) {
+void	app::draw_cursor(
+	display_interface& _di, 
+	const interpreter::coordinates& _pos, 
+	const interpreter::board& _b, 
+	display_interface::color_fg _fg, 
+	display_interface::color_bg _bg
+) {
 
 	interpreter::coordinates offset{2,2};
 
@@ -62,38 +84,44 @@ void	app::draw_cursor(display_interface& _di, const interpreter::coordinates& _p
 		_fg, _bg);
 }
 
-void	app::draw_stack(display_interface& _di, const interpreter::stack& _s) {
+void	app::draw_stack(
+	display_interface& _di, 
+	const interpreter::stack& _s
+) {
 
-	//TODO: This goes against the given limits!!
-	interpreter::coordinates pos{82, 1};
+//TODO: what happens when the board is larger?
+	interpreter::coordinates pos{50, 1};
 
 	int lines_cleared=0;
 
-	for(const auto &it : _s.get_slice()) {
+	std::stringstream ss;
 
-		auto bg=it->is_printable() 
+	std::size_t i=0;
+	while(i < 10 && i < _s.get_size()) {
+
+		const auto it=_s.peek(i++);
+
+		auto bg=it.is_printable() 
 			? display_interface::color_bg::blue
 			: display_interface::color_bg::red;
 
-		char display=it->is_printable() 
-			? it->as_char()
+		char display=it.is_printable() 
+			? it.as_char()
 			: '?';
 
-		std::string str="["
-			+display
-			+std::string("]\t[")
-			+std::to_string(it->value)
-			+"]";
+		ss.str("");
+		ss<<"["<<display<<"] ["<<std::to_string(it.value)<<"]";
 
 		_di.draw(
 			interpreter::coordinates{pos.x, pos.y++},
-			str,
+			ss.str(),
 			display_interface::color_fg::white, 
-			bg);
+			bg
+		);
 
 		++lines_cleared;
 	}
-
+	//TODO: some rationale about what this is would be nice
 	while(lines_cleared < 10) {
 		++lines_cleared;
 		++pos.y;
@@ -108,7 +136,8 @@ void	app::draw_stack(display_interface& _di, const interpreter::stack& _s) {
 
 
 void	app::draw_board(display_interface& _di, const interpreter::board& _b) {
-
+	
+	//the borders are at 1,1
 	interpreter::coordinates pos{2,2};
 
 	for(int y=0; y<_b.get_h(); y++) {

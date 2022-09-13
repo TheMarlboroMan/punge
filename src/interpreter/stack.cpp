@@ -1,4 +1,5 @@
 #include "interpreter/stack.h"
+#include "interpreter/exception.h"
 
 using namespace interpreter;
 
@@ -19,31 +20,20 @@ register_item stack::pop() {
 		res.value=items.back().value;
 		items.pop_back();
 	}
-	update_slice();
 	return res;
 }
 
 void stack::push(register_item _v) {
 
 	items.push_back(_v);
-	update_slice();
 }
 
-const std::vector<register_item const *> stack::get_slice() const {
+const register_item& stack::peek(std::size_t _depth) const {
 
-	return slice;
-}
+	if(_depth >= items.size()) {
 
-void stack::update_slice() {
-
-	//TODO: No magic numbers....
-	slice.clear();
-	slice.reserve(10);
-
-	for(auto it=items.crbegin(); it!=items.crend(); ++it) {
-		slice.push_back( &(*it) );
-		if(slice.size()==10) {
-			break;
-		}
+		throw bad_stack_peek(_depth, items.size());
 	}
+
+	return items.at(items.size()-_depth-1);
 }

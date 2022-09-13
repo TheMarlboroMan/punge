@@ -1,5 +1,4 @@
-#ifndef INTERPRETER_STACK_H
-#define INTERPRETER_STACK_H
+#pragma once
 
 #include <vector>
 
@@ -17,19 +16,12 @@ class stack {
 	void										clear();
 	register_item								pop();
 	void										push(register_item _v);
-
-	//TODO... Hmmmm... this is actually game specific... I don't want it here in the interpreter!!
-	const std::vector<register_item const *> 	get_slice() const;
+	const register_item&						peek(std::size_t) const;
 
 	private:
 
-	//TODO... Hmmmm... this is actually game specific... I don't want it here in the interpreter!!
-	void 										update_slice();
-
 	std::vector<register_item>					items;
-	std::vector<register_item const *>			slice; //!Already reversed in show order.
 };
 
 }
 
-#endif

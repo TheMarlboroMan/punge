@@ -25,7 +25,7 @@ class driver {
 
 	private:
 	
-	static const int 			refresh_rate=250; //Four times per second.
+	int 			refresh_rate=100; //Four times per second.
 
 	void					do_input(input_interface&, interpreter::board&);
 

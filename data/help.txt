@@ -1,33 +1,14 @@
-# punge
+controls in edit mode:
 
-An idea of a puzzle game based in the Befunge language.
+tab - start playing
+arrows - move 
+characters - set the value
 
-## Building
+controls in play mode:
 
-You will need the libraries from the following projects of mine:
+tab - go back to edit mode
 
-- tools
-- terminal-tools
-- log
-- utf8-tools
-
-Then just do the cmake dance.
-
-## TODO and FIX.
-
-- Seems like popping the stack does not work.
-- Add help with the instructions list and game instructions.
-- What should be printed out if there's nothing on the stack???
-- Experiment with getch alternatives...
-- Finish the interpreter with the missing commands. I am only missing the input stuff.
-- Hide the cursor, show it when needed.
-- Clear the stdin when done.
-- Separate the stack slice... perhaps we can use the stack manipulator for that?
-
-- Normalize board format as far as files are concerned (perhaps board first, info later????).
-- Normalize puzzle set structure (a directory with a set.dat file with info and the boards listed).
-
-## For my own reference: befunge-93 instruction list
+befunge93 instruction list:
 
 0-9 	Push this number on the stack
 + 	Addition: Pop a and b, then push a+b

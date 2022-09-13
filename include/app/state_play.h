@@ -21,7 +21,7 @@ class state_play:
 
 	private:
 
-	static const int tick_speed=1000;
+	static const int tick_speed=200;
 
 };
 

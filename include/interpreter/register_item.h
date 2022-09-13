@@ -1,6 +1,4 @@
-#ifndef INTERPRETER_REGISTER_ITEM_H
-#define INTERPRETER_REGISTER_ITEM_H
-
+#pragma once
 #include <cctype>
 
 #include "exception.h"
@@ -25,4 +23,3 @@ struct register_item {
 
 }
 
-#endif
