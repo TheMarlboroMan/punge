@@ -1,19 +1,19 @@
-#include "driver.h"
+#include "app/driver.h"
 
 #include <thread>
 #include <memory>
 #include <iostream>
 
-#include <terminal_out.h>
+#include <tools/terminal_out.h>
 
-#include "terminal_display.h"
-#include "terminal_input.h"
+#include "app/terminal_display.h"
+#include "app/terminal_input.h"
 
-#include "state_play.h"
-#include "state_edit.h"
-#include "state_title.h"
+#include "app/state_play.h"
+#include "app/state_edit.h"
+#include "app/state_title.h"
 
-#include "../interpreter/parser.h"
+#include "interpreter/parser.h"
 
 
 using namespace app;

@@ -1,5 +1,5 @@
-#include "state_title.h"
-#include "drawing_routines.h"
+#include "app/state_title.h"
+#include "app/drawing_routines.h"
 
 using namespace app;
 

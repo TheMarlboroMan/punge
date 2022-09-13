@@ -1,4 +1,4 @@
-#include "output.h"
+#include "interpreter/output.h"
 
 using namespace interpreter;
 

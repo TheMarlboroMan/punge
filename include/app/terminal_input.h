@@ -1,7 +1,7 @@
 #ifndef APP_TERMINAL_INPUT_H
 #define APP_TERMINAL_INPUT_H
 
-#include <terminal_in.h>
+#include <tools/terminal_in.h>
 
 #include "input_interface.h"
 

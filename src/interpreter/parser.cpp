@@ -1,14 +1,14 @@
-#include "parser.h"
+#include "interpreter/parser.h"
 
 #include <iostream>
 #include <cctype>
 
-#include <number_generator.h>
-#include <log.h>
+#include <tools/number_generator.h>
+#include <lm/log.h>
 
-#include "board_loader.h"
+#include "interpreter/board_loader.h"
 
-extern tools::log applog;
+extern lm::logger* applog;
 
 using namespace interpreter;
 
@@ -138,7 +138,7 @@ void parser::do_put_board() {
 
 	try {
 		auto y=stk.pop(), x=stk.pop(), v=stk.pop();
-applog<<"do_put_board:"<<x.value<<","<<y.value<<" => "<<v.value<<std::endl;
+lm::log(*applog).info()<<"do_put_board:"<<x.value<<","<<y.value<<" => "<<v.value<<std::endl;
 		brd.set_tile( {static_cast<int>(x.value), static_cast<int>(y.value)}, v.as_char());
 	}
 	catch(out_of_bounds_exception& e) {
@@ -153,7 +153,7 @@ void parser::do_get_board() {
 		auto y=stk.pop(), x=stk.pop();
 		const auto& t=brd.get_tile({static_cast<int>(x.value), static_cast<int>(y.value)});
 		stk.push({static_cast<t_stack>(t.get_val())});
-applog<<"do_get_board:"<<x.value<<","<<y.value<<" => "<<t.get_val()<<std::endl;
+lm::log(*applog).info()<<"do_get_board:"<<x.value<<","<<y.value<<" => "<<t.get_val()<<std::endl;
 	}
 	catch(out_of_bounds_exception& e) {
 		stk.push({0});

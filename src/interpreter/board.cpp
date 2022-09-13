@@ -1,5 +1,5 @@
-#include "board.h"
-#include "exception.h"
+#include "interpreter/board.h"
+#include "interpreter/exception.h"
 
 using namespace interpreter;
 

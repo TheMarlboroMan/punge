@@ -1,0 +1,13 @@
+set(SOURCE
+	${SOURCE}
+	${CMAKE_CURRENT_SOURCE_DIR}/board.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/board_loader.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/cursor.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/output.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/parser.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/register_item.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/stack.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/stack_manipulator.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/tile.cpp 
+	PARENT_SCOPE
+)

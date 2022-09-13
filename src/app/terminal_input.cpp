@@ -1,4 +1,4 @@
-#include "terminal_input.h"
+#include "app/terminal_input.h"
 
 using namespace app;
 

@@ -1,4 +1,4 @@
-#include "stack.h"
+#include "interpreter/stack.h"
 
 using namespace interpreter;
 

@@ -1,15 +1,12 @@
-#include "terminal_display.h"
+#include "app/terminal_display.h"
 
 #include <sys/ioctl.h>
 #include <unistd.h>
 #include <iostream>
 
-#include <terminal_out.h>
+#include <tools/terminal_out.h>
 
-#include "exception.h"
-
-#include <log_tools.h>
-extern	tools::log applog;
+#include "app/exception.h"
 
 using namespace app;
 

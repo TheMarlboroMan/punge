@@ -1,4 +1,4 @@
-#include "stack_manipulator.h"
+#include "interpreter/stack_manipulator.h"
 
 using namespace interpreter;
 

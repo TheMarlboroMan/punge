@@ -1,0 +1,11 @@
+set(SOURCE
+	${SOURCE}
+	${CMAKE_CURRENT_SOURCE_DIR}/drawing_routines.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/driver.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/state_edit.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/state_play.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/state_title.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/terminal_display.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/terminal_input.cpp
+	PARENT_SCOPE
+)

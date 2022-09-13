@@ -1,4 +1,4 @@
-#include "cursor.h"
+#include "interpreter/cursor.h"
 
 using namespace interpreter;
 
