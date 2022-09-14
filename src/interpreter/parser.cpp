@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <cctype>
+#include <exception>
 
 #include <tools/number_generator.h>
 #include <lm/log.h>
@@ -67,14 +68,18 @@ void parser::step() {
 void parser::push_value_to_stack(char _val) {
 
 	if(string_mode) {
+
 		stk.push({static_cast<t_stack>(_val)});
 	}
 	else {
+	
 		if(std::isdigit(_val)) {
+
 			//TODO: No magic numbers...
 			stk.push({static_cast<t_stack>(_val-48)});
 		}
 		else {
+
 			stk.push({static_cast<t_stack>(_val)});
 		}
 	}
@@ -84,9 +89,11 @@ void parser::parse_string_mode(const tile& _t) {
 
 	char val=_t.get_val();
 	if(val==tile::string_delimiter) {
+
 		string_mode=!string_mode;
 	}
 	else {
+
 		push_value_to_stack(val);
 	}
 }
@@ -127,8 +134,9 @@ void parser::parse_regular_mode(const tile& _t) {
 		case tile::string_delimiter:	string_mode=!string_mode; break;
 		case tile::skip:		skip_next=true; break;
 		case tile::end:			end_signal=true; break;
+		//TODO: I think there are still missing operations.
+		default:				push_value_to_stack(val); break;
 
-		default:			/* Noop, cool... */ break;
 	}
 }
 

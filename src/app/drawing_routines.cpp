@@ -110,6 +110,9 @@ void	app::draw_stack(
 			: '?';
 
 		ss.str("");
+		//TODO: beware, when displayed as an integer it can be VERY large.
+		//TODO: actually, we should use a FIXED width for this, so previous
+		//stuff will be overwritten.
 		ss<<"["<<display<<"] ["<<std::to_string(it.value)<<"]";
 
 		_di.draw(
@@ -121,8 +124,17 @@ void	app::draw_stack(
 
 		++lines_cleared;
 	}
-	//TODO: some rationale about what this is would be nice
+
+	//There will be space for 10 lines, if we cleared less, we must add
+	//some whitespace there to overwrite stuff that was there before.
 	while(lines_cleared < 10) {
+
+		_di.draw(
+			interpreter::coordinates{pos.x, pos.y},
+			"             ", //TODO: fix the amount of space.
+			display_interface::color_fg::white,
+			display_interface::color_bg::black
+		);
 		++lines_cleared;
 		++pos.y;
 	}
@@ -131,11 +143,15 @@ void	app::draw_stack(
 		interpreter::coordinates{pos.x, pos.y},
 		(_s.get_size() > 10 ? "[MORE]" : "[----]"),
 		display_interface::color_fg::white, 
-		display_interface::color_bg::blue);
+		display_interface::color_bg::blue
+	);
 }
 
 
-void	app::draw_board(display_interface& _di, const interpreter::board& _b) {
+void	app::draw_board(
+	display_interface& _di, 
+	const interpreter::board& _b
+) {
 	
 	//the borders are at 1,1
 	interpreter::coordinates pos{2,2};
@@ -156,7 +172,9 @@ void	app::draw_board(display_interface& _di, const interpreter::board& _b) {
 }
 
 
-void	app::draw_title_screen(display_interface& _di) {
+void	app::draw_title_screen(
+	display_interface& _di
+) {
 
 	_di.draw(interpreter::coordinates{1, 1}, 
 		"Welcome to PUNGE\n\nPress any key to start (this is a lie)", 
