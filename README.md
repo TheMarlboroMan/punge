@@ -15,6 +15,8 @@ Then just do the cmake dance.
 
 ## TODO and FIX.
 
+- Fix the controller interface, it makes no sense that the board is there when
+	it should be a property of the controller itself.
 - Add help with the instructions list and game instructions.
 - What should be printed out if there's nothing on the stack???
 - Experiment with getch alternatives...
