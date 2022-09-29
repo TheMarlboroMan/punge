@@ -8,7 +8,8 @@ namespace app {
 enum class states{
 	title,
 	edit,
-	play
+	play,
+	help
 };
 
 typedef 	status_manager<states>	t_state_manager;

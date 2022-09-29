@@ -2,7 +2,7 @@
 #include <stdexcept>
 
 #include <tools/terminal_in.h>
-
+#include <tools/arg_manager.h>
 #include "app/driver.h"
 
 #include <lm/file_logger.h>
@@ -15,7 +15,7 @@ int main(int argc, char ** argv) {
 	try {
 		applog=new lm::file_logger("logs/applog.log");
 		lm::log(*applog).info()<<"Starting session"<<std::endl;
-		app::driver d;
+		app::driver d(argc, argv);
 		d.run();
 		delete applog;
 		return 0;

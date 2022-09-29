@@ -12,9 +12,8 @@ class status_manager {
 
 	//!Class constructor.
 			status_manager(T _value)
-		:current(_value), next(_value) {
-
-	}
+		:current(_value), next(_value), prev(_value)
+	{}
 
 	//!Gets the current value.
 	T		get_current() const {return current;}
@@ -29,16 +28,20 @@ class status_manager {
 	void		reject() {next=current;}
 
 	//!Accepts the change for the current value.
-	void		accept() {current=next;}
+	void		accept() {prev=current; current=next;}
 
 	//!Returns true if a change has been proposed.
 	bool		is_change() const {return next!=current;}
+
+	//!Not exactly pop, but good enough
+	void        pop() {next=prev;}
 
 	
 	private:
 
 	T		current,
-			next;
+			next,
+			prev;
 
 };
 }

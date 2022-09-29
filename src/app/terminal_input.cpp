@@ -68,3 +68,9 @@ char terminal_input::get_char() const {
 
 	return indata.get_string_data()[0];
 }
+
+bool terminal_input::is_help() const {
+
+	return tools::terminal_in_data::types::function==indata.type 
+      && 1 == indata.function;
+}

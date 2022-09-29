@@ -27,6 +27,7 @@ class terminal_input:
 	virtual bool 	is_arrow_down() const;
 	virtual bool 	is_char() const;
 	virtual char 	get_char() const;
+	virtual bool    is_help() const;
 
 	private:
 

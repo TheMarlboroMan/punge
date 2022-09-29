@@ -12,19 +12,20 @@
 #include "app/state_play.h"
 #include "app/state_edit.h"
 #include "app/state_title.h"
-
+#include "app/state_help.h"
 #include "interpreter/parser.h"
 
 
 using namespace app;
 
-driver::driver()
-	:state_mngr(states::title) {
+driver::driver(
+	int,
+	char **
+) 
+	:state_mngr(states::title)
+{
 
 	//TODO: allow setting the speed at runtime.
-	controllers[states::title]=std::unique_ptr<state_interface>(new state_title(state_mngr));
-	controllers[states::play]=std::unique_ptr<state_interface>(new state_play(state_mngr));
-	controllers[states::edit]=std::unique_ptr<state_interface>(new state_edit(state_mngr));
 }
 
 //TODO: There is stuff to do here... First, the driver acts like a program
@@ -43,6 +44,11 @@ void driver::run() {
 	try {
 		interpreter::parser 	p;
 
+		controllers[states::title]=std::unique_ptr<state_interface>(new state_title(state_mngr));
+		controllers[states::play]=std::unique_ptr<state_interface>(new state_play(state_mngr, p));
+		controllers[states::edit]=std::unique_ptr<state_interface>(new state_edit(state_mngr, p.get_board()));
+		controllers[states::help]=std::unique_ptr<state_interface>(new state_help(state_mngr));
+
 		p.load_board_from_filename("data/sets/original/test01.brd");
 //		p.new_board(20, 20);
 
@@ -57,7 +63,7 @@ void driver::run() {
 
 		while(!exit_signal) {
 
-			do_input(*i, p.get_board());
+			do_input(*i);
 
 			if(state_mngr.is_change()) {
 				d->clear();
@@ -67,14 +73,14 @@ void driver::run() {
 			}
 
 			auto state=state_mngr.get_current();
-			controllers[state]->do_logic(p, last_tick);
+			controllers[state]->do_logic(last_tick);
 
 			//TODO: Should not refresh until something has changed...
 			auto diff_display=std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-last_refresh);
 			if(diff_display.count() >= refresh_rate) {
 
 				last_refresh=std::chrono::system_clock::now();
-				controllers[state]->do_draw(*d, p);
+				controllers[state]->do_draw(*d);
 			}
 		}
 
@@ -96,12 +102,14 @@ void driver::run() {
 	}
 }
 
-void driver::do_input(input_interface& _i, interpreter::board& _board) {
+void driver::do_input(
+	input_interface& _i
+) {
 
 	const auto state=state_mngr.get_current();
 
 	_i.collect();
-	controllers[state]->do_input(_i, _board);
+	controllers[state]->do_input(_i);
 
 	if(_i.is_input()) {
 

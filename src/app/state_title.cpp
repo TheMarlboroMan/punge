@@ -16,19 +16,25 @@ void state_title::sleep() {
 
 }
 
-void state_title::do_input(input_interface& _if, interpreter::board&) {
+void state_title::do_input(
+	input_interface& _if
+) {
 
 	if(_if.is_input()) {
 		state_mngr.request(states::edit);
 	}
 }
 
-void state_title::do_draw(display_interface& _di, const interpreter::parser& _parser) {
+void state_title::do_draw(
+	display_interface& _di
+) {
 
 	draw_title_screen(_di);
 	_di.refresh();
 }
 
-void state_title::do_logic(interpreter::parser& _p, t_time& _last_tick) {
+void state_title::do_logic(
+	t_time& _last_tick
+) {
 
 }

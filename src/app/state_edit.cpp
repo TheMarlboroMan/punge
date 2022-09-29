@@ -3,8 +3,13 @@
 
 using namespace app;
 
-state_edit::state_edit(t_state_manager& _sm)
-	:state_interface(_sm) {
+state_edit::state_edit(
+	t_state_manager& _sm,
+	interpreter::board& _board
+)
+	:state_interface(_sm),
+	board{_board}
+{
 
 }
 
@@ -16,14 +21,21 @@ void state_edit::sleep() {
 
 }
 
-//TODO: Board should be injected.
-void state_edit::do_input(input_interface& _i, interpreter::board& _board) {
+void state_edit::do_input(
+	input_interface& _i
+) {
 
 	if(_i.is_tab()) {
 		state_mngr.request(states::play);
 		return;
 	}
 	
+	if(_i.is_help()) {
+
+		state_mngr.request(states::help);
+		return;
+	}
+
 	if(_i.is_arrow()) {
 
 		auto future_position=edit_cursor;
@@ -34,28 +46,30 @@ void state_edit::do_input(input_interface& _i, interpreter::board& _board) {
 		else if(_i.is_arrow_right()) {++future_position.x;}
 
 		//Validate the position...
-		if(_board.check_coords(future_position)) {
+		if(board.check_coords(future_position)) {
 			edit_cursor=future_position;
 		}
 	}
 	else if(_i.is_char()) {
 
-		_board.set_tile(edit_cursor, _i.get_char());
+		board.set_tile(edit_cursor, _i.get_char());
 	}
 
 }
 
-void state_edit::do_draw(display_interface& _di, const interpreter::parser& _parser) {
+void state_edit::do_draw(
+	display_interface& _di
+) {
 
-	draw_board_borders(_di, _parser.get_board());
-	draw_board(_di, _parser.get_board());
+	draw_board_borders(_di, board);
+	draw_board(_di, board);
 
-	draw_cursor(_di, edit_cursor, _parser.get_board(), display_interface::color_fg::white, display_interface::color_bg::green);
+	draw_cursor(_di, edit_cursor, board, display_interface::color_fg::white, display_interface::color_bg::green);
 	draw_cursor_pos(_di, edit_cursor);
 
 	_di.refresh();
 }
 
-void state_edit::do_logic(interpreter::parser&, t_time&) {
+void state_edit::do_logic(t_time&) {
 
 }

@@ -20,14 +20,14 @@ class driver {
 
 	public:
 
-						driver();
+						driver(int, char **);
 	void					run();
 
 	private:
 	
 	int 			refresh_rate=100; //Four times per second.
 
-	void					do_input(input_interface&, interpreter::board&);
+	void					do_input(input_interface&);
 
 	t_state_manager				state_mngr;
 	bool					exit_signal=false;

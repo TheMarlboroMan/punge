@@ -25,15 +25,12 @@ class state_interface {
 	//!Called when another controller is called to the front.
 	virtual void	sleep()=0;
 
-	//TODO: Board should NOT BE A PART OF THE INTERFACE.
 	//!Processes input. Should not change any unrelated internal state.
-	virtual void 	do_input(input_interface&, interpreter::board&)=0;
+	virtual void 	do_input(input_interface&)=0;
 	//!Draws.
-	//TODO: Parser should NOT BE A PART OF THE INTERFACE.
-	virtual void 	do_draw(display_interface&, const interpreter::parser&)=0;
+	virtual void 	do_draw(display_interface&)=0;
 	//!Does logic  Should be the one to change internal state.
-	//TODO: Parser should not be part of the interface.
-	virtual void 	do_logic(interpreter::parser&, t_time&)=0;
+	virtual void 	do_logic(t_time&)=0;
 
 	protected:
 

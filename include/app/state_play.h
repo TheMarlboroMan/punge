@@ -1,6 +1,4 @@
-#ifndef APP_STATE_PLAY
-#define APP_STATE_PLAY
-
+#pragma once
 #include "state_interface.h"
 
 namespace app {
@@ -11,20 +9,21 @@ class state_play:
 
 	public:
 
-			state_play(t_state_manager&);
+			state_play(t_state_manager&, interpreter::parser&);
 
 	void		awake();
 	void		sleep();
-	void 		do_input(input_interface&, interpreter::board&);
-	void 		do_draw(display_interface&, const interpreter::parser&);
-	void 		do_logic(interpreter::parser&, t_time&);
+	void 		do_input(input_interface&);
+	void 		do_draw(display_interface&);
+	void 		do_logic(t_time&);
 
 	private:
 
 	static const int tick_speed=200;
 
+	interpreter::parser&        parser;
+
 };
 
 }
 
-#endif

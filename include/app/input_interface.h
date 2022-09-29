@@ -22,6 +22,7 @@ class input_interface {
 	virtual bool 	is_arrow_down() const=0;
 	virtual bool 	is_char() const=0;
 	virtual char 	get_char() const=0;
+	virtual bool    is_help() const=0;
 };
 }
 

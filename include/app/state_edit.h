@@ -1,6 +1,4 @@
-#ifndef APP_STATE_EDIT
-#define APP_STATE_EDIT
-
+#pragma once
 #include "state_interface.h"
 #include "../interpreter/coordinates.h"
 
@@ -12,20 +10,20 @@ class state_edit:
 
 	public:
 
-					state_edit(t_state_manager&);
+						state_edit(t_state_manager&, interpreter::board&); 
 
 	void				awake();
 	void				sleep();
-	void 				do_input(input_interface&, interpreter::board&);
-	void 				do_draw(display_interface&, const interpreter::parser&);
-	void 				do_logic(interpreter::parser&, t_time&);
+	void 				do_input(input_interface&);
+	void 				do_draw(display_interface&);
+	void 				do_logic(t_time&);
 
 	private:
 
+	interpreter::board&         board;
 	interpreter::coordinates	edit_cursor;
 
 };
 
 }
 
-#endif
