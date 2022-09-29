@@ -14,14 +14,16 @@ class display_interface {
 
 	enum class		color_fg {
 		white,
-		blue
+		blue,
+		black
 	};
 
 	enum class		color_bg {
 		black,
 		green,
 		red,
-		blue
+		blue,
+		white
 	};
 
 	//!Must clear the whole screen.

@@ -29,6 +29,9 @@ void	draw_cursor_pos(display_interface&, const interpreter::coordinates&);
 
 //!Must prepare the title screen.
 void	draw_title_screen(display_interface&);
+
+//!Must draw the help screen.
+void	draw_help_screen(display_interface&, const std::vector<std::string>&, std::size_t, std::size_t);
 }
 
 #endif

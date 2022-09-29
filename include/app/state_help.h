@@ -26,6 +26,7 @@ class state_help:
 	std::vector<std::string>    lines;
 	std::size_t                 current_position{0}, //top position.
 	                            max_position{0};
+	bool                        must_refresh{false};
 };
 
 }

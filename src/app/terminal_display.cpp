@@ -58,6 +58,7 @@ void terminal_display::draw(interpreter::coordinates _pos, const std::string& _s
 	switch(_fg) {
 		case color_fg::white:	fg=tools::txt_white;	break;
 		case color_fg::blue:	fg=tools::txt_blue;	break;
+		case color_fg::black:	fg=tools::txt_black; break;
 	}
 
 	auto bg=tools::bg_black;
@@ -66,9 +67,11 @@ void terminal_display::draw(interpreter::coordinates _pos, const std::string& _s
 		case color_bg::green:	bg=tools::bg_green;	break;
 		case color_bg::red:	bg=tools::bg_red;	break;
 		case color_bg::blue:	bg=tools::bg_blue;	break;
+		case color_bg::white:	bg=tools::bg_white; break;
 	}
 
 	//TODO: Optimize, keep a private buffer...
+	//TODO: Not only that... the interface requires it!!!
 	std::cout<<tools::s::pos(_pos.x, _pos.y)
 		<<tools::s::text_color(fg)
 		<<tools::s::background_color(bg)

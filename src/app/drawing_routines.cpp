@@ -180,3 +180,42 @@ void	app::draw_title_screen(
 		"Welcome to PUNGE\n\nPress any key to start (this is a lie)", 
 		display_interface::color_fg::white, display_interface::color_bg::black);
 }
+
+void	app::draw_help_screen(
+	display_interface& _di,
+	const std::vector<std::string>& _data,
+	std::size_t _pos, 
+	std::size_t _height
+) {
+	
+	std::size_t y=1;
+
+	//TODO: you know the rest of the line will be black, right?
+	_di.draw(
+		interpreter::coordinates{1, y++},
+		"Help. Press escape to return, arrows to move",
+		display_interface::color_fg::black,
+		display_interface::color_bg::white
+	);
+
+	while(true) {
+
+		//-1 because we used one line for the title...
+		if(_pos >= _data.size() || y >= _height-1) {
+
+			break;
+		}
+
+		_di.draw(
+			interpreter::coordinates{1, y++},
+			_data.at(_pos),
+			display_interface::color_fg::white,
+			display_interface::color_bg::black
+		);
+
+		++_pos;
+	}
+
+	//TODO: we can either draw blank lines if there is still screen space
+	//or not allow movement beyond the end of the file.
+}

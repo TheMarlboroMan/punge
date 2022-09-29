@@ -15,9 +15,8 @@ Then just do the cmake dance.
 
 ## TODO and FIX.
 
-- Fix the controller interface, it makes no sense that the board is there when
-	it should be a property of the controller itself.
-- Add help with the instructions list and game instructions.
+- In the help controller, tabs should be interpreted as N spaces for the 
+	purposes of the formatter.
 - What should be printed out if there's nothing on the stack???
 - Experiment with getch alternatives...
 - Finish the interpreter with the missing commands. I am only missing the input stuff.
