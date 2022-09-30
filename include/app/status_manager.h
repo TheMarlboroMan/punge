@@ -1,5 +1,4 @@
-#ifndef STATUS_MANAGER_H
-#define STATUS_MANAGER_H
+#pragma once
 
 namespace app {
 //!Manages two variables of a templated type. One of them will be declared as
@@ -36,7 +35,6 @@ class status_manager {
 	//!Not exactly pop, but good enough
 	void        pop() {next=prev;}
 
-	
 	private:
 
 	T		current,
@@ -46,4 +44,3 @@ class status_manager {
 };
 }
 
-#endif

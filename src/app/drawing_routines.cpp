@@ -184,8 +184,7 @@ void	app::draw_title_screen(
 void	app::draw_help_screen(
 	display_interface& _di,
 	const std::vector<std::string>& _data,
-	std::size_t _pos, 
-	std::size_t _height
+	std::size_t _pos 
 ) {
 	
 	std::size_t y=1;
@@ -198,10 +197,12 @@ void	app::draw_help_screen(
 		display_interface::color_bg::white
 	);
 
+	//Amount of rows available for printing discarding the title row...
+	std::size_t available=_di.get_h()-1; 
 	while(true) {
 
 		//-1 because we used one line for the title...
-		if(_pos >= _data.size() || y >= _height-1) {
+		if(_pos >= _data.size() || !available) {
 
 			break;
 		}
@@ -214,8 +215,6 @@ void	app::draw_help_screen(
 		);
 
 		++_pos;
+		--available;
 	}
-
-	//TODO: we can either draw blank lines if there is still screen space
-	//or not allow movement beyond the end of the file.
 }

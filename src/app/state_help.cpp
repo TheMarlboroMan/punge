@@ -45,7 +45,9 @@ void state_help::do_input(
 	}
 	else if(_if.is_arrow_down()) {
 
-		if(current_position < max_position) {
+		//dsize.h-1 is the height of the screen minus one line that will
+		//be used for the title.
+		if(current_position+dsize.h-1 < max_position) {
 
 			++current_position;
 			must_refresh=true;
@@ -66,12 +68,12 @@ void state_help::do_draw(
 		must_refresh=false;
 	}
 
-	draw_help_screen(_di, lines, current_position, dsize.h);
+	draw_help_screen(_di, lines, current_position);
 	_di.refresh();
 }
 
 void state_help::do_logic(
-	t_time& _last_tick
+	t_time& 
 ) {
 
 }
@@ -93,6 +95,4 @@ void state_help::read_help_file() {
 	//set the min and max values...
 	current_position=0;
 	max_position=lines.size()-1;
-	
-	//and we are done.
 }

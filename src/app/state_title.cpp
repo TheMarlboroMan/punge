@@ -34,7 +34,7 @@ void state_title::do_draw(
 }
 
 void state_title::do_logic(
-	t_time& _last_tick
+	t_time& 
 ) {
 
 }

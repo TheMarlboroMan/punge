@@ -1,5 +1,4 @@
-#ifndef DRAWING_ROUTINES_H
-#define DRAWING_ROUTINES_H
+#pragma once
 
 #include "display_interface.h"
 #include "../interpreter/board.h"
@@ -31,7 +30,6 @@ void	draw_cursor_pos(display_interface&, const interpreter::coordinates&);
 void	draw_title_screen(display_interface&);
 
 //!Must draw the help screen.
-void	draw_help_screen(display_interface&, const std::vector<std::string>&, std::size_t, std::size_t);
+void	draw_help_screen(display_interface&, const std::vector<std::string>&, std::size_t);
 }
 
-#endif
