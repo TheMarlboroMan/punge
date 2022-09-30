@@ -11,7 +11,7 @@ class state_help:
 
 	public:
 
-		state_help(t_state_manager&);
+		state_help(t_state_manager&, const display_size&);
 
 	void	awake();
 	void	sleep();
@@ -23,6 +23,7 @@ class state_help:
 
 	void    read_help_file();
 
+	const display_size&			dsize;
 	std::vector<std::string>    lines;
 	std::size_t                 current_position{0}, //top position.
 	                            max_position{0};

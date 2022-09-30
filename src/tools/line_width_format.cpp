@@ -1,4 +1,5 @@
 #include <tools/line_width_format.h>
+#include <tools/string_utils.h>
 #include <sstream>
 
 using namespace tools;
@@ -35,6 +36,8 @@ std::string line_width_format::stream_to_string(
 	while(true) {
 
 		std::getline(_stream, line);
+		tools::rtrim(line);
+		tools::replace(line, "\t", "    ");
 		if(_width) {
 
 			do {

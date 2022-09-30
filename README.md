@@ -16,12 +16,8 @@ Then just do the cmake dance.
 ## TODO and FIX.
 
 - Maybe add a top bar always, with the title???
-- A display interface should hold how many columns and rows can it fit...
-	To avoid breaking containing rules, maybe it is a property of the driver
-	that passes a reference along to whoever needs it.
-- In the help controller, tabs should be interpreted as N spaces for the 
-	purposes of the formatter.
 - What should be printed out if there's nothing on the stack???
+	Popping from empty stacks gives out zero.
 - Experiment with getch alternatives...
 - Finish the interpreter with the missing commands. I am only missing the input stuff.
 - Hide the cursor, show it when needed.

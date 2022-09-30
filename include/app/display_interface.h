@@ -1,11 +1,16 @@
-#ifndef DISPLAY_INTERFACE_H
-#define DISPLAY_INTERFACE_H
-
+#pragma once
 #include <string>
 
 #include "../interpreter/coordinates.h"
 
 namespace app {
+
+//!Expresses display size in rows and columns.
+struct display_size {
+
+	std::size_t		w{0},
+					h{0};
+};
 
 //!Represents a basic display interface. 
 class display_interface {
@@ -26,6 +31,12 @@ class display_interface {
 		white
 	};
 
+	//!Must return the width of the display in columns.
+	virtual std::size_t	get_w()const=0;
+
+	//!Must return the width of the display in rows.
+	virtual std::size_t get_h()const=0;
+	
 	//!Must clear the whole screen.
 	virtual void		clear()=0;
 
@@ -48,4 +59,3 @@ class display_interface {
 
 }
 
-#endif

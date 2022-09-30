@@ -1,16 +1,17 @@
 #include "app/state_help.h"
 #include "app/drawing_routines.h"
 #include "tools/line_width_format.h"
-#include <tools/terminal_out.h>
 #include <fstream>
 #include <stdexcept>
 
 using namespace app;
 
 state_help::state_help(
-t_state_manager& _sm
+	t_state_manager& _sm,
+	const display_size& _dsize
 )
-	:state_interface(_sm) 
+	:state_interface(_sm),
+	dsize{_dsize}
 {
 
 	read_help_file();
@@ -31,9 +32,9 @@ void state_help::do_input(
 	if(_if.is_escape()) {
 
 		state_mngr.pop();
+		return;
 	}
 
-	must_refresh=false;
 	if(_if.is_arrow_up()) {
 	
 		if(current_position > 0) {
@@ -55,14 +56,17 @@ void state_help::do_input(
 void state_help::do_draw(
 	display_interface& _di
 ) {
+
+	//a refresh will be called far less than input recollection, thus this is
+	//the place to signal a refresh has taken place and no others are expected
+	//until scrolling happens.
 	if(must_refresh) {
 
 		_di.clear();
+		must_refresh=false;
 	}
 
-	//TODO: don't repeat ourselves, we got this before.
-	auto ts=tools::get_termsize();
-	draw_help_screen(_di, lines, current_position, ts.h);	
+	draw_help_screen(_di, lines, current_position, dsize.h);
 	_di.refresh();
 }
 
@@ -84,9 +88,8 @@ void state_help::read_help_file() {
 
 	//pass it through the helper..
 	tools::line_width_format lwf;
-	auto screen_size=tools::get_termsize();
-	lines=lwf.stream_to_vector(infile, screen_size.w);
-	//TODO: Actually, we could make good use of the height too...	
+	lines=lwf.stream_to_vector(infile, dsize.w);
+	
 	//set the min and max values...
 	current_position=0;
 	max_position=lines.size()-1;

@@ -10,12 +10,25 @@
 
 using namespace app;
 
-terminal_display::terminal_display() {
+terminal_display::terminal_display(
+	const display_size& _dsize
+)
+	:dsize{_dsize}
+{
 
-	get_terminal_size();
 	if(!check_size()) {
 		throw display_size_exception("terminal must be of at least "+std::to_string(min_w)+"x"+std::to_string(min_h));
 	}
+}
+
+std::size_t terminal_display::get_w() const {
+
+	return dsize.w;
+}
+
+std::size_t terminal_display::get_h() const {
+	
+	return dsize.h;
 }
 
 void terminal_display::refresh() {
@@ -28,7 +41,16 @@ void terminal_display::clear() {
 
 	//TODO: Perhaps it is better to store the terminal size and move down
 	//as much columns as needed??????? I would prefer that.
+	
+	//TODO: not exactly working...
 	std::cout<<tools::s::reset();
+
+	//TODO: not working either, stuff remains to the right!.
+//	for(std::size_t y=1; y>get_w(); y++) {
+//
+//		std::cout<<tools::s::pos(1, y)<<
+//			tools::s::clear_right();
+//	} 
 }
 
 void terminal_display::cleanup() {
@@ -39,17 +61,9 @@ void terminal_display::cleanup() {
 		<<tools::s::flush();
 }
 
-void terminal_display::get_terminal_size(){
-
-	winsize ws;
-	ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws);
-	w=ws.ws_col;
-	h=ws.ws_row;
-}
-
 bool terminal_display::check_size() {
 
-	return !(w < min_w || h < min_h);
+	return !(dsize.w < min_w || dsize.h < min_h);
 }
 
 void terminal_display::draw(interpreter::coordinates _pos, const std::string& _str, color_fg _fg, color_bg _bg) {

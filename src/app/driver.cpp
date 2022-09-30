@@ -25,6 +25,11 @@ driver::driver(
 	:state_mngr(states::title)
 {
 
+	auto termsize=tools::get_termsize();
+	dsize.w=termsize.w;
+	dsize.h=termsize.h;
+//TODO: also set the listener for window size changes!.
+
 	//TODO: allow setting the speed at runtime.
 }
 
@@ -47,12 +52,12 @@ void driver::run() {
 		controllers[states::title]=std::unique_ptr<state_interface>(new state_title(state_mngr));
 		controllers[states::play]=std::unique_ptr<state_interface>(new state_play(state_mngr, p));
 		controllers[states::edit]=std::unique_ptr<state_interface>(new state_edit(state_mngr, p.get_board()));
-		controllers[states::help]=std::unique_ptr<state_interface>(new state_help(state_mngr));
+		controllers[states::help]=std::unique_ptr<state_interface>(new state_help(state_mngr, dsize));
 
 		p.load_board_from_filename("data/sets/original/test01.brd");
 //		p.new_board(20, 20);
 
-		std::unique_ptr<display_interface> d(new terminal_display);
+		std::unique_ptr<display_interface> d(new terminal_display(dsize));
 		std::unique_ptr<input_interface> i(new terminal_input);
 		d->clear();
 
