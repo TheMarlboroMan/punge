@@ -16,6 +16,7 @@ class terminal_display:
 	virtual void				cleanup();
 	virtual void				refresh();
 	virtual void				draw(interpreter::coordinates, const std::string&, color_fg, color_bg);
+	virtual void				draw(const std::string&, color_fg, color_bg);
 	virtual std::size_t		get_w() const;
 	virtual std::size_t		get_h() const;
 

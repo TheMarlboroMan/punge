@@ -48,10 +48,12 @@ class display_interface {
 	virtual void		refresh()=0;
 
 	//!Must prepare a character in the given coordinates, with the specific colors.
-	//!Should not directly draw it until instructed
+	//!Should not directly draw it until instructed. The overload without
+	//!coordinates prints out wherever the cursor is.
 	//!with a call to "refresh".
 	//TODO: How about the "arrangement" as in vertical or horizontal???
 	virtual void		draw(interpreter::coordinates, const std::string&, color_fg, color_bg)=0;
+	virtual void		draw(const std::string&, color_fg, color_bg)=0;
 
 	
 

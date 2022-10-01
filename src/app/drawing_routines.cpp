@@ -1,5 +1,7 @@
 #include "app/drawing_routines.h"
 #include <sstream>
+#include <iostream> //TODO: remove
+#include <tools/terminal_out.h>
 
 using namespace app;
 
@@ -72,8 +74,6 @@ void	app::draw_cursor(
 	display_interface::color_fg _fg, 
 	display_interface::color_bg _bg
 ) {
-
-	interpreter::coordinates offset{2,2};
 
 	std::string contents;
 	contents+=_b.get_tile(_pos).get_val();
@@ -189,13 +189,34 @@ void	app::draw_help_screen(
 	
 	std::size_t y=1;
 
-	//TODO: you know the rest of the line will be black, right?
+	//TODO: put this into a "title" routine.
+	std::string title="Help. Press escape to return, arrows to move";
+	std::string padding(_di.get_w()/*-title.size()*/, ' ');
+	
 	_di.draw(
-		interpreter::coordinates{1, y++},
-		"Help. Press escape to return, arrows to move",
+		interpreter::coordinates{1, y},
+		padding,
 		display_interface::color_fg::black,
 		display_interface::color_bg::white
 	);
+	
+	_di.draw(
+		interpreter::coordinates{1, y},
+		title,
+		display_interface::color_fg::black,
+		display_interface::color_bg::white
+	);
+	
+	//TODO: will explode if title is too long!!!
+	//TODO: not working
+//	std::string padding{_di.get_w()-title.size(), ' '};
+//	_di.draw(
+//		padding,
+//		display_interface::color_fg::black,
+//		display_interface::color_bg::white
+//	);
+
+	++y;
 
 	//Amount of rows available for printing discarding the title row...
 	std::size_t available=_di.get_h()-1; 

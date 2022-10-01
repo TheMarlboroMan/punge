@@ -15,6 +15,8 @@ Then just do the cmake dance.
 
 ## TODO and FIX.
 
+- Showing the stack during play makes little sense in the screen size, create
+	another controller for it.
 - Maybe add a top bar always, with the title???
 - What should be printed out if there's nothing on the stack???
 	Popping from empty stacks gives out zero.
@@ -25,5 +27,6 @@ Then just do the cmake dance.
 - Copy data files on build
 
 - Normalize board format as far as files are concerned (perhaps board first, info later????).
+- board info: name, intended output, starting stack values
 - Normalize puzzle set structure (a directory with a set.dat file with info and the boards listed).
 

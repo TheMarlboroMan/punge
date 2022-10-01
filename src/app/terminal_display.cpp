@@ -66,7 +66,22 @@ bool terminal_display::check_size() {
 	return !(dsize.w < min_w || dsize.h < min_h);
 }
 
-void terminal_display::draw(interpreter::coordinates _pos, const std::string& _str, color_fg _fg, color_bg _bg) {
+void terminal_display::draw(
+	interpreter::coordinates _pos, 
+	const std::string& _str, 
+	color_fg _fg, 
+	color_bg _bg
+) {
+
+	std::cout<<tools::s::pos(_pos.x, _pos.y);
+	draw(_str, _fg, _bg);
+}
+
+void terminal_display::draw(
+	const std::string& _str, 
+	color_fg _fg, 
+	color_bg _bg
+) {
 
 	auto fg=tools::txt_white;
 	switch(_fg) {
@@ -86,8 +101,9 @@ void terminal_display::draw(interpreter::coordinates _pos, const std::string& _s
 
 	//TODO: Optimize, keep a private buffer...
 	//TODO: Not only that... the interface requires it!!!
-	std::cout<<tools::s::pos(_pos.x, _pos.y)
-		<<tools::s::text_color(fg)
+	//TODO: there will be no private buffer without an internal cursor
+	//position...
+	std::cout<<tools::s::text_color(fg)
 		<<tools::s::background_color(bg)
 		<<_str
 		<<tools::s::reset_text();
