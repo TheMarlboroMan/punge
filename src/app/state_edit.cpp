@@ -25,6 +25,12 @@ void state_edit::do_input(
 	input_interface& _i
 ) {
 
+	if(_i.is_escape()) {
+
+		state_mngr.pop();
+		return;
+	}
+
 	if(_i.is_tab()) {
 		state_mngr.request(states::play);
 		return;

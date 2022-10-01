@@ -15,8 +15,6 @@ Then just do the cmake dance.
 
 ## TODO and FIX.
 
-- Pop state does not work because ESC always exits in the driver. Should be
-	changed to something in the state manager??
 - Maybe add a top bar always, with the title???
 - What should be printed out if there's nothing on the stack???
 	Popping from empty stacks gives out zero.

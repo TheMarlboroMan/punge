@@ -43,7 +43,6 @@ driver::driver(
 //storage in the driver, so it will do.
 void driver::run() {
 
-	//TODO: Add state_game_help
 	refresh_rate=100;
 
 	try {
@@ -71,9 +70,15 @@ void driver::run() {
 			do_input(*i);
 
 			if(state_mngr.is_change()) {
+
+				state_mngr.accept_change();
 				d->clear();
-				controllers[state_mngr.get_current()]->sleep();
-				state_mngr.accept();
+				controllers[state_mngr.get_previous()]->sleep();
+				if(state_mngr.empty()) {
+
+					exit_signal=true;
+					continue;
+				}
 				controllers[state_mngr.get_current()]->awake();
 			}
 
@@ -115,11 +120,4 @@ void driver::do_input(
 
 	_i.collect();
 	controllers[state]->do_input(_i);
-
-	if(_i.is_input()) {
-
-		if(_i.is_escape()) {
-			exit_signal=true;
-		}
-	}
 }

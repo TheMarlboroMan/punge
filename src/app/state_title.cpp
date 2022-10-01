@@ -20,6 +20,12 @@ void state_title::do_input(
 	input_interface& _if
 ) {
 
+	if(_if.is_escape()) {
+
+		state_mngr.pop();
+		return;
+	}
+
 	if(_if.is_input()) {
 		state_mngr.request(states::edit);
 	}

@@ -1,4 +1,5 @@
 #pragma once
+#include <stack>
 
 namespace app {
 //!Manages two variables of a templated type. One of them will be declared as
@@ -11,36 +12,53 @@ class status_manager {
 
 	//!Class constructor.
 			status_manager(T _value)
-		:current(_value), next(_value), prev(_value)
-	{}
+	{
+		stack.push(_value);
+	}
 
 	//!Gets the current value.
-	T		get_current() const {return current;}
-
-	//!Gets the desired value.
-	T		get_next() const {return next;}
+	T		get_current() const {return stack.top();}
+	
+	//!Gets the previous value.
+	T		get_previous() const {return prev_state;}
 
 	//!Requests a change for the current value.
-	void		request(T _value) {next=_value;}
+	void		request(T _value) {
 
-	//!Rejects a proposed change for the current value.
-	void		reject() {next=current;}
+		change=true;
+		prev_state=get_current();
+		stack.push(_value);
+	}
 
-	//!Accepts the change for the current value.
-	void		accept() {prev=current; current=next;}
+	void        pop() {
+
+		prev_state=stack.top();
+		stack.pop();
+		change=true;
+	}
+
+	void		accept_change() {
+
+		change=false;
+	}
 
 	//!Returns true if a change has been proposed.
-	bool		is_change() const {return next!=current;}
+	bool		is_change() const {
+		
+		return change;
+	}
 
-	//!Not exactly pop, but good enough
-	void        pop() {next=prev;}
+	bool		empty() const {
+
+		return stack.empty();
+	}
+
 
 	private:
 
-	T		current,
-			next,
-			prev;
-
+	std::stack<T>	stack;
+	T 				prev_state{};
+	bool 			change{false};
 };
 }
 
