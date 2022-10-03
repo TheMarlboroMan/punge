@@ -9,7 +9,8 @@ enum class states{
 	title,
 	edit,
 	play,
-	help
+	help,
+	stack
 };
 
 typedef 	status_manager<states>	t_state_manager;

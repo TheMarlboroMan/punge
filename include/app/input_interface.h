@@ -1,6 +1,4 @@
-#ifndef APP_INPUT_INTERFACE_H
-#define APP_INPUT_INTERFACE_H
-
+#pragma once
 namespace app {
 
 //!Will abstract away different input methods.
@@ -23,7 +21,7 @@ class input_interface {
 	virtual bool 	is_char() const=0;
 	virtual char 	get_char() const=0;
 	virtual bool    is_help() const=0;
+	virtual bool    is_stack() const=0;
 };
 }
 
-#endif

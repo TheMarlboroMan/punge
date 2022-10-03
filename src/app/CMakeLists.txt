@@ -6,6 +6,7 @@ set(SOURCE
 	${CMAKE_CURRENT_SOURCE_DIR}/state_play.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/state_title.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/state_help.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/state_stack.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/terminal_display.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/terminal_input.cpp
 	PARENT_SCOPE

@@ -1,6 +1,4 @@
-#ifndef APP_TERMINAL_INPUT_H
-#define APP_TERMINAL_INPUT_H
-
+#pragma once
 #include <tools/terminal_in.h>
 
 #include "input_interface.h"
@@ -28,7 +26,7 @@ class terminal_input:
 	virtual bool 	is_char() const;
 	virtual char 	get_char() const;
 	virtual bool    is_help() const;
-
+	virtual bool    is_stack() const;
 	private:
 
 	tools::terminal_in 		ti;
@@ -37,4 +35,3 @@ class terminal_input:
 
 }
 
-#endif

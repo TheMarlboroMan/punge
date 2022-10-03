@@ -74,3 +74,10 @@ bool terminal_input::is_help() const {
 	return tools::terminal_in_data::types::function==indata.type 
       && 1 == indata.function;
 }
+
+bool terminal_input::is_stack() const {
+
+	return tools::terminal_in_data::types::function==indata.type 
+      && 2 == indata.function;
+
+}

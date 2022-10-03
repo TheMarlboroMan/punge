@@ -13,6 +13,7 @@
 #include "app/state_edit.h"
 #include "app/state_title.h"
 #include "app/state_help.h"
+#include "app/state_stack.h"
 #include "interpreter/parser.h"
 
 
@@ -52,6 +53,7 @@ void driver::run() {
 		controllers[states::play]=std::unique_ptr<state_interface>(new state_play(state_mngr, p));
 		controllers[states::edit]=std::unique_ptr<state_interface>(new state_edit(state_mngr, p.get_board()));
 		controllers[states::help]=std::unique_ptr<state_interface>(new state_help(state_mngr, dsize));
+		controllers[states::stack]=std::unique_ptr<state_interface>(new state_stack(state_mngr, p.get_stack()));
 
 		p.load_board_from_filename("data/sets/original/test01.brd");
 //		p.new_board(20, 20);

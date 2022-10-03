@@ -1,5 +1,6 @@
 controls in edit mode:
 
+f1 - show help
 tab - start playing
 arrows - move 
 characters - set the value
@@ -7,6 +8,13 @@ characters - set the value
 controls in play mode:
 
 tab - go back to edit mode
+f1 - help
+f2 - show stack
+
+controls in help mode:
+
+arrows - move
+esc - back
 
 befunge93 instruction list:
 

@@ -35,6 +35,11 @@ void state_play::do_input(
 		state_mngr.request(states::help);
 		return;
 	}
+
+	if(_i.is_stack()) {
+
+		state_mngr.request(states::stack);
+	}
 }
 
 void state_play::do_draw(
@@ -49,7 +54,6 @@ void state_play::do_draw(
 	//TODO: Change color when in string mode!!!
 	//TODO: Set a reasonable refresh rate.
 	draw_cursor(_di, curpos, parser.get_board(), display_interface::color_fg::white, display_interface::color_bg::red);
-	draw_stack(_di, parser.get_stack());
 	draw_output(_di, parser.get_output());
 	draw_cursor_pos(_di, curpos);
 
