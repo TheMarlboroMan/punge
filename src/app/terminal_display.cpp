@@ -19,6 +19,8 @@ terminal_display::terminal_display(
 	if(!check_size()) {
 		throw display_size_exception("terminal must be of at least "+std::to_string(min_w)+"x"+std::to_string(min_h));
 	}
+
+	std::cout<<tools::s::hide();
 }
 
 std::size_t terminal_display::get_w() const {
@@ -58,6 +60,7 @@ void terminal_display::cleanup() {
 	interpreter::coordinates exit_pos{1, 25};
 	std::cout<<tools::s::pos(exit_pos.x, exit_pos.y)
 		<<tools::s::reset()
+		<<tools::s::show()
 		<<tools::s::flush();
 }
 

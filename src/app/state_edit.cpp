@@ -73,6 +73,7 @@ void state_edit::do_draw(
 	draw_cursor(_di, edit_cursor, board, display_interface::color_fg::white, display_interface::color_bg::green);
 	draw_cursor_pos(_di, edit_cursor);
 
+	draw_title(_di, "Edit mode");
 	_di.refresh();
 }
 

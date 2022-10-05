@@ -15,14 +15,12 @@ Then just do the cmake dance.
 
 ## TODO and FIX.
 
-- Showing the stack during play makes little sense in the screen size, create
-	another controller for it.
-- Maybe add a top bar always, with the title???
 - What should be printed out if there's nothing on the stack???
 	Popping from empty stacks gives out zero.
 - Experiment with getch alternatives...
 - Finish the interpreter with the missing commands. I am only missing the input stuff.
-- Hide the cursor, show it when needed.
+- Hide the cursor, show it when needed
+	- there is a call to do this, but it does not seem to do anything.
 - Clear the stdin when done.
 - Copy data files on build
 

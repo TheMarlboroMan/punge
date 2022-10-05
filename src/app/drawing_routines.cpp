@@ -16,6 +16,7 @@ void	app::draw_cursor_pos(
 		+std::to_string(_pos.y)
 		+"]";
 
+	//TODO: this would go lower too.
 	_di.draw(interpreter::coordinates{1, 24}, output, display_interface::color_fg::white, display_interface::color_bg::black);
 }
 
@@ -24,9 +25,12 @@ void	app::draw_output(
 	const interpreter::output& _o
 ) {
 
+	//TODO: This would go lower
 	_di.draw(interpreter::coordinates{1, 23}, _o.get(), display_interface::color_fg::white, display_interface::color_bg::green);
 }
 
+//TODO: Do we really need board borders? I argue that we can just use a 
+//different BG color, or something
 void	app::draw_board_borders(
 	display_interface& _di, 
 	const interpreter::board& _b
@@ -89,8 +93,7 @@ void	app::draw_stack(
 	const interpreter::stack& _s
 ) {
 
-//TODO: what happens when the board is larger?
-	interpreter::coordinates pos{50, 1};
+	interpreter::coordinates pos{1, 2};
 
 	int lines_cleared=0;
 
@@ -147,7 +150,6 @@ void	app::draw_stack(
 	);
 }
 
-
 void	app::draw_board(
 	display_interface& _di, 
 	const interpreter::board& _b
@@ -171,12 +173,11 @@ void	app::draw_board(
 	}
 }
 
-
 void	app::draw_title_screen(
 	display_interface& _di
 ) {
 
-	_di.draw(interpreter::coordinates{1, 1}, 
+	_di.draw(interpreter::coordinates{1, 3}, 
 		"Welcome to PUNGE\n\nPress any key to start (this is a lie)", 
 		display_interface::color_fg::white, display_interface::color_bg::black);
 }
@@ -186,37 +187,10 @@ void	app::draw_help_screen(
 	const std::vector<std::string>& _data,
 	std::size_t _pos 
 ) {
-	
-	std::size_t y=1;
 
-	//TODO: put this into a "title" routine.
-	std::string title="Help. Press escape to return, arrows to move";
-	std::string padding(_di.get_w()/*-title.size()*/, ' ');
-	
-	_di.draw(
-		interpreter::coordinates{1, y},
-		padding,
-		display_interface::color_fg::black,
-		display_interface::color_bg::white
-	);
-	
-	_di.draw(
-		interpreter::coordinates{1, y},
-		title,
-		display_interface::color_fg::black,
-		display_interface::color_bg::white
-	);
-	
-	//TODO: will explode if title is too long!!!
-	//TODO: not working
-//	std::string padding{_di.get_w()-title.size(), ' '};
-//	_di.draw(
-//		padding,
-//		display_interface::color_fg::black,
-//		display_interface::color_bg::white
-//	);
-
-	++y;
+	//TODO: This whole y=2 is... terrible, to be honest. We should have
+	//a transformation offset for all these functions.
+	std::size_t y=2;
 
 	//Amount of rows available for printing discarding the title row...
 	std::size_t available=_di.get_h()-1; 
@@ -238,4 +212,37 @@ void	app::draw_help_screen(
 		++_pos;
 		--available;
 	}
+}
+
+void app::draw_title(
+    display_interface& _di,
+	const std::string& _title
+) {
+
+	std::string padding(_di.get_w()/*-title.size()*/, ' ');
+	
+	_di.draw(
+		interpreter::coordinates{1, 1},
+		padding,
+		display_interface::color_fg::black,
+		display_interface::color_bg::white
+	);
+	
+	_di.draw(
+		interpreter::coordinates{1, 1},
+		_title,
+		display_interface::color_fg::black,
+		display_interface::color_bg::white
+	);
+	
+	//TODO: will explode if title is too long!!!
+	//TODO: not working
+//	std::string padding{_di.get_w()-title.size(), ' '};
+//	_di.draw(
+//		padding,
+//		display_interface::color_fg::black,
+//		display_interface::color_bg::white
+//	);
+
+
 }

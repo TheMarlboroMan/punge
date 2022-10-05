@@ -69,6 +69,7 @@ void state_help::do_draw(
 	}
 
 	draw_help_screen(_di, lines, current_position);
+	draw_title(_di, "Help, press escape to return");
 	_di.refresh();
 }
 

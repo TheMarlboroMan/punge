@@ -31,5 +31,8 @@ void	draw_title_screen(display_interface&);
 
 //!Must draw the help screen.
 void	draw_help_screen(display_interface&, const std::vector<std::string>&, std::size_t);
+
+//!Must draw a row with the controller title.
+void    draw_title(display_interface&, const std::string&);
 }
 

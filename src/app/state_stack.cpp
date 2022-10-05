@@ -41,6 +41,7 @@ void state_stack::do_draw(
 	display_interface& _di
 ) {
 
+	draw_title(_di, "Current stack");
 	draw_stack(_di, stack);
 	_di.refresh();
 }

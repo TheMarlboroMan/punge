@@ -1,6 +1,6 @@
 #include "app/state_title.h"
 #include "app/drawing_routines.h"
-
+#include <sstream>
 using namespace app;
 
 state_title::state_title(t_state_manager& _sm)
@@ -35,7 +35,11 @@ void state_title::do_draw(
 	display_interface& _di
 ) {
 
+	std::stringstream ss;
+	ss<<"Punge v"<<MAJOR_VERSION<<"."<<MINOR_VERSION<<"."<<PATCH_VERSION;
+
 	draw_title_screen(_di);
+	draw_title(_di, ss.str());
 	_di.refresh();
 }
 

@@ -56,6 +56,7 @@ void state_play::do_draw(
 	draw_cursor(_di, curpos, parser.get_board(), display_interface::color_fg::white, display_interface::color_bg::red);
 	draw_output(_di, parser.get_output());
 	draw_cursor_pos(_di, curpos);
+	draw_title(_di, "Interpreter mode");
 
 	_di.refresh();
 }

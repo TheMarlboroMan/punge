@@ -24,7 +24,7 @@ class terminal_display:
 
 	bool					check_size();
 
-	const unsigned				min_w=80, min_h=26;
+	const unsigned				min_w=80, min_h=27;
 
 	const display_size&		dsize;
 };
