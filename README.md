@@ -15,6 +15,8 @@ Then just do the cmake dance.
 
 ## TODO and FIX.
 
+- The stack is signed, 32 bit.
+- The cell is unsigned 8 bit.
 - What should be printed out if there's nothing on the stack???
 	Popping from empty stacks gives out zero.
 - Experiment with getch alternatives...

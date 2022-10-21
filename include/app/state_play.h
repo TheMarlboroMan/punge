@@ -9,7 +9,7 @@ class state_play:
 
 	public:
 
-			state_play(t_state_manager&, interpreter::parser&);
+				state_play(t_state_manager&, interpreter::parser&);
 
 	void		awake();
 	void		sleep();
@@ -22,7 +22,6 @@ class state_play:
 	static const int tick_speed=200;
 
 	interpreter::parser&        parser;
-
 };
 
 }

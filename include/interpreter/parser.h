@@ -22,11 +22,19 @@ class parser {
 	const cursor&	get_cursor() const {return cur;}
 	const stack&	get_stack() const {return stk;}
 
+	bool			is_playing() const {return state==states::play;}
+	bool			is_waiting_for_char() const {return state==states::waiting_char;}
+	bool			is_waiting_for_int() const {return state==states::waiting_int;}
+
 	//!Overwrites the current board with a new one. The original board is discarded.
 	void			new_board(int _w, int _h);
 	void 			load_board_from_filename(const std::string& _f);
 	void			reset();
 	void 			step();
+	//!Pushes the given char into the stack, used for input get calls. Returns to play mode.
+	void			push_char(char _val);
+	//!Pushes the given integer into the stack, used for input get calls. Returns to play mode.
+	void			push_int(t_stack _val);
 
 	private:
 
@@ -47,7 +55,7 @@ class parser {
 	stack_manipulator	stkman;
 	board 				brd;
 	output				out;
-
+	enum class states{play, waiting_int, waiting_char} state{states::play};
 	bool				end_signal=false,
 						string_mode=false,
 						skip_next=false;

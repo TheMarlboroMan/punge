@@ -2,7 +2,7 @@
 
 using namespace interpreter;
 
-register_item::register_item(t_stack _v)
+register_item::register_item(t_cell _v)
 	:value(_v) {
 
 }

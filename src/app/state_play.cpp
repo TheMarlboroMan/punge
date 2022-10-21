@@ -40,6 +40,17 @@ void state_play::do_input(
 
 		state_mngr.request(states::stack);
 	}
+
+	if(parser.is_waiting_for_char()) {
+
+		//TODO: only push printable stuf??
+		//TODO: if enter, parser.push_char();
+	}
+	else if(parser.is_waiting_for_int()) {
+
+		//TODO: add shit, use a max length for this!!
+		//TODO: if enter, parser.push_int();
+	}
 }
 
 void state_play::do_draw(
@@ -58,6 +69,8 @@ void state_play::do_draw(
 	draw_cursor_pos(_di, curpos);
 	draw_title(_di, "Interpreter mode");
 
+	//TODO: when we are not in play mode we should draw the input mode...
+
 	_di.refresh();
 }
 
@@ -67,8 +80,22 @@ void state_play::do_logic(
 
 	auto diff_tick=std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-_last_tick);
 	if(diff_tick.count() >= tick_speed) {
+
 		_last_tick=std::chrono::system_clock::now();
-		parser.step();
+
+		//the parser will only play if not waiting for input.
+		if(parser.is_playing()) {
+
+			parser.step();
+		}
+		else if(parser.is_waiting_for_char()) {
+
+			//TODO:
+		}
+		else if(parser.is_waiting_for_int()) {
+		
+			//TODO:
+		}
 	}
 
 	if(parser.is_end()) {

@@ -62,7 +62,22 @@ void parser::step() {
 	}
 
 	//...and move.
-	cur.set_position(brd.get_movement_position(cur.get_position(), cur.get_heading()));
+	if(state==states::play) {
+
+		cur.set_position(brd.get_movement_position(cur.get_position(), cur.get_heading()));
+	}
+}
+
+void parser::push_char(char _val) {
+
+	stk.push({static_cast<t_stack>(_val)});
+	state=states::play;
+}
+
+void parser::push_int(t_stack _val) {
+
+	stk.push({_val});
+	state=states::play;
 }
 
 void parser::push_value_to_stack(char _val) {
@@ -134,7 +149,8 @@ void parser::parse_regular_mode(const tile& _t) {
 		case tile::string_delimiter:	string_mode=!string_mode; break;
 		case tile::skip:		skip_next=true; break;
 		case tile::end:			end_signal=true; break;
-		//TODO: I think there are still missing operations.
+		case tile::push_in_int: state=states::waiting_int; break;
+		case tile::push_in_char: state=states::waiting_char; break;
 		default:				push_value_to_stack(val); break;
 
 	}
