@@ -1,5 +1,6 @@
 #pragma once
 #include "state_interface.h"
+#include <string>
 
 namespace app {
 
@@ -22,6 +23,7 @@ class state_play:
 	static const int tick_speed=200;
 
 	interpreter::parser&        parser;
+	std::string					user_input;
 };
 
 }

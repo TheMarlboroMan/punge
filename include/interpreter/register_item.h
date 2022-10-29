@@ -8,9 +8,9 @@ namespace interpreter {
 
 struct register_item {
 
-	t_cell			value;
+	t_stack			value;
 
-					register_item(t_cell _v=0);
+					register_item(t_stack _v=0);
 	bool			operator>(const register_item& _o) const;
 	register_item 	operator+(const register_item& _o);
 	register_item 	operator-(const register_item& _o);

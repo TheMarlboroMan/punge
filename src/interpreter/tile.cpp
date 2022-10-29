@@ -2,6 +2,6 @@
 
 using namespace interpreter;
 
-tile::tile(char _v):val{_v}{
+tile::tile(t_cell _v):val{_v}{
 
 }

@@ -1,5 +1,6 @@
 #include "app/state_play.h"
 #include "app/drawing_routines.h"
+#include <sstream>
 
 using namespace app;
 
@@ -43,13 +44,38 @@ void state_play::do_input(
 
 	if(parser.is_waiting_for_char()) {
 
-		//TODO: only push printable stuf??
-		//TODO: if enter, parser.push_char();
+		if(_i.is_char()) {
+
+			user_input=_i.get_char();
+		}
+		else if(_i.is_enter() && user_input.size()) {
+
+			parser.push_char(user_input[0]);
+			user_input.clear();
+		}
 	}
 	else if(parser.is_waiting_for_int()) {
 
-		//TODO: add shit, use a max length for this!!
-		//TODO: if enter, parser.push_int();
+		if(_i.is_char()) {
+
+			char c=_i.get_char();
+			if(c >= 48 && c <= 57) {
+
+				user_input+=c;
+			}
+			//TODO: What about negative integers? -> if stack size, yes.
+			//TODO: is this cell size or stack size????? I would say this is stack size.
+		}
+		else if(_i.is_backspace() && user_input.size()) {
+
+			user_input.pop_back();
+		}
+		else if(_i.is_enter() && user_input.size()) {
+
+			//TODO: should we do any filtering of limits here??
+			parser.push_int(std::stoi(user_input));
+			user_input.clear();
+		}
 	}
 }
 
@@ -67,9 +93,23 @@ void state_play::do_draw(
 	draw_cursor(_di, curpos, parser.get_board(), display_interface::color_fg::white, display_interface::color_bg::red);
 	draw_output(_di, parser.get_output());
 	draw_cursor_pos(_di, curpos);
-	draw_title(_di, "Interpreter mode");
 
-	//TODO: when we are not in play mode we should draw the input mode...
+	if(parser.is_waiting_for_char()) {
+
+		std::stringstream ss;
+		ss<<"Enter a character, hit ENTER to finish ["<<user_input<<"]";
+		draw_title(_di, ss.str());
+	}
+	else if(parser.is_waiting_for_int()) {
+
+		std::stringstream ss;
+		ss<<"Enter a number, hit ENTER to finish ["<<user_input<<"]";
+		draw_title(_di, ss.str());
+	}
+	else {
+	
+		draw_title(_di, "Interpreter mode");
+	}
 
 	_di.refresh();
 }
@@ -87,14 +127,6 @@ void state_play::do_logic(
 		if(parser.is_playing()) {
 
 			parser.step();
-		}
-		else if(parser.is_waiting_for_char()) {
-
-			//TODO:
-		}
-		else if(parser.is_waiting_for_int()) {
-		
-			//TODO:
 		}
 	}
 

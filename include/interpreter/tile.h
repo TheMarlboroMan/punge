@@ -1,6 +1,5 @@
-#ifndef INTERPRETER_TILE_H
-#define INTERPRETER_TILE_H
-
+#pragma once
+#include "typedefs.h"
 namespace interpreter {
 
 class tile {
@@ -36,16 +35,15 @@ class tile {
 	static const char end='@';
 	//Of course, a tile can also be any other character :).
 
-				tile(char _v);
-	char		get_val() const {return val;}
-	void		set_val(char _v) {val=_v;}
+				tile(t_cell _v);
+	t_cell		get_val() const {return val;}
+	void		set_val(t_cell _v) {val=_v;}
 
 	private:
 
-	char		val;
+	t_cell		val;
 
 };
 
 }
 
-#endif

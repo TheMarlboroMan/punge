@@ -70,14 +70,22 @@ void parser::step() {
 
 void parser::push_char(char _val) {
 
+lm::log(*applog).info()<<"push_char("<<_val<<")"<<std::endl;
+
 	stk.push({static_cast<t_stack>(_val)});
 	state=states::play;
+	//we also move the cursor, less we want to be in the same position we were...
+	cur.set_position(brd.get_movement_position(cur.get_position(), cur.get_heading()));
 }
 
 void parser::push_int(t_stack _val) {
 
+
+lm::log(*applog).info()<<"push_int("<<_val<<")"<<std::endl;
 	stk.push({_val});
 	state=states::play;
+	//see push_char...
+	cur.set_position(brd.get_movement_position(cur.get_position(), cur.get_heading()));
 }
 
 void parser::push_value_to_stack(char _val) {
