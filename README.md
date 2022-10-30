@@ -13,16 +13,20 @@ You will need the libraries from the following projects of mine:
 
 Then just do the cmake dance.
 
-## TODO and FIX.
+## TODO and routemap
 
-- Can't go further than the start screen in terminology.
-- Remove borders, use different backgrounds instead (?)
-	- Sure... How would this even go???
-	- What if... the boards don't have a size?? Nah, we can still have a VERY large terminal.
-	- background should be black, that's for sure. Maybe dark blue for the outer part?
-	- Or maybe borders show only on non-standard sizes?
-- The whole size thing... We cannot represent anything larger than the min size, so maybe we scrap that?? 
-	- I say we scrap it, 80x25 and that's it, this makes the border problem dissapear.
+- If we have different sizes:
+	- How do we indicate that a board is of a different size?
+		- Metadata after line 25?
+		- This would surely preserve any "compatibility" with other program files.
+	- Center the boards.
+		- This should be easy enough.
+	- Make sure borders are solid and visible.
+		- Easy enough again.
+	- How would we mark borders that cannot fit with title and status (24h)
+		- This is the stuff of nightmares... I say we use just one border, like
+		below and to the right.
+	- Same for the w.
 - Add an ASCII table in the help
 	- or maybe it is its own controller?
 - Hide the cursor, show it when needed
@@ -32,10 +36,12 @@ Then just do the cmake dance.
 
 - Normalize board format as far as files are concerned (perhaps board first, info later????).
 	- board first, sure... how do we signal the metadata?? some string or just anything beyond the 25st line.
-	- but this would break with non-standard board sizes...
+	- metadata could be signales from the 26 line, as pairs of key:value, one in each line
 - board info: name, intended output, starting stack values, author
 - Normalize puzzle set structure (a directory with a set.dat file with info and the boards listed).
 	- author
 	- comments
 	- board list
 
+## Bugs and FIXME
+- Can't go further than the start screen in terminology.
