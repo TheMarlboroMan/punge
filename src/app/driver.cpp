@@ -22,9 +22,11 @@ using namespace app;
 
 driver::driver(
 	int,
-	char **
+	char **,
+	lm::logger& _logger
 ) 
-	:state_mngr(states::title)
+	:logger{_logger},
+	state_mngr(states::title)
 {
 
 	auto termsize=tools::get_termsize();
@@ -48,7 +50,7 @@ void driver::run() {
 	refresh_rate=100;
 
 	try {
-		interpreter::parser 	p;
+		interpreter::parser 	p{logger};
 
 		controllers[states::title]=std::unique_ptr<state_interface>(new state_title(state_mngr));
 		controllers[states::play]=std::unique_ptr<state_interface>(new state_play(state_mngr, p));
@@ -57,7 +59,6 @@ void driver::run() {
 		controllers[states::stack]=std::unique_ptr<state_interface>(new state_stack(state_mngr, p.get_stack()));
 
 		p.load_board_from_filename("data/sets/original/test01.brd");
-//		p.new_board(20, 20);
 
 //		std::unique_ptr<display_interface> d(new terminal_display(dsize));
 		std::unique_ptr<display_interface> d(new buffered_terminal_display(dsize));

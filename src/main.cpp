@@ -15,7 +15,7 @@ int main(int argc, char ** argv) {
 	try {
 		applog=new lm::file_logger("logs/applog.log");
 		lm::log(*applog).info()<<"Starting session"<<std::endl;
-		app::driver d(argc, argv);
+		app::driver d(argc, argv, *applog);
 		d.run();
 		delete applog;
 		return 0;

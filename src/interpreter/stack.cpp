@@ -16,6 +16,8 @@ void stack::clear() {
 register_item stack::pop() {
 
 	auto res=register_item{0};
+
+	//There is no underflow: popping the empty stack yields zero.
 	if(items.size()) {
 		res.value=items.back().value;
 		items.pop_back();

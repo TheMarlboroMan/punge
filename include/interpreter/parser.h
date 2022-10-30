@@ -1,19 +1,17 @@
-#ifndef INTERPRETER_PARSER_H
-#define INTERPRETER_PARSER_H
-
+#pragma once
 #include "board.h"
 #include "cursor.h"
 #include "output.h"
 #include "stack.h"
 #include "stack_manipulator.h"
-
+#include <lm/logger.h>
 namespace interpreter {
 
 class parser {
 
 	public:
 
-					parser();
+					parser(lm::logger&);
 	bool			is_end() const;
 	const output&	get_output() const {return out;}
 	const board&	get_board() const {return brd;}
@@ -50,6 +48,7 @@ class parser {
 
 	directions		get_random_heading();
 
+	lm::logger&			logger;
 	cursor 				cur;
 	stack				stk;
 	stack_manipulator	stkman;
@@ -64,4 +63,3 @@ class parser {
 
 }
 
-#endif

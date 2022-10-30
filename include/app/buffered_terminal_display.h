@@ -30,7 +30,8 @@ class buffered_terminal_display:
 	private:
 
 	bool					check_size();
-
+	
+	//80 width, and then 25 height for the board, plus one for title and one for output line.
 	const unsigned				min_w=80, min_h=27;
 
 	const display_size&		dsize;

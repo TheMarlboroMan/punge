@@ -1,6 +1,4 @@
-#ifndef INTERPRETER_BOARD_H
-#define INTERPRETER_BOARD_H
-
+#pragma once
 #include <cstddef>
 #include <vector>
 
@@ -32,11 +30,11 @@ class board {
 
 	size_t				get_index(const coordinates& _c) const;
 
-	const int 			min_w=4, min_h=4, max_w=80, max_h=24;
+	const int 			min_w=4, min_h=4, max_w=80, max_h=25;
+	//boards support different sizes, even if the driver does not.
 	int 				w, h;
 	std::vector<tile>	tiles;
 };
 
 }
 
-#endif

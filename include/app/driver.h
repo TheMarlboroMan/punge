@@ -13,14 +13,14 @@
 #include "states.h"
 #include "state_interface.h"
 #include "typedefs.h"
-
+#include <lm/logger.h>
 namespace app {
 
 class driver {
 
 	public:
 
-						driver(int, char **);
+						driver(int, char **, lm::logger&);
 	void					run();
 
 	private:
@@ -29,6 +29,7 @@ class driver {
 
 	void					do_input(input_interface&);
 
+	lm::logger&					logger;
 	t_state_manager				state_mngr;
 	display_size				dsize;
 	bool					exit_signal=false;
