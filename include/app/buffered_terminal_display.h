@@ -1,15 +1,24 @@
 #pragma once
 #include "exception.h"
 #include "display_interface.h"
+#include <vector>
 
 namespace app {
 
-class terminal_display:
+struct display_cell {
+
+	char		contents;
+	display_interface::color_fg	fg;
+	display_interface::color_bg bg;	
+	bool		dirty;
+};
+
+class buffered_terminal_display:
 	public display_interface {
 
 	public:
 
-						terminal_display(const display_size&);
+						buffered_terminal_display(const display_size&);
 	virtual void				clear();
 	virtual void				cleanup();
 	virtual void				refresh();
@@ -25,6 +34,8 @@ class terminal_display:
 	const unsigned				min_w=80, min_h=27;
 
 	const display_size&		dsize;
+	interpreter::coordinates    cursor;	
+	std::vector<display_cell> 	cells;
 };
 
 }

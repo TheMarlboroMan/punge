@@ -7,6 +7,7 @@
 #include <tools/terminal_out.h>
 
 #include "app/terminal_display.h"
+#include "app/buffered_terminal_display.h"
 #include "app/terminal_input.h"
 
 #include "app/state_play.h"
@@ -58,7 +59,8 @@ void driver::run() {
 		p.load_board_from_filename("data/sets/original/test01.brd");
 //		p.new_board(20, 20);
 
-		std::unique_ptr<display_interface> d(new terminal_display(dsize));
+//		std::unique_ptr<display_interface> d(new terminal_display(dsize));
+		std::unique_ptr<display_interface> d(new buffered_terminal_display(dsize));
 		std::unique_ptr<input_interface> i(new terminal_input);
 		d->clear();
 

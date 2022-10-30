@@ -15,6 +15,7 @@ Then just do the cmake dance.
 
 ## TODO and FIX.
 
+- Remove borders, use different backgrounds instead (?)
 - Add an ASCII table in the help
 	- or maybe it is its own controller?
 - What should be printed out if there's nothing on the stack???
