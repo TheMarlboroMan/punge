@@ -19,14 +19,6 @@ Then just do the cmake dance.
 	- How do we indicate that a board is of a different size?
 		- Metadata after line 25?
 		- This would surely preserve any "compatibility" with other program files.
-	- Center the boards.
-		- This should be easy enough.
-	- Make sure borders are solid and visible.
-		- Easy enough again.
-	- How would we mark borders that cannot fit with title and status (24h)
-		- This is the stuff of nightmares... I say we use just one border, like
-		below and to the right.
-	- Same for the w.
 - Add an ASCII table in the help
 	- or maybe it is its own controller?
 - Hide the cursor, show it when needed
@@ -44,3 +36,5 @@ Then just do the cmake dance.
 	- board list
 
 ## Bugs and FIXME
+- Board centering is irregular at best
+- Cursor position overlaps with output on play mode, should not be there.

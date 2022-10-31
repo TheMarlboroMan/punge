@@ -1,7 +1,7 @@
 #include "app/drawing_routines.h"
 #include <sstream>
-#include <iostream> //TODO: remove
 #include <tools/terminal_out.h>
+#include <lm/log.h>
 
 using namespace app;
 
@@ -33,45 +33,97 @@ void drawing_routines::draw_output(
 	di.draw(interpreter::coordinates{1, 27}, _o.get(), display_interface::color_fg::white, display_interface::color_bg::green);
 }
 
-//TODO: Do we really need board borders? I argue that we can just use a 
-//different BG color, or something
 void drawing_routines::draw_board_borders(
 	const interpreter::board& _b
 ) {
+	int x_offset=(di.get_w()-_b.get_w()) / 2;
+	int available_h=di.get_h()-2; //TODO: this might as well be a method
+	int y_offset=(available_h-_b.get_h()) / 2;
+	++y_offset; //Because we have a line for the title...
 
-	const interpreter::coordinates& _pos{1,1};
+lm::log(logger).debug()<<"display: "<<di.get_w()<<"x"<<di.get_h()<<" board: "<<_b.get_w()<<"x"<<_b.get_h()<<"\n";
+lm::log(logger).debug()<<"offsets: "<<x_offset<<" and "<<y_offset<<"\n";
 
-	//Terminal positions are not arranged as X, Y from 0,0 but from 1,1
-	auto draw_hor=[&_pos, &_b, this](int _y, const char _r) {
+	auto bgcolor=display_interface::color_bg::blue;
+	auto draw_vertical_border=[this](int _x, int _y, int _h, const char _r, display_interface::color_bg _bg) {
 
-		std::string str;
-		str.append(_b.get_w(), _r);
-		di.draw(interpreter::coordinates{_pos.x+1, _y},
-			str, 
-			display_interface::color_fg::blue, 
-			display_interface::color_bg::black);
-	};
+		std::string str{_r};
+		while(_h) {
 
-	auto draw_ver=[&_pos, &_b, this](int _x, const char _r) {
+			//Don't allow drawing outside the center portion.
+			if(_y < 1 || _x < 0) {
 
-		std::string str;
-		str=_r;
-		for(int y=_pos.y+1; y<=_b.get_h()+_pos.y; y++) {
-			di.draw(interpreter::coordinates{_x, y}, str, display_interface::color_fg::blue, display_interface::color_bg::black);
+				++_y;
+				continue;
+			}
+
+			//TODO: Y may exceed the available h!!
+			di.draw(
+				interpreter::coordinates{_x+1, _y+1}, 
+				str, 
+				display_interface::color_fg::black,
+				_bg
+			);
+
+			++_y;
+			--_h;
 		}
 	};
 
-	draw_hor(_pos.y, '-');
-	draw_hor(_pos.y+_b.get_h()+1, '-');
+	auto draw_horizontal_border=[this](int _x, int _y, int _w, const char _r, display_interface::color_bg _bg) {
 
-	draw_ver(_pos.x, '|');
-	draw_ver(_pos.x+_b.get_w()+1, '|');
+		std::string str{_r};
+		while(_w) {
 
-	//draw corners...
-	di.draw(interpreter::coordinates{1,1}, "+", display_interface::color_fg::blue, display_interface::color_bg::black);
-	di.draw(interpreter::coordinates{_b.get_w()+2,1}, "+", display_interface::color_fg::blue, display_interface::color_bg::black);
-	di.draw(interpreter::coordinates{1, _b.get_h()+2}, "+", display_interface::color_fg::blue, display_interface::color_bg::black);
-	di.draw(interpreter::coordinates{_b.get_w()+2,_b.get_h()+2}, "+", display_interface::color_fg::blue, display_interface::color_bg::black);
+			//Don't allow drawing outside the center portion.
+			if(_x < 0 || _y==0) {
+
+				++_x;
+				continue;
+			}
+
+			//TODO: may exceed the available w!
+			di.draw(
+				interpreter::coordinates{_x+1, _y+1},
+				str,
+				display_interface::color_fg::black,
+				_bg
+			);
+
+			++_x;
+			--_w;
+		}
+	};
+
+	//let's see if vertical borders fit... Also, I did not run these numbers,
+	//just tested it until it worked. Might be bugs.
+	switch(di.get_w() - _b.get_w()) {
+
+		case 0: //no borders for you, we have the full screen covered!
+		break;
+		case 1: //only right border, we can't fit the rest!
+			draw_vertical_border(x_offset+_b.get_w()+1, y_offset-2, _b.get_h()+2, ' ', bgcolor);
+		break;
+		default: //both borders, left and right
+			draw_vertical_border(x_offset-2, y_offset-2, _b.get_h()+2, ' ', bgcolor);
+			draw_vertical_border(x_offset+_b.get_w()-1, y_offset-2, _b.get_h()+2, ' ', bgcolor);
+		break;
+	}
+
+	//and now the same, but with horizontal ones. There may be overdraw in the
+	//corners.
+	switch(di.get_h() - _b.get_h()) {
+
+		case 0:
+		break;
+		case 1:
+			draw_horizontal_border(x_offset-2, y_offset-2, _b.get_w()+2, ' ', bgcolor);
+		break;
+		default:
+			draw_horizontal_border(x_offset-2, y_offset-2, _b.get_w()+2, ' ', bgcolor);
+			draw_horizontal_border(x_offset-2, y_offset+_b.get_h()-1, _b.get_w()+2, ' ', bgcolor);
+		break;
+	}
 }
 
 void drawing_routines::draw_cursor(
@@ -81,11 +133,16 @@ void drawing_routines::draw_cursor(
 	display_interface::color_bg _bg
 ) {
 
+	int x_offset=(di.get_w()-_b.get_w()) / 2;
+	int available_h=di.get_h()-2; //TODO: this might as well be a method
+	int y_offset=(available_h-_b.get_h()) / 2;
+	++y_offset; //Because we have a line for the title...
+
 	std::string contents;
 	contents+=_b.get_tile(_pos).get_val();
 
 	di.draw(
-		interpreter::coordinates{2+_pos.x, 2+_pos.y},
+		interpreter::coordinates{x_offset+_pos.x, y_offset+_pos.y},
 		contents, //Char to string...
 		_fg, _bg);
 }
@@ -154,9 +211,14 @@ void drawing_routines::draw_stack(
 void drawing_routines::draw_board(
 	const interpreter::board& _b
 ) {
+
+	//Center the board...
+	int x_offset=(di.get_w()-_b.get_w()) / 2;
+	int available_h=di.get_h()-2; //TODO: might as well be a new method.
+	int y_offset=(available_h-_b.get_h()) / 2;
+	++y_offset; //again, we have a line for the title. This is ugly AF.
 	
-	//the borders are at 1,1
-	interpreter::coordinates pos{2,2};
+	interpreter::coordinates pos{x_offset,y_offset};
 
 	for(int y=0; y<_b.get_h(); y++) {
 

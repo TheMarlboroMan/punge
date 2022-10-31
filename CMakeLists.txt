@@ -52,3 +52,7 @@ set_target_properties(applib PROPERTIES OUTPUT_NAME applib)
 
 add_executable(punge src/main.cpp)
 target_link_libraries(punge applib tools terminal-tools lm utf8-tools stdc++fs)
+
+#copy files...
+add_custom_target(setup_files ALL)
+add_custom_command(TARGET setup_files POST_BUILD COMMAND cp -r ../data ./)
