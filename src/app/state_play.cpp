@@ -97,7 +97,6 @@ void state_play::do_draw(
 	//TODO: Set a reasonable refresh rate.
 	dr.draw_cursor(curpos, parser.get_board(), display_interface::color_fg::white, display_interface::color_bg::red);
 	dr.draw_output(parser.get_output());
-	dr.draw_cursor_pos(curpos);
 
 	if(parser.is_waiting_for_char()) {
 

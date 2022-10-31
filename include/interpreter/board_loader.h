@@ -1,11 +1,8 @@
-#ifndef INTERPRETER_BOARD_LOADER_H
-#define INTERPRETER_BOARD_LOADER_H
-
+#pragma once
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <stdexcept>
-#include <iostream> //TODO: Remove.
 
 #include "board.h"
 
@@ -31,4 +28,3 @@ class board_loader {
 
 }
 
-#endif

@@ -32,8 +32,6 @@ board_loader::boardinfo board_loader::get_boardinfo(const std::string& _s) {
 		res.w=line.size() > res.w ? line.size() : res.w;
 	}
 
-
-
 	return res;
 }
 
