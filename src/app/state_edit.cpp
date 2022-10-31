@@ -1,13 +1,15 @@
 #include "app/state_edit.h"
 #include "app/drawing_routines.h"
+#include <lm/log.h>
 
 using namespace app;
 
 state_edit::state_edit(
 	t_state_manager& _sm,
+	lm::logger& _logger,
 	interpreter::board& _board
 )
-	:state_interface(_sm),
+	:state_interface(_sm, _logger),
 	board{_board}
 {
 
@@ -15,10 +17,13 @@ state_edit::state_edit(
 
 void state_edit::awake() {
 
+	lm::log(logger).info()<<"state_edit awakens\n";
 }
 
 void state_edit::sleep() {
 
+
+	lm::log(logger).info()<<"state_edit slumbers\n";
 }
 
 void state_edit::do_input(
@@ -66,14 +71,12 @@ void state_edit::do_input(
 void state_edit::do_draw(
 	display_interface& _di
 ) {
-
-	draw_board_borders(_di, board);
-	draw_board(_di, board);
-
-	draw_cursor(_di, edit_cursor, board, display_interface::color_fg::white, display_interface::color_bg::green);
-	draw_cursor_pos(_di, edit_cursor);
-
-	draw_title(_di, "Edit mode");
+	drawing_routines dr{_di, logger};
+	dr.draw_board_borders(board);
+	dr.draw_board(board);
+	dr.draw_cursor(edit_cursor, board, display_interface::color_fg::white, display_interface::color_bg::green);
+	dr.draw_cursor_pos(edit_cursor);
+	dr.draw_title("Edit mode");
 	_di.refresh();
 }
 

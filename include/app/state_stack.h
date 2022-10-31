@@ -1,6 +1,5 @@
 #pragma once
 #include "state_interface.h"
-
 namespace app {
 
 //!State for the playing phase of the application.
@@ -9,7 +8,7 @@ class state_stack:
 
 	public:
 
-			state_stack(t_state_manager&, const interpreter::stack&);
+			state_stack(t_state_manager&, lm::logger&, const interpreter::stack&);
 
 	void		awake();
 	void		sleep();
@@ -20,7 +19,6 @@ class state_stack:
 	private:
 
 	static const int tick_speed=200;
-
 	const interpreter::stack&        stack;
 
 };

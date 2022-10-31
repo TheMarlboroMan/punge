@@ -1,8 +1,7 @@
-#ifndef INTERPRETER_COORDINATES_H
-#define INTERPRETER_COORDINATES_H
+#pragma once
 
 namespace interpreter {
-
+//TODO: should maybe be unsigned???
 struct coordinates {
 	int x, y;
 	coordinates(int _x, int _y):x(_x), y(_y) {}
@@ -11,4 +10,3 @@ struct coordinates {
 
 }
 
-#endif

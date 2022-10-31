@@ -1,19 +1,25 @@
 #include "app/state_title.h"
 #include "app/drawing_routines.h"
 #include <sstream>
+#include <lm/log.h>
 using namespace app;
 
-state_title::state_title(t_state_manager& _sm)
-	:state_interface(_sm) {
+state_title::state_title(
+	t_state_manager& _sm,
+	lm::logger& _logger
+)
+	:state_interface(_sm, _logger) {
 
 }
 
 void state_title::awake() {
 
+	lm::log(logger).info()<<"state_title awakens\n";
 }
 
 void state_title::sleep() {
 
+	lm::log(logger).info()<<"state_title slumbers\n";
 }
 
 void state_title::do_input(
@@ -27,6 +33,7 @@ void state_title::do_input(
 	}
 
 	if(_if.is_input()) {
+		lm::log(logger).debug()<<"input was entered!\n";
 		state_mngr.request(states::edit);
 	}
 }
@@ -38,8 +45,9 @@ void state_title::do_draw(
 	std::stringstream ss;
 	ss<<"Punge v"<<MAJOR_VERSION<<"."<<MINOR_VERSION<<"."<<PATCH_VERSION;
 
-	draw_title_screen(_di);
-	draw_title(_di, ss.str());
+	drawing_routines dr{_di, logger};
+	dr.draw_title_screen();
+	dr.draw_title(ss.str());
 	_di.refresh();
 }
 

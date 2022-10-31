@@ -9,7 +9,7 @@ class state_title:
 
 	public:
 
-		state_title(t_state_manager&);
+		state_title(t_state_manager&, lm::logger&);
 
 	void	awake();
 	void	sleep();

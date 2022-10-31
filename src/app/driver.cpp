@@ -21,12 +21,13 @@
 using namespace app;
 
 driver::driver(
-	int,
-	char **,
+	int _argc,
+	char ** _argv,
 	lm::logger& _logger
-) 
-	:logger{_logger},
-	state_mngr(states::title)
+): 
+	logger{_logger},
+	state_mngr(states::title),
+	argm{_argc, _argv}
 {
 
 	auto termsize=tools::get_termsize();
@@ -51,19 +52,40 @@ void driver::run() {
 
 	try {
 		interpreter::parser 	p{logger};
-
-		controllers[states::title]=std::unique_ptr<state_interface>(new state_title(state_mngr));
-		controllers[states::play]=std::unique_ptr<state_interface>(new state_play(state_mngr, p));
-		controllers[states::edit]=std::unique_ptr<state_interface>(new state_edit(state_mngr, p.get_board()));
-		controllers[states::help]=std::unique_ptr<state_interface>(new state_help(state_mngr, dsize));
-		controllers[states::stack]=std::unique_ptr<state_interface>(new state_stack(state_mngr, p.get_stack()));
-
+		//TODO: use argm.
 		p.load_board_from_filename("data/sets/original/test01.brd");
 
-//		std::unique_ptr<display_interface> d(new terminal_display(dsize));
-		std::unique_ptr<display_interface> d(new buffered_terminal_display(dsize));
+		std::unique_ptr<display_interface> d{nullptr};
+		if(argm.exists("--display") && argm.arg_follows("--display")) {
+
+			const auto display_type=argm.get_following("--display");
+
+			if(display_type=="buffered-terminal") {
+
+				d.reset(new buffered_terminal_display(dsize, logger));
+			}
+			else if(display_type=="unbuffered-terminal") {
+
+				d.reset(new terminal_display(dsize));
+			}
+			else {
+
+				throw std::runtime_error("invalid --display type, use buffered-terminal or unbuffered-terminal");
+			}
+		}
+		else {
+
+			d.reset(new buffered_terminal_display(dsize, logger));
+		}
+
 		std::unique_ptr<input_interface> i(new terminal_input);
 		d->clear();
+
+		controllers[states::title]=std::unique_ptr<state_interface>(new state_title(state_mngr, logger));
+		controllers[states::play]=std::unique_ptr<state_interface>(new state_play(state_mngr, logger, p));
+		controllers[states::edit]=std::unique_ptr<state_interface>(new state_edit(state_mngr, logger, p.get_board()));
+		controllers[states::help]=std::unique_ptr<state_interface>(new state_help(state_mngr, logger, dsize));
+		controllers[states::stack]=std::unique_ptr<state_interface>(new state_stack(state_mngr, logger, p.get_stack()));
 
 		auto last_tick=std::chrono::system_clock::now();
 		auto last_refresh=last_tick;
@@ -77,7 +99,6 @@ void driver::run() {
 			if(state_mngr.is_change()) {
 
 				state_mngr.accept_change();
-				d->clear();
 				controllers[state_mngr.get_previous()]->sleep();
 				if(state_mngr.empty()) {
 
@@ -85,12 +106,12 @@ void driver::run() {
 					continue;
 				}
 				controllers[state_mngr.get_current()]->awake();
+				d->clear();
 			}
 
 			auto state=state_mngr.get_current();
 			controllers[state]->do_logic(last_tick);
 
-			//TODO: Should not refresh until something has changed...
 			auto diff_display=std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now()-last_refresh);
 			if(diff_display.count() >= refresh_rate) {
 

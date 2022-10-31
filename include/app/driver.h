@@ -1,6 +1,4 @@
-#ifndef APP_DRIVER
-#define APP_DRIVER
-
+#pragma once
 #include <map>
 #include <memory>
 
@@ -13,7 +11,11 @@
 #include "states.h"
 #include "state_interface.h"
 #include "typedefs.h"
+#include "app/drawing_routines.h"
+
 #include <lm/logger.h>
+#include <tools/arg_manager.h>
+
 namespace app {
 
 class driver {
@@ -31,6 +33,7 @@ class driver {
 
 	lm::logger&					logger;
 	t_state_manager				state_mngr;
+	tools::arg_manager          argm;
 	display_size				dsize;
 	bool					exit_signal=false;
 	std::map<states, std::unique_ptr<state_interface>> controllers;
@@ -38,4 +41,3 @@ class driver {
 
 }
 
-#endif

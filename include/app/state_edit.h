@@ -10,7 +10,7 @@ class state_edit:
 
 	public:
 
-						state_edit(t_state_manager&, interpreter::board&); 
+						state_edit(t_state_manager&, lm::logger&, interpreter::board&);
 
 	void				awake();
 	void				sleep();

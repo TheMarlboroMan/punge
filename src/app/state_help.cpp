@@ -3,14 +3,15 @@
 #include "tools/line_width_format.h"
 #include <fstream>
 #include <stdexcept>
-
+#include <lm/log.h>
 using namespace app;
 
 state_help::state_help(
 	t_state_manager& _sm,
+	lm::logger& _logger,
 	const display_size& _dsize
 )
-	:state_interface(_sm),
+	:state_interface(_sm, _logger),
 	dsize{_dsize}
 {
 
@@ -19,10 +20,13 @@ state_help::state_help(
 
 void state_help::awake() {
 
+	lm::log(logger).info()<<"state_help awakens\n";
 }
 
 void state_help::sleep() {
 
+
+	lm::log(logger).info()<<"state_help slumbers\n";
 }
 
 void state_help::do_input(
@@ -67,9 +71,10 @@ void state_help::do_draw(
 		_di.clear();
 		must_refresh=false;
 	}
-
-	draw_help_screen(_di, lines, current_position);
-	draw_title(_di, "Help, press escape to return");
+	
+	drawing_routines dr{_di, logger};
+	dr.draw_help_screen(lines, current_position);
+	dr.draw_title("Help, press escape to return");
 	_di.refresh();
 }
 

@@ -11,7 +11,7 @@ class state_help:
 
 	public:
 
-		state_help(t_state_manager&, const display_size&);
+		state_help(t_state_manager&, lm::logger&, const display_size&);
 
 	void	awake();
 	void	sleep();

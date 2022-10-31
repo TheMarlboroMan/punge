@@ -2,6 +2,7 @@
 #include "exception.h"
 #include "display_interface.h"
 #include <vector>
+#include <lm/logger.h>
 
 namespace app {
 
@@ -18,7 +19,7 @@ class buffered_terminal_display:
 
 	public:
 
-						buffered_terminal_display(const display_size&);
+						buffered_terminal_display(const display_size&, lm::logger&);
 	virtual void				clear();
 	virtual void				cleanup();
 	virtual void				refresh();
@@ -35,8 +36,10 @@ class buffered_terminal_display:
 	const unsigned				min_w=80, min_h=27;
 
 	const display_size&		dsize;
+	lm::logger&                 logger;
 	interpreter::coordinates    cursor;	
 	std::vector<display_cell> 	cells;
+	std::size_t                 dirty_cell_count{0};
 };
 
 }

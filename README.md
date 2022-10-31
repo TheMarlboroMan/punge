@@ -44,4 +44,3 @@ Then just do the cmake dance.
 	- board list
 
 ## Bugs and FIXME
-- Can't go further than the start screen in terminology.

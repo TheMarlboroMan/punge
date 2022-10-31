@@ -1,24 +1,28 @@
 #include "app/state_play.h"
 #include "app/drawing_routines.h"
 #include <sstream>
+#include <lm/log.h>
 
 using namespace app;
 
 state_play::state_play(
 	t_state_manager& _sm,
+	lm::logger& _logger,
 	interpreter::parser& _parser
 ) 
-	:state_interface(_sm),
+	:state_interface(_sm, _logger),
 	parser{_parser}
 {
 }
 
 void state_play::awake() {
 
+	lm::log(logger).info()<<"state_play awakens\n";
 }
 
 void state_play::sleep() {
 
+	lm::log(logger).info()<<"state_play slumbers\n";
 }
 
 void state_play::do_input(
@@ -85,30 +89,31 @@ void state_play::do_draw(
 
 	const auto curpos=parser.get_cursor().get_position();
 
-	draw_board_borders(_di, parser.get_board());
-	draw_board(_di, parser.get_board());
+	drawing_routines dr{_di, logger};
+	dr.draw_board_borders(parser.get_board());
+	dr.draw_board(parser.get_board());
 
 	//TODO: Change color when in string mode!!!
 	//TODO: Set a reasonable refresh rate.
-	draw_cursor(_di, curpos, parser.get_board(), display_interface::color_fg::white, display_interface::color_bg::red);
-	draw_output(_di, parser.get_output());
-	draw_cursor_pos(_di, curpos);
+	dr.draw_cursor(curpos, parser.get_board(), display_interface::color_fg::white, display_interface::color_bg::red);
+	dr.draw_output(parser.get_output());
+	dr.draw_cursor_pos(curpos);
 
 	if(parser.is_waiting_for_char()) {
 
 		std::stringstream ss;
 		ss<<"Enter a character, hit ENTER to finish ["<<user_input<<"]";
-		draw_title(_di, ss.str());
+		dr.draw_title(ss.str());
 	}
 	else if(parser.is_waiting_for_int()) {
 
 		std::stringstream ss;
 		ss<<"Enter a number, hit ENTER to finish ["<<user_input<<"]";
-		draw_title(_di, ss.str());
+		dr.draw_title(ss.str());
 	}
 	else {
 	
-		draw_title(_di, "Interpreter mode");
+		dr.draw_title("Interpreter mode");
 	}
 
 	_di.refresh();

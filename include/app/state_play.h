@@ -10,7 +10,7 @@ class state_play:
 
 	public:
 
-				state_play(t_state_manager&, interpreter::parser&);
+				state_play(t_state_manager&, lm::logger&, interpreter::parser&);
 
 	void		awake();
 	void		sleep();

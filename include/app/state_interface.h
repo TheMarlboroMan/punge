@@ -1,12 +1,11 @@
-#ifndef APP_STATE_INTERFACE
-#define APP_STATE_INTERFACE
-
+#pragma once
 #include "input_interface.h"
 #include "display_interface.h"
 #include "../interpreter/board.h"
 #include "../interpreter/parser.h"
 #include "states.h" 	//t_state_manager.
 #include "typedefs.h"
+#include <lm/logger.h>
 
 namespace app {
 
@@ -15,10 +14,10 @@ class state_interface {
 
 	public:
 
-			state_interface(t_state_manager& _sm)
-		:state_mngr(_sm) {
-
-	}
+			state_interface(t_state_manager& _sm, lm::logger& _logger)
+		:state_mngr(_sm),
+		logger{_logger}
+	{}
 
 	//!Called when the state is activated (from another state or at startup).
 	virtual void	awake()=0;
@@ -35,8 +34,8 @@ class state_interface {
 	protected:
 
 	t_state_manager&	state_mngr;
+	lm::logger&         logger;
 };
 
 }
 
-#endif

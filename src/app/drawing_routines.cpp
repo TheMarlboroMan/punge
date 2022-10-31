@@ -5,8 +5,15 @@
 
 using namespace app;
 
-void	app::draw_cursor_pos(
-	display_interface& _di, 
+drawing_routines::drawing_routines(
+	display_interface& _di,
+	lm::logger& _logger
+):
+	di{_di},
+	logger{_logger}
+{}
+
+void drawing_routines::draw_cursor_pos(
 	const interpreter::coordinates& _pos
 ) {
 
@@ -16,45 +23,41 @@ void	app::draw_cursor_pos(
 		+std::to_string(_pos.y)
 		+"]";
 
-	//TODO: this would go lower too.
-	_di.draw(interpreter::coordinates{1, 24}, output, display_interface::color_fg::white, display_interface::color_bg::black);
+	di.draw(interpreter::coordinates{1, 27}, output, display_interface::color_fg::white, display_interface::color_bg::black);
 }
 
-void	app::draw_output(
-	display_interface& _di, 
+void drawing_routines::draw_output(
 	const interpreter::output& _o
 ) {
 
-	//TODO: This would go lower
-	_di.draw(interpreter::coordinates{1, 23}, _o.get(), display_interface::color_fg::white, display_interface::color_bg::green);
+	di.draw(interpreter::coordinates{1, 27}, _o.get(), display_interface::color_fg::white, display_interface::color_bg::green);
 }
 
 //TODO: Do we really need board borders? I argue that we can just use a 
 //different BG color, or something
-void	app::draw_board_borders(
-	display_interface& _di, 
+void drawing_routines::draw_board_borders(
 	const interpreter::board& _b
 ) {
 
 	const interpreter::coordinates& _pos{1,1};
 
 	//Terminal positions are not arranged as X, Y from 0,0 but from 1,1
-	auto draw_hor=[&_pos, &_b, &_di](int _y, const char _r) {
+	auto draw_hor=[&_pos, &_b, this](int _y, const char _r) {
 
 		std::string str;
 		str.append(_b.get_w(), _r);
-		_di.draw(interpreter::coordinates{_pos.x+1, _y},
+		di.draw(interpreter::coordinates{_pos.x+1, _y},
 			str, 
 			display_interface::color_fg::blue, 
 			display_interface::color_bg::black);
 	};
 
-	auto draw_ver=[&_pos, &_b, &_di](int _x, const char _r) {
+	auto draw_ver=[&_pos, &_b, this](int _x, const char _r) {
 
 		std::string str;
 		str=_r;
 		for(int y=_pos.y+1; y<=_b.get_h()+_pos.y; y++) {
-			_di.draw(interpreter::coordinates{_x, y}, str, display_interface::color_fg::blue, display_interface::color_bg::black);
+			di.draw(interpreter::coordinates{_x, y}, str, display_interface::color_fg::blue, display_interface::color_bg::black);
 		}
 	};
 
@@ -65,14 +68,13 @@ void	app::draw_board_borders(
 	draw_ver(_pos.x+_b.get_w()+1, '|');
 
 	//draw corners...
-	_di.draw(interpreter::coordinates{1,1}, "+", display_interface::color_fg::blue, display_interface::color_bg::black);
-	_di.draw(interpreter::coordinates{_b.get_w()+2,1}, "+", display_interface::color_fg::blue, display_interface::color_bg::black);
-	_di.draw(interpreter::coordinates{1, _b.get_h()+2}, "+", display_interface::color_fg::blue, display_interface::color_bg::black);
-	_di.draw(interpreter::coordinates{_b.get_w()+2,_b.get_h()+2}, "+", display_interface::color_fg::blue, display_interface::color_bg::black);
+	di.draw(interpreter::coordinates{1,1}, "+", display_interface::color_fg::blue, display_interface::color_bg::black);
+	di.draw(interpreter::coordinates{_b.get_w()+2,1}, "+", display_interface::color_fg::blue, display_interface::color_bg::black);
+	di.draw(interpreter::coordinates{1, _b.get_h()+2}, "+", display_interface::color_fg::blue, display_interface::color_bg::black);
+	di.draw(interpreter::coordinates{_b.get_w()+2,_b.get_h()+2}, "+", display_interface::color_fg::blue, display_interface::color_bg::black);
 }
 
-void	app::draw_cursor(
-	display_interface& _di, 
+void drawing_routines::draw_cursor(
 	const interpreter::coordinates& _pos, 
 	const interpreter::board& _b, 
 	display_interface::color_fg _fg, 
@@ -82,14 +84,13 @@ void	app::draw_cursor(
 	std::string contents;
 	contents+=_b.get_tile(_pos).get_val();
 
-	_di.draw(
+	di.draw(
 		interpreter::coordinates{2+_pos.x, 2+_pos.y},
 		contents, //Char to string...
 		_fg, _bg);
 }
 
-void	app::draw_stack(
-	display_interface& _di, 
+void drawing_routines::draw_stack(
 	const interpreter::stack& _s
 ) {
 
@@ -118,7 +119,7 @@ void	app::draw_stack(
 		//stuff will be overwritten.
 		ss<<"["<<display<<"] ["<<std::to_string(it.value)<<"]";
 
-		_di.draw(
+		di.draw(
 			interpreter::coordinates{pos.x, pos.y++},
 			ss.str(),
 			display_interface::color_fg::white, 
@@ -132,7 +133,7 @@ void	app::draw_stack(
 	//some whitespace there to overwrite stuff that was there before.
 	while(lines_cleared < 10) {
 
-		_di.draw(
+		di.draw(
 			interpreter::coordinates{pos.x, pos.y},
 			"             ", //TODO: fix the amount of space.
 			display_interface::color_fg::white,
@@ -142,7 +143,7 @@ void	app::draw_stack(
 		++pos.y;
 	}
 
-	_di.draw(
+	di.draw(
 		interpreter::coordinates{pos.x, pos.y},
 		(_s.get_size() > 10 ? "[MORE]" : "[----]"),
 		display_interface::color_fg::white, 
@@ -150,8 +151,7 @@ void	app::draw_stack(
 	);
 }
 
-void	app::draw_board(
-	display_interface& _di, 
+void drawing_routines::draw_board(
 	const interpreter::board& _b
 ) {
 	
@@ -165,7 +165,7 @@ void	app::draw_board(
 			str+=_b.get_tile({x, y}).get_val();
 		}
 
-		_di.draw(
+		di.draw(
 			interpreter::coordinates{pos.x, pos.y+y},
 			str,
 			display_interface::color_fg::white, 
@@ -173,17 +173,14 @@ void	app::draw_board(
 	}
 }
 
-void	app::draw_title_screen(
-	display_interface& _di
-) {
+void drawing_routines::draw_title_screen() {
 
-	_di.draw(interpreter::coordinates{1, 3}, 
+	di.draw(interpreter::coordinates{1, 3}, 
 		"Welcome to PUNGE\n\nPress any key to start (this is a lie)", 
 		display_interface::color_fg::white, display_interface::color_bg::black);
 }
 
-void	app::draw_help_screen(
-	display_interface& _di,
+void drawing_routines::draw_help_screen(
 	const std::vector<std::string>& _data,
 	std::size_t _pos 
 ) {
@@ -193,7 +190,7 @@ void	app::draw_help_screen(
 	std::size_t y=2;
 
 	//Amount of rows available for printing discarding the title row...
-	std::size_t available=_di.get_h()-1; 
+	std::size_t available=di.get_h()-1; 
 	while(true) {
 
 		//-1 because we used one line for the title...
@@ -202,7 +199,7 @@ void	app::draw_help_screen(
 			break;
 		}
 
-		_di.draw(
+		di.draw(
 			interpreter::coordinates{1, y++},
 			_data.at(_pos),
 			display_interface::color_fg::white,
@@ -214,35 +211,23 @@ void	app::draw_help_screen(
 	}
 }
 
-void app::draw_title(
-    display_interface& _di,
+void drawing_routines::draw_title(
 	const std::string& _title
 ) {
 
-	std::string padding(_di.get_w()/*-title.size()*/, ' ');
+	std::string padding(di.get_w(), ' ');
 	
-	_di.draw(
+	di.draw(
 		interpreter::coordinates{1, 1},
 		padding,
 		display_interface::color_fg::black,
 		display_interface::color_bg::white
 	);
 	
-	_di.draw(
+	di.draw(
 		interpreter::coordinates{1, 1},
 		_title,
 		display_interface::color_fg::black,
 		display_interface::color_bg::white
 	);
-	
-	//TODO: will explode if title is too long!!!
-	//TODO: not working
-//	std::string padding{_di.get_w()-title.size(), ' '};
-//	_di.draw(
-//		padding,
-//		display_interface::color_fg::black,
-//		display_interface::color_bg::white
-//	);
-
-
 }
