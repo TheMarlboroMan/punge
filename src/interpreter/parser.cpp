@@ -26,7 +26,7 @@ bool parser::is_end() const {
 
 void parser::load_board_from_filename(const std::string& _f) {
 
-	board_loader 	bl;
+	board_loader 	bl{logger};
 	brd=bl.from_filename(_f);
 }
 

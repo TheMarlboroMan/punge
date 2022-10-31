@@ -52,8 +52,24 @@ void driver::run() {
 
 	try {
 		interpreter::parser 	p{logger};
-		//TODO: use argm.
-		p.load_board_from_filename("data/sets/original/test01.brd");
+
+		if(argm.exists("--debug")) {
+
+			logger.set_mask(lm::levels::all);
+		}
+		else {
+
+			logger.set_mask(lm::levels::all & ~lm::levels::debug);
+		}
+
+		if(argm.exists("--file") && argm.arg_follows("--file")) {
+
+			p.load_board_from_filename(argm.get_following("--file"));
+		}
+		else {
+
+			p.load_board_from_filename("data/sets/original/test01.brd");
+		}
 
 		std::unique_ptr<display_interface> d{nullptr};
 		if(argm.exists("--display") && argm.arg_follows("--display")) {

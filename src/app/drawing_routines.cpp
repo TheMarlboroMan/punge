@@ -23,14 +23,16 @@ void drawing_routines::draw_cursor_pos(
 		+std::to_string(_pos.y)
 		+"]";
 
-	di.draw(interpreter::coordinates{1, 27}, output, display_interface::color_fg::white, display_interface::color_bg::black);
+	//TODO: Let's give this a background.
+	di.draw(interpreter::coordinates{1, di.get_h()}, output, display_interface::color_fg::white, display_interface::color_bg::black);
 }
 
 void drawing_routines::draw_output(
 	const interpreter::output& _o
 ) {
 
-	di.draw(interpreter::coordinates{1, 27}, _o.get(), display_interface::color_fg::white, display_interface::color_bg::green);
+	//TODO: Let's use a full background for this???
+	di.draw(interpreter::coordinates{1, di.get_h()}, _o.get(), display_interface::color_fg::white, display_interface::color_bg::green);
 }
 
 void drawing_routines::draw_board_borders(
