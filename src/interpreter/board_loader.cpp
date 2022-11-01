@@ -21,6 +21,7 @@ board board_loader::from_string(const std::string& _s) {
 	return res;
 }
 
+//TODO: how do we return the board_extension structure???????
 board board_loader::from_filename(const std::string& _fn) {
 
 	std::ifstream file(_fn.c_str());
@@ -40,20 +41,20 @@ board_loader::boardinfo board_loader::get_boardinfo(const std::string& _s) {
 	//Read each line. Add a row and read the length without the \n (-1)
 	//There are some conditions under which we will consider a board to be
 	//an extended format: if it has more than 25 lines, any line is larger
-	//than 80 columns or the --BEGIN_METADATA-- mark is found.
-	bool has_metadata{false};
+	//than 80 columns or the --BEGIN_EXTENSIONS-- mark is found.
+	bool has_extensions{false};
 	while(std::getline(ss, line)) {
 
-		if(line=="--BEGIN_METADATA--") {
+		if(line=="--BEGIN_EXTENSIONS--") {
 
-			has_metadata=true;
-			break; //stop at once, whatever follows is the metadata.
+			has_extensions=true;
+			break; //stop at once, whatever follows is the extensions.
 		}
 		res.h++;
 		res.w=line.size() > res.w ? line.size() : res.w;
 	}
 
-	res.is_extended=res.w > 80 || res.h > 25 || has_metadata;
+	res.is_extended=res.w > 80 || res.h > 25 || has_extensions;
 
 	//all non-extended maps are set to 80x25.
 	if(!res.is_extended) {
@@ -77,8 +78,8 @@ void board_loader::read_into_board(
 	int y=0;
 	while(std::getline(ss, line)) {
 
-		//stop if extended and metadata mark is found!!
-		if(_is_extended && line=="--BEGIN_METADATA--") {
+		//stop if extended and extensions mark is found!!
+		if(_is_extended && line=="--BEGIN_EXTENSIONS--") {
 
 			break;
 		}
@@ -90,72 +91,100 @@ void board_loader::read_into_board(
 		++y;
 	}
 
+	board_extension ext;
 	if(_is_extended) {
 
+		ext.extended=true;
+		
 		while(std::getline(ss, line)) {
 
-			read_metadata(_b, line);
+			read_extension(ext, line);
 		}
 	}
 }
 
-void board_loader::read_metadata(
-	board& _b,
+void board_loader::read_extension(
+	board_extension& _extensions,
 	const std::string& _line
 ) {
 
-	//TODO: I kind of think that these metadata values could be in a 
-	//different class that board, so as to keep the board uniquely 
-	//responsible of its stuff. board_metadata is good enough. Maybe 
-	//board_extensions is good enough too. Let us first focus on 
-	//writing these things to memory from disk and we will see later how
-	//do we work more stuff out.
 	auto pieces=tools::explode(_line, ':', 2);
-	if(2!=pieces.size) {
+	if(2!=pieces.size()) {
 
 		std::stringstream ss;
-		ss<<"bad board metadata format, missing colon in '"<<line<<"'";
+		ss<<"bad board extension format, missing colon in '"<<_line<<"'";
 		throw std::runtime_error(ss.str());
 	}	
 
-	auto value=pieces.pop_back();
-	auto key=pieces.pop_back();
+	auto value=pieces.back(); 
+	pieces.pop_back();
+	auto key=pieces.back();
+
+	auto write_string=[](
+		const std::string& _key,
+		const std::string& _value,
+		std::string& _property
+	) -> void {
+
+		if(_property.size()) {
+	
+			std::stringstream ss;
+			ss<<"repeated extension property "<<_key;
+			throw std::runtime_error(ss.str());
+		}
+
+		_property=_value;
+	};
 
 	if(key=="author") {
 
+		write_string(key, value, _extensions.author);
 		return;
 	}
 
 	if(key=="title") {
 
+		write_string(key, value, _extensions.title);
 		return;
 	}
 
 	//the stack is just a bunch of integers separated by whitespace.
 	if(key=="stack") {
 
+		//TODO; interpret this shit. Surely in another method.
 		return;
 	}
 
 	//if a program expects nothing, the value can be empty.
 	if(key=="expects") {
 
+		write_string(key, value, _extensions.expects);
 		return;
 	}
 
+	if(key=="non_writable_cells") {
+
+		//TODO: interpret this, surely in another method.
 	//TODO: inmutable cells... think this through. The idea here is to have 
 	//some cells that cannot be changed. We could express it like "none",
 	//"all" or "none but 1,1 2,2 4,4" "all but 1,1 2,2 3,3,". Ranges as in
 	//"all but 1,1-10" would be nice, but they can always be added later.
-	
-	//TODO: available cells to write, a list of characters, two aa means just that, you can use two a.
-	//
+		return;
+	}
+
+	if(key=="allowed_input") {
+
+		write_string(key, value, _extensions.allowed_input);
+		return;
+	}
+
 	std::stringstream ss;
-	ss<<"unknown metadata value in '"<<_line<<"'";
+	ss<<"unknown extension value in '"<<_line<<"'";
 	throw std::runtime_error(ss.str());
 }
 
 std::string board_loader::string_from_file(std::ifstream& _f) {
+
 	std::stringstream buf;
 	buf<<_f.rdbuf();
 	return buf.str();

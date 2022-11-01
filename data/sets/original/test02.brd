@@ -2,7 +2,7 @@
  a little map
  with metadata
 ^               >
---BEGIN_METADATA--
+--BEGIN_EXTENSIONS--
 author:The Marlboro Man
 title:A little loop
 stack:32, 32, 48

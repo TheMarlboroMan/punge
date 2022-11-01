@@ -26,6 +26,7 @@ bool parser::is_end() const {
 
 void parser::load_board_from_filename(const std::string& _f) {
 
+	//senseless forwarding of calls, but the board is private.
 	board_loader 	bl{logger};
 	brd=bl.from_filename(_f);
 }

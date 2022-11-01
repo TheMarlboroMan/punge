@@ -5,6 +5,7 @@
 #include <stdexcept>
 
 #include "board.h"
+#include "board_extension.h"
 #include <lm/logger.h>
 namespace interpreter {
 
@@ -24,8 +25,8 @@ class board_loader {
 	};
 
 	boardinfo	get_boardinfo(const std::string& _s);
-	void read_into_board(board& _b, const std::string& _s, bool);
-	void 		read_metadata(board& _b, const std::string& _s);
+	void 		read_into_board(board& _b, const std::string& _s, bool);
+	void 		read_extension(board_extension&, const std::string& _s);
 	std::string string_from_file(std::ifstream& _f);
 
 	lm::logger&		logger;
