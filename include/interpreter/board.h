@@ -8,6 +8,10 @@
 
 namespace interpreter {
 
+//a board is a program, stored in disk or in memory. We try to keep it 
+//befunge93 compatible.
+//TODO: the min and max sizes are fixed here. Extended size boards will not 
+//work.
 class board {
 
 	public:

@@ -1,5 +1,6 @@
 #include "interpreter/board_loader.h"
 #include <lm/log.h>
+#include <tools/string_utils.h>
 
 using namespace interpreter;
 
@@ -102,8 +103,56 @@ void board_loader::read_metadata(
 	board& _b,
 	const std::string& _line
 ) {
-	//TODO:
-	lm::log(logger).info()<<"read metadata line '"<<_line<<"'\n";
+
+	//TODO: I kind of think that these metadata values could be in a 
+	//different class that board, so as to keep the board uniquely 
+	//responsible of its stuff. board_metadata is good enough. Maybe 
+	//board_extensions is good enough too. Let us first focus on 
+	//writing these things to memory from disk and we will see later how
+	//do we work more stuff out.
+	auto pieces=tools::explode(_line, ':', 2);
+	if(2!=pieces.size) {
+
+		std::stringstream ss;
+		ss<<"bad board metadata format, missing colon in '"<<line<<"'";
+		throw std::runtime_error(ss.str());
+	}	
+
+	auto value=pieces.pop_back();
+	auto key=pieces.pop_back();
+
+	if(key=="author") {
+
+		return;
+	}
+
+	if(key=="title") {
+
+		return;
+	}
+
+	//the stack is just a bunch of integers separated by whitespace.
+	if(key=="stack") {
+
+		return;
+	}
+
+	//if a program expects nothing, the value can be empty.
+	if(key=="expects") {
+
+		return;
+	}
+
+	//TODO: inmutable cells... think this through. The idea here is to have 
+	//some cells that cannot be changed. We could express it like "none",
+	//"all" or "none but 1,1 2,2 4,4" "all but 1,1 2,2 3,3,". Ranges as in
+	//"all but 1,1-10" would be nice, but they can always be added later.
+	
+	//TODO: available cells to write, a list of characters, two aa means just that, you can use two a.
+	//
+	std::stringstream ss;
+	ss<<"unknown metadata value in '"<<_line<<"'";
+	throw std::runtime_error(ss.str());
 }
 
 std::string board_loader::string_from_file(std::ifstream& _f) {
