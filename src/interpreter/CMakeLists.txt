@@ -9,5 +9,6 @@ set(SOURCE
 	${CMAKE_CURRENT_SOURCE_DIR}/stack.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/stack_manipulator.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/tile.cpp 
+	${CMAKE_CURRENT_SOURCE_DIR}/board_extension.cpp 
 	PARENT_SCOPE
 )

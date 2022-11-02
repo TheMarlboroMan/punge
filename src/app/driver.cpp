@@ -16,7 +16,7 @@
 #include "app/state_help.h"
 #include "app/state_stack.h"
 #include "interpreter/parser.h"
-
+#include "interpreter/board_loader.h"
 
 using namespace app;
 
@@ -62,13 +62,27 @@ void driver::run() {
 			logger.set_mask(lm::levels::all & ~lm::levels::debug);
 		}
 
+		std::string brd_filename{"data/sets/original/test01.brd"};
 		if(argm.exists("--file") && argm.arg_follows("--file")) {
 
-			p.load_board_from_filename(argm.get_following("--file"));
+			brd_filename=argm.get_following("--file");
 		}
-		else {
 
-			p.load_board_from_filename("data/sets/original/test01.brd");
+		//These are the master copies of the board and extensions.
+		interpreter::board_loader 	bl{logger};
+		auto brd=bl.from_filename(brd_filename);
+		auto brd_extensions=p.get_board_extension();
+
+		//with this, the parser acquires its own copies.
+		p.set_board(brd);
+		p.set_board_extension(brd_extensions);
+		if(brd_extensions.extended) {
+
+			//TODO: this is starting to be a bit of a mess now...
+			for(const auto c : brd_extensions.initial_stack) {
+
+				p.push_int(c);
+			}
 		}
 
 		std::unique_ptr<display_interface> d{nullptr};

@@ -15,7 +15,11 @@ Then just do the cmake dance.
 
 ## TODO and routemap
 
-- Read metadata, put it in the board.
+- There is a problem here with the whole map thing. The parser owns the board,
+	and then it should own the metadata too. The parser SEEMS to load the 
+	board too, which is... weird. My take is that we should feed the board and
+	the extensions to the parser externally with a set_board and set_extensions
+	and the parser should make a copy of these. 
 - Make sure exit checks the output and declares a status!!
 - Background for bottom line too.
 - Add an ASCII table in the help
@@ -25,10 +29,6 @@ Then just do the cmake dance.
 - Clear the stdin when done.
 - Copy data files on build
 
-- Normalize board format as far as files are concerned (perhaps board first, info later????).
-	- board first, sure... how do we signal the metadata?? some string or just anything beyond the 25st line.
-	- metadata could be signales from the 26 line, as pairs of key:value, one in each line
-- board info: name, intended output, starting stack values, author
 - Normalize puzzle set structure (a directory with a set.dat file with info and the boards listed).
 	- author
 	- comments

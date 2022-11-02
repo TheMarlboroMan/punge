@@ -14,6 +14,8 @@ namespace interpreter {
  */
 struct board_extension {
 
+	void					reset();
+
 	bool					extended{false}; //indicates whether or not there's any info in this class.
 	std::string				author,
 							title,

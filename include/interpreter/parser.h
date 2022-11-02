@@ -1,5 +1,6 @@
 #pragma once
 #include "board.h"
+#include "board_extension.h"
 #include "cursor.h"
 #include "output.h"
 #include "stack.h"
@@ -15,8 +16,9 @@ class parser {
 	bool			is_end() const;
 	const output&	get_output() const {return out;}
 	const board&	get_board() const {return brd;}
-	//!Returns a reference to the board. Allows changes on it.
 	board&			get_board() {return brd;}
+	const board_extension& get_board_extension() const {return brd_extension;}
+
 	const cursor&	get_cursor() const {return cur;}
 	const stack&	get_stack() const {return stk;}
 
@@ -24,9 +26,9 @@ class parser {
 	bool			is_waiting_for_char() const {return state==states::waiting_char;}
 	bool			is_waiting_for_int() const {return state==states::waiting_int;}
 
+	void			set_board(const board& _b) {brd=_b;}
+	void			set_board_extension(const board_extension& _e) {brd_extension=_e;}
 	//!Overwrites the current board with a new one. The original board is discarded.
-	void			new_board(int _w, int _h);
-	void 			load_board_from_filename(const std::string& _f);
 	void			reset();
 	void 			step();
 	//!Pushes the given char into the stack, used for input get calls. Returns to play mode.
@@ -53,6 +55,7 @@ class parser {
 	stack				stk;
 	stack_manipulator	stkman;
 	board 				brd;
+	board_extension		brd_extension;
 	output				out;
 	enum class states{play, waiting_int, waiting_char} state{states::play};
 	bool				end_signal=false,

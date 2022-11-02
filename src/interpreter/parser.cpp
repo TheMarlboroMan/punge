@@ -7,8 +7,6 @@
 #include <tools/number_generator.h>
 #include <lm/log.h>
 
-#include "interpreter/board_loader.h"
-
 using namespace interpreter;
 
 parser::parser(
@@ -24,20 +22,9 @@ bool parser::is_end() const {
 	return end_signal;
 }
 
-void parser::load_board_from_filename(const std::string& _f) {
-
-	//senseless forwarding of calls, but the board is private.
-	board_loader 	bl{logger};
-	brd=bl.from_filename(_f);
-}
-
-void parser::new_board(int _w, int _h) {
-
-	brd=board(_w, _h);
-}
-
 void parser::reset() {
 
+	//TODO: is this ever called???
 	out.clear();
 	stk.clear();
 

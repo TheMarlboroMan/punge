@@ -21,7 +21,6 @@ board board_loader::from_string(const std::string& _s) {
 	return res;
 }
 
-//TODO: how do we return the board_extension structure???????
 board board_loader::from_filename(const std::string& _fn) {
 
 	std::ifstream file(_fn.c_str());
@@ -91,14 +90,14 @@ void board_loader::read_into_board(
 		++y;
 	}
 
-	board_extension ext;
+	extensions.reset();
 	if(_is_extended) {
 
-		ext.extended=true;
+		extensions.extended=true;
 		
 		while(std::getline(ss, line)) {
 
-			read_extension(ext, line);
+			read_extension(extensions, line);
 		}
 	}
 }

@@ -16,6 +16,9 @@ class board_loader {
 				board_loader(lm::logger&);
 	board		from_string(const std::string& _s);
 	board		from_filename(const std::string& _fn);
+	//the extensions are returned with this method after a call to any 
+	//board loading method.
+	const board_extension& get_extensions() const {return extensions;}
 
 	private:
 
@@ -30,6 +33,10 @@ class board_loader {
 	std::string string_from_file(std::ifstream& _f);
 
 	lm::logger&		logger;
+
+	//The board loader has a copy of any possible extensions that it can just
+	//give away.
+	board_extension		extensions;
 };
 
 }
