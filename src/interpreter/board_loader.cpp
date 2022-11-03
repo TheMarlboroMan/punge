@@ -93,8 +93,8 @@ void board_loader::read_into_board(
 	extensions.reset();
 	if(_is_extended) {
 
+		lm::log(logger).info()<<"board is considered extended\n";
 		extensions.extended=true;
-		
 		while(std::getline(ss, line)) {
 
 			read_extension(extensions, line);
@@ -150,7 +150,7 @@ void board_loader::read_extension(
 	//the stack is just a bunch of integers separated by whitespace.
 	if(key=="stack") {
 
-		//TODO; interpret this shit. Surely in another method.
+		read_stack(_extensions, value);
 		return;
 	}
 
@@ -188,3 +188,29 @@ std::string board_loader::string_from_file(std::ifstream& _f) {
 	buf<<_f.rdbuf();
 	return buf.str();
 }
+
+void board_loader::read_stack(
+	board_extension& _ext, 
+	const std::string& _str
+) {
+
+	//TODO:
+	//the stack is just a bunch of integers separated by whitespace
+	std::stringstream ss(_str);
+	t_stack value_read{0};
+	while(true) {
+
+		ss>>value_read;
+
+		_ext.initial_stack.push_back(value_read);
+		lm::log(logger).debug()<<"pushing "<<value_read<<" into the initial stack\n";
+		
+		if(ss.eof()) {
+
+			break;
+		}
+	}
+
+	lm::log(logger).debug()<<"pushed "<<_ext.initial_stack.size()<<" total values into the initial stack\n";
+}
+

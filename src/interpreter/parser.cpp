@@ -25,6 +25,7 @@ bool parser::is_end() const {
 void parser::reset() {
 
 	//TODO: is this ever called???
+	lm::log(logger).debug()<<"resetting parser\n";
 	out.clear();
 	stk.clear();
 
@@ -59,7 +60,7 @@ void parser::step() {
 
 void parser::push_char(char _val) {
 
-lm::log(logger).info()<<"push_char("<<_val<<")"<<std::endl;
+	lm::log(logger).debug()<<"user push_char("<<_val<<")"<<std::endl;
 
 	stk.push({static_cast<t_stack>(_val)});
 	state=states::play;
@@ -69,8 +70,7 @@ lm::log(logger).info()<<"push_char("<<_val<<")"<<std::endl;
 
 void parser::push_int(t_stack _val) {
 
-
-lm::log(logger).info()<<"push_int("<<_val<<")"<<std::endl;
+	lm::log(logger).debug()<<"user push_int("<<_val<<")"<<std::endl;
 	stk.push({_val});
 	state=states::play;
 	//see push_char...
@@ -159,7 +159,7 @@ void parser::do_put_board() {
 
 	try {
 		auto y=stk.pop(), x=stk.pop(), v=stk.pop();
-lm::log(logger).info()<<"do_put_board:"<<x.value<<","<<y.value<<" => "<<v.value<<std::endl;
+lm::log(logger).debug()<<"do_put_board:"<<x.value<<","<<y.value<<" => "<<v.value<<std::endl;
 		brd.set_tile( {static_cast<int>(x.value), static_cast<int>(y.value)}, v.as_char());
 	}
 	catch(out_of_bounds_exception& e) {
@@ -174,7 +174,7 @@ void parser::do_get_board() {
 		auto y=stk.pop(), x=stk.pop();
 		const auto& t=brd.get_tile({static_cast<int>(x.value), static_cast<int>(y.value)});
 		stk.push({static_cast<t_stack>(t.get_val())});
-lm::log(logger).info()<<"do_get_board:"<<x.value<<","<<y.value<<" => "<<t.get_val()<<std::endl;
+lm::log(logger).debug()<<"do_get_board:"<<x.value<<","<<y.value<<" => "<<t.get_val()<<std::endl;
 	}
 	catch(out_of_bounds_exception& e) {
 		stk.push({0});

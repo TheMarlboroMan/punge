@@ -18,7 +18,7 @@ class board_loader {
 	board		from_filename(const std::string& _fn);
 	//the extensions are returned with this method after a call to any 
 	//board loading method.
-	const board_extension& get_extensions() const {return extensions;}
+	const board_extension& get_board_extension() const {return extensions;}
 
 	private:
 
@@ -30,6 +30,7 @@ class board_loader {
 	boardinfo	get_boardinfo(const std::string& _s);
 	void 		read_into_board(board& _b, const std::string& _s, bool);
 	void 		read_extension(board_extension&, const std::string& _s);
+	void		read_stack(board_extension&, const std::string&);
 	std::string string_from_file(std::ifstream& _f);
 
 	lm::logger&		logger;

@@ -44,6 +44,7 @@ void state_play::do_input(
 	if(_i.is_stack()) {
 
 		state_mngr.request(states::stack);
+		return;
 	}
 
 	if(parser.is_waiting_for_char()) {

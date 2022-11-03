@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include <tools/terminal_out.h>
+#include <lm/log.h>
 
 #include "app/terminal_display.h"
 #include "app/buffered_terminal_display.h"
@@ -71,17 +72,21 @@ void driver::run() {
 		//These are the master copies of the board and extensions.
 		interpreter::board_loader 	bl{logger};
 		auto brd=bl.from_filename(brd_filename);
-		auto brd_extensions=p.get_board_extension();
+		auto brd_extensions=bl.get_board_extension();
 
 		//with this, the parser acquires its own copies.
 		p.set_board(brd);
 		p.set_board_extension(brd_extensions);
 		if(brd_extensions.extended) {
 
+			lm::log(logger).debug()<<"adding extensions to stack "<<brd_extensions.initial_stack.size()<<std::endl;
 			//TODO: this is starting to be a bit of a mess now...
-			for(const auto c : brd_extensions.initial_stack) {
+			//this should happen also when we reset: the stack should be reset
+			//and then reloaded.
+			for(const auto unit : brd_extensions.initial_stack) {
 
-				p.push_int(c);
+				lm::log(logger).debug()<<"pushing "<<unit<<" into real stack"<<std::endl;
+				p.push_int(unit);
 			}
 		}
 

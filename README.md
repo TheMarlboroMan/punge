@@ -15,11 +15,13 @@ Then just do the cmake dance.
 
 ## TODO and routemap
 
-- There is a problem here with the whole map thing. The parser owns the board,
-	and then it should own the metadata too. The parser SEEMS to load the 
-	board too, which is... weird. My take is that we should feed the board and
-	the extensions to the parser externally with a set_board and set_extensions
-	and the parser should make a copy of these. 
+- Load available input somewhere, the driver for now.
+- Where do we draw the available input??? I guess we could add it in the lower line of edit mode and pray its long enough xD
+	- TODO: How do we know we can RETRIEVE a tile the player placed?
+	- I guess we keep track of them and paint them in a different color...
+	- TODO: What happens when the player RETRIEVES a tile that was FULL? How do we put the tile as it was?	
+	- TODO: How do we distingish between NO MORE TILES and no limitations?
+- Make the player be able to place the limited tiles. Should actually be easy.
 - Make sure exit checks the output and declares a status!!
 - Background for bottom line too.
 - Add an ASCII table in the help
@@ -27,7 +29,7 @@ Then just do the cmake dance.
 - Hide the cursor, show it when needed
 	- there is a call to do this, but it does not seem to do anything.
 - Clear the stdin when done.
-- Copy data files on build
+- Play mode should copy the board from the editor before starting so changes won't bleed back!!!:w
 
 - Normalize puzzle set structure (a directory with a set.dat file with info and the boards listed).
 	- author

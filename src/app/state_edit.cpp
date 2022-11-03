@@ -47,6 +47,12 @@ void state_edit::do_input(
 		return;
 	}
 
+	if(_i.is_stack()) {
+
+		state_mngr.request(states::stack);
+		return;
+	}
+
 	if(_i.is_arrow()) {
 
 		auto future_position=edit_cursor;

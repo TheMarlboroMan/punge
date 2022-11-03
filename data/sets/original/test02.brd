@@ -5,5 +5,5 @@
 --BEGIN_EXTENSIONS--
 author:The Marlboro Man
 title:A little loop
-stack:32, 32, 48
+stack:32 45 48
 expects:nothing
